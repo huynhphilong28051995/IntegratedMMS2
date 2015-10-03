@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mms.leasing.entity;
+package mms2.leasing.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;

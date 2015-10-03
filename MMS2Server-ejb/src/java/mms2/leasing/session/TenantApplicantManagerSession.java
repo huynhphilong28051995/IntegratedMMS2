@@ -5,8 +5,8 @@
  */
 package mms2.leasing.session;
 
-import mms.leasing.entity.TenantApplicantEntity;
-import mms.leasing.entity.TenantEntity;
+import mms2.leasing.entity.TenantApplicantEntity;
+import mms2.leasing.entity.TenantEntity;
 import java.util.ArrayList;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

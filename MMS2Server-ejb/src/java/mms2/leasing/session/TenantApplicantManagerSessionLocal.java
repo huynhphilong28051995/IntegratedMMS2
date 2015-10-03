@@ -5,7 +5,7 @@
  */
 package mms2.leasing.session;
 
-import mms.leasing.entity.TenantApplicantEntity;
+import mms2.leasing.entity.TenantApplicantEntity;
 import javax.ejb.Local;
 
 /**

@@ -5,8 +5,8 @@
  */
 package mms2.leasing.session;
 
-import mms.leasing.entity.LeasingSystemRequestEntity;
-import mms.leasing.entity.LongTermApplicationEntity;
+import mms2.leasing.entity.LeasingSystemRequestEntity;
+import mms2.leasing.entity.LongTermApplicationEntity;
 import java.util.ArrayList;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

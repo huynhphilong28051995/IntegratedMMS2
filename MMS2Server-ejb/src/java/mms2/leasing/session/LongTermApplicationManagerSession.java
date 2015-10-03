@@ -5,7 +5,7 @@
  */
 package mms2.leasing.session;
 
-import mms.leasing.entity.LongTermApplicationEntity;
+import mms2.leasing.entity.LongTermApplicationEntity;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import javax.ejb.Stateless;

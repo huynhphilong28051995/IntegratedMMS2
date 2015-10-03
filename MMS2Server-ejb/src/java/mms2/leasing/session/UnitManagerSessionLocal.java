@@ -5,9 +5,9 @@
  */
 package mms2.leasing.session;
 
-import mms.leasing.entity.LevelEntity;
-import mms.leasing.entity.UnitEntity;
-import mms.leasing.entity.TenantEntity;
+import mms2.leasing.entity.LevelEntity;
+import mms2.leasing.entity.UnitEntity;
+import mms2.leasing.entity.TenantEntity;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.ejb.Local;

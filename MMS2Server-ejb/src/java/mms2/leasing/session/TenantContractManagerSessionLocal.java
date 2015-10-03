@@ -5,8 +5,8 @@
  */
 package mms2.leasing.session;
 
-import mms.leasing.entity.TenantContractEntity;
-import mms.leasing.entity.TenantEntity;
+import mms2.leasing.entity.TenantContractEntity;
+import mms2.leasing.entity.TenantEntity;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;

@@ -3,56 +3,48 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mms.leasing.entity;
+package mms2.leasing.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 /**
  *
  * @author PhiLong
  */
 @Entity
-public class TenantEntity implements Serializable {
-
+public class TenantApplicantEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String mallName;
+    private ArrayList<String> chosenUnitList = new ArrayList();
     private String name;
     private String businessType;
     private ArrayList<String> description= new ArrayList();
-    private String mallName;
     private String address;
     private String tel;
     private String email;
-    @OneToOne
-    private TenantContractEntity tenantContract;
-    @OneToMany(cascade={CascadeType.ALL},mappedBy = "tenant")
-    private Collection<UnitEntity> units = new ArrayList<UnitEntity>();
 
-    public TenantEntity() {
+    public TenantApplicantEntity() {
     }
 
-    public TenantEntity(String mallName, String name, String businessType, ArrayList<String> description,
-            String address, String email, String tel) {
+    public TenantApplicantEntity(String mallName, String businessType, String name, 
+            ArrayList<String> description, String address, String email, String tel) {
         this.name = name;
         this.businessType = businessType;
-        this.mallName=mallName;
-        this.description = description;
-        this.address=address;
-        this.email=email;
-        this.tel=tel;
+        this.mallName = mallName;
+        this.address = address;
+        this.tel = tel;
+        this.email = email;
+        this.description=description;
     }
-
+    
     public Long getId() {
         return id;
     }
@@ -71,10 +63,10 @@ public class TenantEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TenantEntity)) {
+        if (!(object instanceof TenantApplicantEntity)) {
             return false;
         }
-        TenantEntity other = (TenantEntity) object;
+        TenantApplicantEntity other = (TenantApplicantEntity) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -83,7 +75,7 @@ public class TenantEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "EntityPackage.TenantEntity[ id=" + id + " ]";
+        return "EntityPackage.TenantApplicantEntity[ id=" + id + " ]";
     }
 
     /**
@@ -101,23 +93,6 @@ public class TenantEntity implements Serializable {
     }
 
     /**
-     * @return the unitNumber
-     */
-    /**
-     * @return the tenantContract
-     */
-    public TenantContractEntity getTenantContract() {
-        return tenantContract;
-    }
-
-    /**
-     * @param tenantContract the tenantContract to set
-     */
-    public void setTenantContract(TenantContractEntity tenantContract) {
-        this.tenantContract = tenantContract;
-    }
-
-    /**
      * @return the businessType
      */
     public String getBusinessType() {
@@ -132,17 +107,17 @@ public class TenantEntity implements Serializable {
     }
 
     /**
-     * @return the units
+     * @return the description
      */
-    public Collection<UnitEntity> getUnits() {
-        return units;
+    public ArrayList<String> getDescription() {
+        return description;
     }
 
     /**
-     * @param units the units to set
+     * @param description the description to set
      */
-    public void setUnits(Collection<UnitEntity> units) {
-        this.units = units;
+    public void setDescription(ArrayList<String> description) {
+        this.description = description;
     }
 
     /**
@@ -156,7 +131,7 @@ public class TenantEntity implements Serializable {
      * @param mallName the mallName to set
      */
     public void setMallName(String mallName) {
-        this.mallName = mallName;    
+        this.mallName = mallName;
     }
 
     /**
@@ -202,17 +177,17 @@ public class TenantEntity implements Serializable {
     }
 
     /**
-     * @return the description
+     * @return the chosenUnitList
      */
-    public ArrayList<String> getDescription() {
-        return description;
+    public ArrayList<String> getChosenUnitList() {
+        return chosenUnitList;
     }
 
     /**
-     * @param description the description to set
+     * @param chosenUnitList the chosenUnitList to set
      */
-    public void setDescription(ArrayList<String> description) {
-        this.description = description;
+    public void setChosenUnitList(ArrayList<String> chosenUnitList) {
+        this.chosenUnitList = chosenUnitList;
     }
-
+    
 }

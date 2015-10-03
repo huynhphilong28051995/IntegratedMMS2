@@ -5,7 +5,7 @@
  */
 package mms2.leasing.session;
 
-import mms.leasing.entity.LeasingSystemRequestEntity;
+import mms2.leasing.entity.LeasingSystemRequestEntity;
 import java.util.ArrayList;
 import javax.ejb.Local;
 
