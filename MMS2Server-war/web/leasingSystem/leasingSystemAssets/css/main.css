@@ -1,0 +1,59 @@
+textarea{
+    resize: none;
+}
+#section1SpaceLocate{
+    float: right;
+}
+.DragResizeButton{
+    width: 50px;
+    height: 50px;
+    border: solid black 1px;
+    background-color: #d9dddb ;
+}
+.DragResizeButton:hover{
+    background-color: #03aacc;
+}
+.DragResize{
+    display: inline-block;
+    position:absolute;
+    width: 70px;
+    height: 70px;
+}
+.NonDragResize{
+    position:absolute;
+    width: 70px;
+    height: 70px;
+    float: left;
+}
+
+button:active{
+}
+
+.changeFloor{
+    top: 100px;
+    width: 300px;
+    border: solid black 1px;
+    padding: 10px;
+}
+#MassCategoryDeclareForm{
+    float: right;
+    height: 400px;
+    width: 300px;
+    border: solid black 1px;
+    padding: 20px;
+}
+.SelectUnitToAddTenantForm{
+    display: inline-block;
+    float: right;
+    border: solid black 1px;
+    height: 250px;
+    width: 150px;
+    padding: 20px;
+}
+#UnitProposeDeleteForm{
+    border: solid black 1px;
+    width: 200px;
+    background-color: white;
+    float: right;
+    padding: 10px;
+}
