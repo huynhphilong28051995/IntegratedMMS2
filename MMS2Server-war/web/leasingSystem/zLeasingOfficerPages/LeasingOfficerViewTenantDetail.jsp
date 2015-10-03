@@ -4,8 +4,8 @@
     Author     : PhiLong
 --%>
 
-<%@page import="mms.leasing.entity.TenantContractEntity"%>
-<%@page import="mms.leasing.entity.TenantEntity"%>
+<%@page import="mms2.leasing.entity.TenantContractEntity"%>
+<%@page import="mms2.leasing.entity.TenantEntity"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

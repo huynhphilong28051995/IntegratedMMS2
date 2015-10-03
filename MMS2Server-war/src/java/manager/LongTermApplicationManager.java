@@ -5,7 +5,7 @@
  */
 package manager;
 
-import mms.leasing.entity.LongTermApplicationEntity;
+import mms2.leasing.entity.LongTermApplicationEntity;
 import mms2.leasing.session.LongTermApplicationManagerSessionLocal;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;

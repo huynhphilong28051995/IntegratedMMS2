@@ -3,7 +3,7 @@
     Created on : Sep 19, 2015, 7:06:31 PM
     Author     : PhiLong
 --%>
-<%@page import="mms.leasing.entity.TenantEntity"%>
+<%@page import="mms2.leasing.entity.TenantEntity"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

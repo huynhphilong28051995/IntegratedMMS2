@@ -5,7 +5,7 @@
  */
 package manager;
 
-import mms.leasing.entity.LeasingSystemRequestEntity;
+import mms2.leasing.entity.LeasingSystemRequestEntity;
 import mms2.leasing.session.LeasingSystemRequestManagerSessionLocal;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;

@@ -4,7 +4,7 @@
     Author     : PhiLong
 --%>
 
-<%@page import="mms.leasing.entity.LeasingSystemRequestEntity"%>
+<%@page import="mms2.leasing.entity.LeasingSystemRequestEntity"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

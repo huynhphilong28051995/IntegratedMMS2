@@ -5,9 +5,9 @@
  */
 package manager;
 
-import mms.leasing.entity.TenantContractEntity;
-import mms.leasing.entity.UnitEntity;
-import mms.leasing.entity.TenantEntity;
+import mms2.leasing.entity.TenantContractEntity;
+import mms2.leasing.entity.UnitEntity;
+import mms2.leasing.entity.TenantEntity;
 import mms2.leasing.session.TenantManagerSessionLocal;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;

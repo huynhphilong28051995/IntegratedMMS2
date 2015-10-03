@@ -4,11 +4,11 @@
     Author     : PhiLong
 --%>
 
+<%@page import="mms2.leasing.entity.LevelEntity"%>
+<%@page import="mms2.leasing.entity.UnitEntity"%>
 <%@page import="java.util.Vector"%>
-<%@page import="EntityPackage.UnitEntity"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="EntityPackage.LevelEntity"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

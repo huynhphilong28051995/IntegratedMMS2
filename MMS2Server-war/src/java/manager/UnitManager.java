@@ -5,8 +5,8 @@
  */
 package manager;
 
-import mms.leasing.entity.LevelEntity;
-import mms.leasing.entity.UnitEntity;
+import mms2.leasing.entity.LevelEntity;
+import mms2.leasing.entity.UnitEntity;
 import mms2.leasing.session.UnitManagerSessionLocal;
 import java.util.ArrayList;
 import java.util.Vector;

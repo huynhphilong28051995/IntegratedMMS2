@@ -3,8 +3,8 @@
     Created on : Sep 15, 2015, 11:06:40 PM
     Author     : PhiLong
 --%>
-<%@page import="mms.leasing.entity.LevelEntity"%>
-<%@page import="mms.leasing.entity.UnitEntity"%>
+<%@page import="mms2.leasing.entity.LevelEntity"%>
+<%@page import="mms2.leasing.entity.UnitEntity"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Vector"%>
 <%@page import="java.util.ArrayList"%>

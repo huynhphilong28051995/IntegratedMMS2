@@ -5,11 +5,11 @@
  */
 package servlets;
 
-import mms.leasing.entity.LeasingSystemRequestEntity;
-import mms.leasing.entity.LevelEntity;
-import mms.leasing.entity.LongTermApplicationEntity;
-import mms.leasing.entity.UnitEntity;
-import mms.leasing.entity.TenantEntity;
+import mms2.leasing.entity.LeasingSystemRequestEntity;
+import mms2.leasing.entity.LevelEntity;
+import mms2.leasing.entity.LongTermApplicationEntity;
+import mms2.leasing.entity.UnitEntity;
+import mms2.leasing.entity.TenantEntity;
 import mms2.leasing.session.LeasingSystemRequestManagerSessionLocal;
 import mms2.leasing.session.LevelManagerSessionLocal;
 import mms2.leasing.session.LongTermApplicationManagerSessionLocal;

@@ -3,9 +3,9 @@
     Created on : Sep 26, 2015, 8:57:43 AM
     Author     : PhiLong
 --%>
-<%@page import="mms.leasing.entity.UnitEntity"%>
-<%@page import="mms.leasing.entity.LevelEntity"%>
-<%@page import="mms.leasing.entity.LeasingSystemRequestEntity"%>
+<%@page import="mms2.leasing.entity.UnitEntity"%>
+<%@page import="mms2.leasing.entity.LevelEntity"%>
+<%@page import="mms2.leasing.entity.LeasingSystemRequestEntity"%>
 <%@page import="java.util.Vector"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>

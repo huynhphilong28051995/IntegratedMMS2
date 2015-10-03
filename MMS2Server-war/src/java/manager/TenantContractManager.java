@@ -5,7 +5,7 @@
  */
 package manager;
 
-import mms.leasing.entity.TenantContractEntity;
+import mms2.leasing.entity.TenantContractEntity;
 import mms2.leasing.session.TenantContractManagerSessionLocal;
 import java.sql.Timestamp;
 import javax.servlet.http.HttpServletRequest;
