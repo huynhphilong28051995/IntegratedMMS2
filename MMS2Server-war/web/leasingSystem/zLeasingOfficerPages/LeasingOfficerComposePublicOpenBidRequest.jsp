@@ -63,7 +63,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="logout">
+                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
