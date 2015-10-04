@@ -39,7 +39,7 @@ public interface UnitManagerSessionLocal {
 
     public Vector getAllPrototypeUnitColorForCurrentMall(String mallName);
 
-    public void setUnitDelete(String mallName, String locationCode);
+    public String setUnitDelete(String mallName, String locationCode);
 
     public void setOpenPublicBiddingPrototype(String mallName, ArrayList<String> chosenUnitList);
 }
