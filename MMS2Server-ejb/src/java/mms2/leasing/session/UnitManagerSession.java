@@ -337,17 +337,28 @@ public class UnitManagerSession implements UnitManagerSessionLocal {
     }
     
     @Override
-    public void setUnitDelete(String mallName, String locationCode){
+    public String setUnitDelete(String mallName, String locationCode){
         Query query = em.createQuery("SELECT u FROM UnitEntity u WHERE "
                     + "u.mallName=:inMallName AND u.locationCode=:inLocationCode ");
             query.setParameter("inMallName", mallName);
             query.setParameter("inLocationCode", locationCode);
         UnitEntity unit =(UnitEntity) query.getResultList().get(0);
+        if(unit.isHasTenant())
+            return "Unsuccessful! This unit already had tenant";
+        if(unit.isOpenForPublicBidding())
+            return "Unsuccessful! This unit already opened for public bidding";
+        if(unit.isOpenForPublicBiddingPrototype())
+            return "Unsuccessful! This unit is being proposed for public bidding";
+        if(unit.isOpenForInternalBidding())
+            return "Unsuccessful! This unit already opened for internl bidding";
+        if(unit.isOpenForInternalBiddingPrototype())
+            return "Unsuccessful! This unit is being proposed for internal bidding";
         unit.setDeleteProposed(true);
         LevelEntity level = unit.getLevel();
         em.merge(unit);
         em.merge(level);
         em.flush();
+        return "Successful! Unit recorded as delete in prototype floor plan";
     }
     
     @Override
