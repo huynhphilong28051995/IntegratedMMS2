@@ -158,6 +158,8 @@ public class LeasingControllerServlet extends HttpServlet {
                 case "LeasingOfficerMain":
                     request.getSession().removeAttribute("unitListToAddTenant");
                     request.getSession().removeAttribute("errorMessage");
+                    request.getSession().setAttribute("levelCode", "LV1");
+                    page = "LeasingOfficerZoneDeclare";
                     break;
                 case "DeclareZone":
                     request.getSession().setAttribute("levelCode", "LV1");
@@ -177,9 +179,8 @@ public class LeasingControllerServlet extends HttpServlet {
                     page = "LeasingOfficerZoneDeclare";
                     break;
                 case "AddUnitToListToAddTenant":
-                    String status = doAddUnitsToListToAddTenant(request);
-                    String errorMessage = status;
-                    request.getSession().setAttribute("errorMessage", errorMessage);
+                    String chooseUnitStatus = doAddUnitsToListToAddTenant(request);
+                    request.setAttribute("chooseUnitStatus", chooseUnitStatus);
                     page = "LeasingOfficerChooseUnitForPublicBidding";
                     break;
 
@@ -188,7 +189,6 @@ public class LeasingControllerServlet extends HttpServlet {
                     request.getSession().removeAttribute("unitListToAddTenant");
                     request.getSession().removeAttribute("errorMessage");
                     page = "LeasingOfficerChooseUnitForPublicBidding";
-                    System.out.println("PAGEEEEEEEEEEEEEEEEEEEEEEEEEE " + page);
                     break;
                 case "ChangeFloorplanLevelChooseUnitPublicBidding":
                     levelCode = request.getParameter("levelCode");
@@ -204,8 +204,9 @@ public class LeasingControllerServlet extends HttpServlet {
                     break;
                 case "SendPublicOpenBidRequest":
                     doSendPublicOpenBidRequest(request);
-                    request.setAttribute("RequestStatus", "PublicBidSent");
-                    page = "LeasingOfficerMain";
+                    request.setAttribute("sendRequestStatus", "Your request has successfully been sent");
+                    request.getSession().setAttribute("levelCode", "LV1");
+                    page = "LeasingOfficerZoneDeclare";
                     break;
 
                 case "ViewAllTenants":
@@ -223,8 +224,8 @@ public class LeasingControllerServlet extends HttpServlet {
                     break;
                 case "SendCategoryRequest":
                     doSendCategoryRequest(request);
-                    request.setAttribute("RequestStatus", "CategoryRequestSent");
-                    page = "LeasingOfficerMain";
+                    request.setAttribute("sendRequestStatus", "Your request has successfully been sent");
+                    page = "LeasingOfficerZoneDeclare";
                     break;
                 case "ViewAllPublicLongTermApplication":
                     page = "LeasingOfficerViewAllPublicLongTerm";
@@ -240,7 +241,9 @@ public class LeasingControllerServlet extends HttpServlet {
                     break;
                 case "SendLongTermApplicationApprovalRequest":
                     doSendLongTermApplicationApprovalRequest(request);
-                    page = "LeasingOfficerMain";
+                    request.setAttribute("sendRequestStatus", "Your request has successfully been sent");
+                    page = "LeasingOfficerZoneDeclare";
+                    page = "LeasingOfficerZoneDeclare";
                     break;
 //END-FUNCTION FOR LEASING OFFICER
 //START-FUNCTION FOR SPACE PLAN OFFICER

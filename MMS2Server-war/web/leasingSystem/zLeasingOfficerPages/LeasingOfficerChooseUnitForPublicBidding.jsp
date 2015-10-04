@@ -148,7 +148,7 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
-                    
+
 
 
                     <%
@@ -247,16 +247,16 @@
                         %>
                     </div>
                     <script>
-            var positions = <%=positionString%>;
-            $.each(positions, function (id, pos) {
-                $("#" + id).css(pos);
-            });
+                        var positions = <%=positionString%>;
+                        $.each(positions, function (id, pos) {
+                            $("#" + id).css(pos);
+                        });
                     </script>
                     <!--SELECT UNIT TO ADD TENANT-->
                     <div class="SelectUnitToAddTenantForm">
                         <form action="AddUnitToListToAddTenant" >
                             <div class="form-group">
-                                <label class="test">From</label>
+                                <label>From</label>
                                 <select required="required" name="firstLocationCode" class="test">
                                     <%
                                         for (int i = 0; i < listOfStoreUnits.size(); i++) {
@@ -290,7 +290,7 @@
                     <div class="SelectUnitToAddTenantForm">
                         <form action="AddUnitToListToAddTenant">
                             <div class="form-group">
-                                <label class="test">From</label>
+                                <label>From</label>
                                 <select required="required" name="firstLocationCode" class="test">
                                     <%
                                         for (int i = 0; i < listOfPushCartUnits.size(); i++) {
@@ -325,7 +325,7 @@
                     <div class="SelectUnitToAddTenantForm" >
                         <form action="AddUnitToListToAddTenant">
                             <div class="form-group">
-                                <label class="test">From</label>
+                                <label>From</label>
                                 <select required="required" name="firstLocationCode" class="test">
                                     <%
                                         for (int i = 0; i < listOfKioskUnits.size(); i++) {
@@ -360,10 +360,10 @@
                         <button class="btn btn-default" id="proceed"  type="submit">Proceed</button>
                     </form>
                     <script>
-            var canProceed = <%=canProceed%>;
-            if (canProceed === false) {
-                document.getElementById("proceed").disabled = true;
-            }
+                        var canProceed = <%=canProceed%>;
+                        if (canProceed === false) {
+                            document.getElementById("proceed").disabled = true;
+                        }
                     </script>
                     <!--SELECT UNIT TO ADD TENANT-->
                     <!--COLOR BUTTONS-->
@@ -378,7 +378,7 @@
 
                     %> 
                     <script>
-            document.getElementById("<%=locationCode%>_button").style.background = "<%=color%>";
+                        document.getElementById("<%=locationCode%>_button").style.background = "<%=color%>";
                     </script>
                     <%
                             }
@@ -405,28 +405,19 @@
                     </div>
                     <!--CHANGE FLOOR-->
 
-                    <!--BACK TO MAIN-->
-                    <form action="LeasingOfficerMain"><button class="btn btn-default" type="submit">BACK</button></form>
-                    <!--BACK TO MAIN-->
-
                     <%
-                        if (request.getSession().getAttribute("errorMessage") != null) {
-                            String errorMessage = (String) request.getSession().getAttribute("errorMessage");
+                        String chooseUnitStatus = null;
+                        String locationCodeList = "Chosen unit(s): ";
+                        if (request.getAttribute("chooseUnitStatus") != null) {
+                            chooseUnitStatus = (String) request.getAttribute("chooseUnitStatus");
+                            System.out.println("TESTING 2 " + chooseUnitStatus);
                             ArrayList<String> unitListToAddTenant = (ArrayList<String>) request.getSession().getAttribute("unitListToAddTenant");
-                    %>
-                    <h3><%=errorMessage%></h3>
-                    <h3>Chosen unit(s):</h3>
-                    <%
                         }
-                    %>
-                    <%
                         if (request.getSession().getAttribute("unitListToAddTenant") != null) {
                             ArrayList<String> unitListToAddTenant = (ArrayList<String>) request.getSession().getAttribute("unitListToAddTenant");
                             for (int i = 0; i < unitListToAddTenant.size(); i++) {
                                 String locationCode = unitListToAddTenant.get(i);
-                    %>
-                    <h4><%=locationCode%></h4>
-                    <%
+                                locationCodeList = locationCodeList + locationCode + " ";
                             }
                         }
                     %>
@@ -472,43 +463,38 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-            jQuery(document).ready(function () {
-                Custom.init(); // init custom core components
-                Layout.init(); // init current layout
-                UIIdleTimeout.init(); // init Idle Timeout
-                UIToastr.init(); // init Toastr Alert
+                        jQuery(document).ready(function () {
+                            Custom.init(); // init custom core components
+                            Layout.init(); // init current layout
+                            UIIdleTimeout.init(); // init Idle Timeout
+                            UIToastr.init(); // init Toastr Alert
+                        });
+        </script>
+
+        <%
+            if (chooseUnitStatus != null) {
+                chooseUnitStatus = chooseUnitStatus  +" | "+ locationCodeList;
+                if (chooseUnitStatus.contains("Successful!")) {
+%>
+        <script language="javascript">
+            $(document).ready(function () {
+                // show when page load
+                toastr.success('<%= chooseUnitStatus%>');
             });
         </script>
-        <% String referrer = request.getHeader("referer");
-            String query = request.getQueryString();
-            String timestamp = null;
+        <%
+        } else {
+%>
+        <script language="javascript">
+            $(document).ready(function () {
+                // show when page load
+                toastr.error('<%=chooseUnitStatus%>');
+            });
+        </script>
+        <%
+                      }
+            }
         %>
-        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
-                timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
-                if ("=continue".equals(query)) {
-        %>        
-        <script language="javascript">
-            var ts = '<%= timestamp%>';
-            $(document).ready(function () {
-                // show when page load
-                toastr.info('Welcome back!');
-
-            });
-        </script>
-        <% } else {%>
-        <script language="javascript">
-            var ts = '<%= timestamp%>';
-            $(document).ready(function () {
-                // show when page load
-                toastr.success(ts, 'Login Successful!');
-
-            });
-        </script>
-        <%}
-            }%>
-
 
         <!-- END JAVASCRIPTS -->
 

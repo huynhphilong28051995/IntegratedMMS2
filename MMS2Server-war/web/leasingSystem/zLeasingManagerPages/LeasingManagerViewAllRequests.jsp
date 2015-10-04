@@ -216,7 +216,6 @@
                         </table>
                         <button class="btn btn-default" id="viewDetailButton" type="submit" disabled="true">View detail</button>
                     </form>
-                    <form action="LeasingManagerMain"><button class="btn btn-default" type="submit">BACK</button></form>
                     <script>
                         $("input:checkbox").on('click', function () {
                             // in the handler, 'this' refers to the box clicked on

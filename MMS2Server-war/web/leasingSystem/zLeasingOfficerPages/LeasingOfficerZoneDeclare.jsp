@@ -44,7 +44,7 @@
     </head>
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
-         <%String IP = (String) request.getSession().getAttribute("IP");%>
+        <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -144,7 +144,7 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER --> 
-                   
+
 
                     <%
                         String levelCode = (String) request.getSession().getAttribute("levelCode");
@@ -235,10 +235,10 @@
                         %>
                     </div>
                     <script>
-            var positions = <%=positionString%>;
-            $.each(positions, function (id, pos) {
-                $("#" + id).css(pos);
-            });
+                        var positions = <%=positionString%>;
+                        $.each(positions, function (id, pos) {
+                            $("#" + id).css(pos);
+                        });
                     </script>
                     <!--CHANGE FLOOR-->
                     <div id="changeFloor">
@@ -376,7 +376,7 @@
 
                     %> 
                     <script>
-            document.getElementById("<%=locationCode%>_button").style.background = "<%=color%>";
+                        document.getElementById("<%=locationCode%>_button").style.background = "<%=color%>";
                     </script>
                     <%
                             }
@@ -384,15 +384,10 @@
                     %>
                     <!--COLOR BUTTONS-->
                     <!--BACK TO MAIN-->
-                    <form action="LeasingOfficerMain"><button class="btn btn-default" type="submit">BACK</button></form>
+
                     <form action="ComposeCategoryRequest">
                         <button type="submit" class="btn btn-default">Compose category request</button>
                     </form>
-                    <!--BACK TO MAIN-->
-
-
-
-
 
                     <!-- END PAGE CONTENT INNER -->
                 </div>
@@ -435,20 +430,20 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-            jQuery(document).ready(function () {
-                Custom.init(); // init custom core components
-                Layout.init(); // init current layout
-                UIIdleTimeout.init(); // init Idle Timeout
-                UIToastr.init(); // init Toastr Alert
-            });
+                        jQuery(document).ready(function () {
+                            Custom.init(); // init custom core components
+                            Layout.init(); // init current layout
+                            UIIdleTimeout.init(); // init Idle Timeout
+                            UIToastr.init(); // init Toastr Alert
+                        });
         </script>
         <% String referrer = request.getHeader("referer");
             String query = request.getQueryString();
             String timestamp = null;
         %>
-        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
+        <% if (referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/login")
+                    || referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/logout")
+                    || referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/adminHome")) {
                 timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
                 if ("=continue".equals(query)) {
         %>        
@@ -470,8 +465,22 @@
             });
         </script>
         <%}
-            }%>
+            }
+        %>
+        <%
+            if (request.getAttribute("sendRequestStatus") != null) {
+                String sendRequestStatus = (String) request.getAttribute("sendRequestStatus");
+        %>
+        <script language="javascript">
+            $(document).ready(function () {
+                // show when page load
+                toastr.success('<%=sendRequestStatus%>');
 
+            });
+        </script>
+        <%
+            }
+        %>
 
         <!-- END JAVASCRIPTS -->
 

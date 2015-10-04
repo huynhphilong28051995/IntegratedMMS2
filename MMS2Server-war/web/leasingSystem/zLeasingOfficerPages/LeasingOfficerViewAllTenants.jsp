@@ -143,7 +143,7 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
-                    <%String IP = (String) request.getSession().getAttribute("IP");%>
+                    
 
                     <form action="ViewTenantDetail">
                         <table id="tenantTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">

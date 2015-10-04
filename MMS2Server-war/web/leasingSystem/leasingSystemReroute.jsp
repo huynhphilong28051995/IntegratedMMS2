@@ -57,8 +57,6 @@
                     <!-- BEGIN TOP NAVIGATION MENU -->
                     <div class="top-menu">
                         <ul class="nav navbar-nav pull-right">
-                            <span class="separator"></span>
-                            </li>
                             <!-- BEGIN USER LOGIN DROPDOWN -->
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -137,7 +135,7 @@
             
             String mainPage="";
             if(staffPosition.equals("Leasing Manager"))
-                 mainPage="LeasingManagerMain";
+                 mainPage="LeasingManagerViewAllRequests";
             else if(staffPosition.equals("Leasing Officer"))
                 mainPage="LeasingOfficerMain";
             else

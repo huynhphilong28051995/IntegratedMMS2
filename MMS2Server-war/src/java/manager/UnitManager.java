@@ -111,7 +111,6 @@ public class UnitManager {
         ArrayList<UnitEntity> pendingUnitList = new ArrayList();
         String firstLocationCode = request.getParameter("firstLocationCode").substring(5);
         String lastLocationCode = request.getParameter("lastLocationCode").substring(5);
-        System.out.println("000000000000000000000000000000000000000000000000" + request.getParameter("firstLocationCode"));
         String unitTypeCode = request.getSession().getAttribute("levelCode") + request.getParameter("firstLocationCode").substring(3, 5);
         String mallName = (String) request.getSession().getAttribute("mallName");
         Integer first = Integer.valueOf(firstLocationCode);
@@ -129,35 +128,31 @@ public class UnitManager {
         boolean alreadyInOfficialList = checkPendingUnitListAlreadyInUnitListToAddTenant(unitListToAddTenant,
                 pendingUnitList);
         if (alreadyInOfficialList) {
-            return "Collide";
+            return "Unsuccessful! Unit(s) collide with chosen ones";
         }
         boolean alreadyHasTenant = checkPendingUnitListAlreadyHasTenant(pendingUnitList);
         if (alreadyHasTenant) {
-            return "Unavailable";
+            return "Unsuccessful! Unit(s) already have tenant";
         }
         boolean categoryNotDefined = checkCategoryNotDefined(pendingUnitList);
         if (categoryNotDefined) {
-            return "CategoryNotDefined";
+            return "Unsuccessful! Category of unit(s) not defined yet";
         }
-//        boolean differentInCategory = checkCategoryDifferent(mallName, unitListToAddTenant, pendingUnitList);
-//        if (differentInCategory) {
-//            return "DifferentCategory";
-//        }
         boolean alreadyOpenForPublicBidding = checkPublicBiddingOpen(pendingUnitList);
         if (alreadyOpenForPublicBidding) {
-            return "PublicBiddingOpened";
+            return "Unsuccessful! Unit(s) is already opened for public bidding";
         }
         boolean alreadySuggestPublicBidding = checkPublicBiddingSuggest(pendingUnitList);
         if (alreadySuggestPublicBidding) {
-            return "PublicBiddingSuggested";
+            return "Unsuccessful Unit(s) already suggested for public bidding";
         }
         boolean alreadyOpenForInternalBidding = checkInternalBiddingOpen(pendingUnitList);
         if (alreadyOpenForInternalBidding) {
-            return "InternalBiddingOpened";
+            return "Unsuccessful! Unit(s) is already opened for internal bidding";
         }
         boolean alreadySuggestInternalidding = checkInternalBiddingSuggest(pendingUnitList);
         if (alreadySuggestInternalidding) {
-            return "InternalBiddingSuggested";
+            return "Unsuccessful! Unit(s) already suggested for internal bidding";
         }
         //if the list is qualified
         for (int i = 0; i < pendingUnitList.size(); i++) {
@@ -165,7 +160,7 @@ public class UnitManager {
             unitListToAddTenant.add(unit.getLocationCode());
         }
         request.getSession().setAttribute("unitListToAddTenant", unitListToAddTenant);
-        return "Succeed";
+        return "Successful!";
     }
 
     private boolean checkCategoryDifferent(String mallName, ArrayList<String> unitListToAddTenant,
