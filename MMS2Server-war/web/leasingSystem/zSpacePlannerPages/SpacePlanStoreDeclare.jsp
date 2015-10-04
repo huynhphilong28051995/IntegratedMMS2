@@ -35,6 +35,7 @@
     <!-- END HEAD -->
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
+        <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -57,7 +58,7 @@
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 
-                                    <span class="username username-hide-mobile">Welcome, <%=(String)request.getSession().getAttribute("staffFirstName")%></span>
+                                    <span class="username username-hide-mobile">Welcome, <%=(String) request.getSession().getAttribute("staffFirstName")%></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
@@ -65,7 +66,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -121,6 +122,9 @@
                             <li class="">
                                 <a href="ComposeFloorplanRequest">Compose floor plan request</a>
                             </li>
+                            <li class="">
+                                <a href="CheckSpacePlanRequestStatus">Request Status</a>
+                            </li>
                         </ul>    
                     </div>
                     <!-- END MEGA MENU -->
@@ -149,7 +153,7 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
-
+                    
                     <%
                         int numOfLevel = (Integer) request.getSession().getAttribute("numOfLevel");
                     %>
@@ -163,7 +167,7 @@
                                    id="numOfStoreToAddLevel<%=i%>" name="numOfStoreToAddLevel<%=i%>" >
                         </div>
                         <script>
-                document.getElementById("numOfStoreToAddLevel<%=i%>").defaultValue = "0";
+                            document.getElementById("numOfStoreToAddLevel<%=i%>").defaultValue = "0";
                         </script>
                         <%
                             }
@@ -213,12 +217,12 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-                jQuery(document).ready(function () {
-                    Custom.init(); // init custom core components
-                    Layout.init(); // init current layout
-                    UIIdleTimeout.init(); // init Idle Timeout
-                    UIToastr.init(); // init Toastr Alert
-                });
+                            jQuery(document).ready(function () {
+                                Custom.init(); // init custom core components
+                                Layout.init(); // init current layout
+                                UIIdleTimeout.init(); // init Idle Timeout
+                                UIToastr.init(); // init Toastr Alert
+                            });
         </script>
 
 

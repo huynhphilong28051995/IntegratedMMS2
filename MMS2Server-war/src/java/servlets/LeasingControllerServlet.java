@@ -347,7 +347,7 @@ public class LeasingControllerServlet extends HttpServlet {
                     page = "SpacePlanLocate";
                     break;
                 case "ProposeDeleteSingleUnit":
-                    doSetUnitDelete(request);
+                    request.setAttribute("unitDeleteStatus", doSetUnitDelete(request));
                     page = "SpacePlanLocate";
                     break;
                 case "logout":
@@ -612,9 +612,9 @@ public class LeasingControllerServlet extends HttpServlet {
         leasingRequestManager.addFloorplanModificationRequest(request);
     }
 
-    public void doSetUnitDelete(HttpServletRequest request) {
+    public String doSetUnitDelete(HttpServletRequest request) {
         UnitManager unitManager = new UnitManager(unitManagerSessionLocal);
-        unitManager.setUnitDelete(request);
+        return unitManager.setUnitDelete(request);
     }
     public boolean doCheckInitialization(HttpServletRequest request){
         LevelManager levelManager = new LevelManager(levelManagerSessionLocal);

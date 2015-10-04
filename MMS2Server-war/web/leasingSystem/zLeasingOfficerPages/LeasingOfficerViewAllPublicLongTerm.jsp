@@ -31,8 +31,8 @@
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
         <!-- END CUSTOM STYLES -->	
-	
-	<!--PERSONAL STYLE-->
+
+        <!--PERSONAL STYLE-->
          <!--<link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/bootstrap.css" type="text/css">-->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" type="text/css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -43,6 +43,7 @@
     </head>
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
+         <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -65,7 +66,7 @@
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 
-                                    <span class="username username-hide-mobile">Welcome, <%=(String)request.getSession().getAttribute("staffFirstName")%></span>
+                                    <span class="username username-hide-mobile">Welcome, <%=(String) request.getSession().getAttribute("staffFirstName")%></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
@@ -73,7 +74,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -97,8 +98,8 @@
                             </span>
                         </div>
                     </form>
-                   <!-- END HEADER SEARCH BOX -->
-                   <div class="hor-menu ">
+                    <!-- END HEADER SEARCH BOX -->
+                    <div class="hor-menu ">
                         <ul class="nav navbar-nav">
                             <li class="">
                                 <a href="DeclareZone">Zone declaration</a>
@@ -106,11 +107,11 @@
                             <li class="">
                                 <a href="ChooseUnitForPublicBidding">Open public bidding</a>
                             </li>
-                            
+
                             <li class="active">
                                 <a href="ViewAllPublicLongTermApplication">View public bidders</a>
                             </li>
-                            
+
                             <li class="">
                                 <a href="ViewAllTenants">View tenants</a>
                             </li>
@@ -141,102 +142,100 @@
                 <div class="container">
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
-                    <!-- BEGIN PAGE CONTENT INNER -->
-                    
-                    
-                    
-                    
-        <form action="PrepareContractForLongTermApplicant">
-            <table id="leasingRequestTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Business type</th>
-                        <th>Description</th>
-                        <th>Address</th>
-                        <th>Email</th>
-                        <th>Tel</th>
-                        <th>Apply unit(s)</th>
-                        <th>Bid rate</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%
-                        ArrayList<LongTermApplicationEntity> applicationList
-                                = (ArrayList<LongTermApplicationEntity>) request.
-                                        getAttribute("longTermApplicationList");
-                        for (int i = 0; i < applicationList.size(); i++) {
-                            LongTermApplicationEntity longTermApplication = applicationList.get(i);
-                            Long id = longTermApplication.getId();
-                            String name = longTermApplication.getApplicantName();
-                            String businessType = longTermApplication.getApplicantBusinessType();
-                            ArrayList<String> descriptionList = longTermApplication.getApplicantDescription();
-                            String descriptionString = "";
-                            for (int j = 0; j < descriptionList.size(); j++) {
-                                descriptionString = descriptionString + ""
-                                        + descriptionList.get(j);
-                            }
-                            String address = longTermApplication.getApplicantAddress();
-                            String email = longTermApplication.getApplicantEmail();
-                            String tel  = longTermApplication.getApplicantTel();
-                            ArrayList<String> unitList = longTermApplication.getApplyUnitList();
-                            String unitString = "";
-                            for (int j = 0; j < unitList.size(); j++) {
-                                unitString = unitString + "  "
-                                        + unitList.get(j);
-                            }
-                            double bidRate = longTermApplication.getApplicantBidRate();
+                    <!-- BEGIN PAGE CONTENT INNER --> 
+                   
 
-                    %>
-                    <tr>
-                        <td><input type="checkbox" class="radio" name="applicantId" value="<%=id%>"></td>
-                        <td><%=id%></td>
-                        <td><%=name%></td>
-                        <td><%=businessType%></td>
-                        <td><%=descriptionString%></td>
-                        <td><%=address%></td>
-                        <td><%=email%></td>
-                        <td><%=tel%></td>
-                        <td><%=unitString%></td>
-                        <td><%=bidRate%></td>            
-                    </tr>
-                    <%
-                        }
-                    %>
-                </tbody>
-            </table>
-                <button id="proceedButton" class="btn btn-default" type="submit" disabled="true">Prepare contract</button>
-        </form>
-        <form action="LeasingOfficerMain"><button class="btn btn-default" type="submit">BACK</button></form>
-        <script>
-            $("input:checkbox").on('click', function () {
-                // in the handler, 'this' refers to the box clicked on
-                var $box = $(this);
-                if ($box.is(":checked")) {
-                    document.getElementById("proceedButton").disabled=false;
-                    // the name of the box is retrieved using the .attr() method
-                    // as it is assumed and expected to be immutable
-                    var group = "input:checkbox[name='" + $box.attr("name") + "']";
-                    // the checked state of the group/box on the other hand will change
-                    // and the current value is retrieved using .prop() method
-                    $(group).prop("checked", false);
-                    $box.prop("checked", true);
-                } else {
-                    $box.prop("checked", false);
-                    document.getElementById("proceedButton").disabled=true;
-                }
-            });
-            $(document).ready(function () {
-                $('#leasingRequestTable').DataTable({
-                    "order": [[3, "desc"]]
-                });
-            });
-        </script>   
-    
-        
-        	<!-- END PAGE CONTENT INNER -->
+                    <form action="PrepareContractForLongTermApplicant">
+                        <table id="leasingRequestTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Business type</th>
+                                    <th>Description</th>
+                                    <th>Address</th>
+                                    <th>Email</th>
+                                    <th>Tel</th>
+                                    <th>Apply unit(s)</th>
+                                    <th>Bid rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    ArrayList<LongTermApplicationEntity> applicationList
+                                            = (ArrayList<LongTermApplicationEntity>) request.
+                                            getAttribute("longTermApplicationList");
+                                    for (int i = 0; i < applicationList.size(); i++) {
+                                        LongTermApplicationEntity longTermApplication = applicationList.get(i);
+                                        Long id = longTermApplication.getId();
+                                        String name = longTermApplication.getApplicantName();
+                                        String businessType = longTermApplication.getApplicantBusinessType();
+                                        ArrayList<String> descriptionList = longTermApplication.getApplicantDescription();
+                                        String descriptionString = "";
+                                        for (int j = 0; j < descriptionList.size(); j++) {
+                                            descriptionString = descriptionString + ""
+                                                    + descriptionList.get(j);
+                                        }
+                                        String address = longTermApplication.getApplicantAddress();
+                                        String email = longTermApplication.getApplicantEmail();
+                                        String tel = longTermApplication.getApplicantTel();
+                                        ArrayList<String> unitList = longTermApplication.getApplyUnitList();
+                                        String unitString = "";
+                                        for (int j = 0; j < unitList.size(); j++) {
+                                            unitString = unitString + "  "
+                                                    + unitList.get(j);
+                                        }
+                                        double bidRate = longTermApplication.getApplicantBidRate();
+
+                                %>
+                                <tr>
+                                    <td><input type="checkbox" class="radio" name="applicantId" value="<%=id%>"></td>
+                                    <td><%=id%></td>
+                                    <td><%=name%></td>
+                                    <td><%=businessType%></td>
+                                    <td><%=descriptionString%></td>
+                                    <td><%=address%></td>
+                                    <td><%=email%></td>
+                                    <td><%=tel%></td>
+                                    <td><%=unitString%></td>
+                                    <td><%=bidRate%></td>            
+                                </tr>
+                                <%
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                        <button id="proceedButton" class="btn btn-default" type="submit" disabled="true">Prepare contract</button>
+                    </form>
+                    <form action="LeasingOfficerMain"><button class="btn btn-default" type="submit">BACK</button></form>
+                    <script>
+                        $("input:checkbox").on('click', function () {
+                            // in the handler, 'this' refers to the box clicked on
+                            var $box = $(this);
+                            if ($box.is(":checked")) {
+                                document.getElementById("proceedButton").disabled = false;
+                                // the name of the box is retrieved using the .attr() method
+                                // as it is assumed and expected to be immutable
+                                var group = "input:checkbox[name='" + $box.attr("name") + "']";
+                                // the checked state of the group/box on the other hand will change
+                                // and the current value is retrieved using .prop() method
+                                $(group).prop("checked", false);
+                                $box.prop("checked", true);
+                            } else {
+                                $box.prop("checked", false);
+                                document.getElementById("proceedButton").disabled = true;
+                            }
+                        });
+                        $(document).ready(function () {
+                            $('#leasingRequestTable').DataTable({
+                                "order": [[3, "desc"]]
+                            });
+                        });
+                    </script>   
+
+
+                    <!-- END PAGE CONTENT INNER -->
                 </div>
             </div>
             <!-- END PAGE CONTENT -->
@@ -259,7 +258,7 @@
         <script src="../assets/global/plugins/respond.min.js"></script>
         <script src="../assets/global/plugins/excanvas.min.js"></script> 
         <![endif]-->
-<!--        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
+        <!--        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
         <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -288,31 +287,31 @@
             String query = request.getQueryString();
             String timestamp = null;
         %>
-        <% if (referrer.matches("http://localhost:8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/adminHome")) {
+        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
+                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
+                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
                 timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
                 if ("=continue".equals(query)) {
         %>        
         <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.info('Welcome back!');
+            var ts = '<%= timestamp%>';
+            $(document).ready(function () {
+                // show when page load
+                toastr.info('Welcome back!');
 
-    });
+            });
         </script>
         <% } else {%>
         <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.success(ts, 'Login Successful!');
+            var ts = '<%= timestamp%>';
+            $(document).ready(function () {
+                // show when page load
+                toastr.success(ts, 'Login Successful!');
 
-    });
+            });
         </script>
         <%}
-    }%>
+            }%>
 
 
         <!-- END JAVASCRIPTS -->

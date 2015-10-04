@@ -71,16 +71,7 @@
 
                                     <span class="username username-hide-mobile">Welcome, guest</span>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-default">
-                                    <li>
-                                        <a href="extra_profile">
-                                            <i class="icon-user"></i> User Settings </a>
-                                    </li>
-                                    <li>
-                                        <a href="logout">
-                                            <i class="icon-key"></i> Log Out </a>
-                                    </li>
-                                </ul>
+                                
                             </li>
                             <!-- END USER LOGIN DROPDOWN -->
                         </ul>

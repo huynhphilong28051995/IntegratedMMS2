@@ -34,6 +34,13 @@
     <!-- END HEAD -->
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
+        <%
+            String IP  = request.getHeader("referer");
+            int begin = IP.indexOf(":")+3;
+            int end = IP.indexOf(":", begin);
+            IP = IP.substring(begin, end);
+            request.getSession().setAttribute("IP", IP);
+        %>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -64,7 +71,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -122,6 +129,7 @@
                     <!-- BEGIN PAGE CONTENT INNER -->
 
         <%
+            
             System.out.println("Rerouting to Leasing system");
             String staffPosition = (String)request.getSession().getAttribute("staffPosition");
             String mallName = (String)request.getSession().getAttribute("mallName");
@@ -138,7 +146,7 @@
             System.out.println("LeasingSystemReroute : "+mainPage);
         %>
         <form action="LeasingControllerServlet/SpacePlanMain">
-            <a href="http://localhost:8080/MMS2Server-war/LeasingControllerServlet/<%=mainPage%>">REROUTE</a>
+            <a href="http://<%=IP%>:8080/MMS2Server-war/LeasingControllerServlet/<%=mainPage%>">REROUTE</a>
         </form>
     <!-- END PAGE CONTENT INNER -->
                 </div>
@@ -188,9 +196,6 @@
                     UIToastr.init(); // init Toastr Alert
                 });
         </script>
-
-
-
         <!-- END JAVASCRIPTS -->
 
     </body>

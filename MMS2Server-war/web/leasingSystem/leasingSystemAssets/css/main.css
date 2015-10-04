@@ -26,9 +26,6 @@ textarea{
     float: left;
 }
 
-button:active{
-}
-
 .changeFloor{
     top: 100px;
     width: 300px;

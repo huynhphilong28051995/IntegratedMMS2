@@ -8,7 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-   <head>
+    <head>
         <meta charset="utf-8"/>
         <title>Merlion Leasing System | Public Bidders List</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,8 +31,8 @@
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
         <!-- END CUSTOM STYLES -->	
-	
-	<!--PERSONAL STYLE-->
+
+        <!--PERSONAL STYLE-->
          <!--<link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/bootstrap.css" type="text/css">-->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" type="text/css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -43,6 +43,7 @@
     </head>
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
+         <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -65,7 +66,7 @@
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 
-                                    <span class="username username-hide-mobile">Welcome, <%=(String)request.getSession().getAttribute("staffFirstName")%></span>
+                                    <span class="username username-hide-mobile">Welcome, <%=(String) request.getSession().getAttribute("staffFirstName")%></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
@@ -73,7 +74,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -97,8 +98,8 @@
                             </span>
                         </div>
                     </form>
-                   <!-- END HEADER SEARCH BOX -->
-                   <div class="hor-menu ">
+                    <!-- END HEADER SEARCH BOX -->
+                    <div class="hor-menu ">
                         <ul class="nav navbar-nav">
                             <li class="">
                                 <a href="DeclareZone">Zone declaration</a>
@@ -106,11 +107,11 @@
                             <li class="">
                                 <a href="ChooseUnitForPublicBidding">Open public bidding</a>
                             </li>
-                            
+
                             <li class="">
                                 <a href="ViewAllPublicLongTermApplication">View public bidders</a>
                             </li>
-                            
+
                             <li class="active">
                                 <a href="ViewAllTenants">View tenants</a>
                             </li>
@@ -142,79 +143,80 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
-                    
-        <form action="ViewTenantDetail">
-            <table id="tenantTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>ID</th>
-                        <th>Tenant Name</th>
-                        <th>Business Type</th>
-                        <th>Contract ID</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%
-                        ArrayList<TenantEntity> allTenantList = (ArrayList<TenantEntity>) request.getSession().getAttribute("allTenantList");
-                        for (int i = 0; i < allTenantList.size(); i++) {
-                            TenantEntity tenant = allTenantList.get(i);
-                            String tenantId = String.valueOf(tenant.getId());
-                            String tenantName = tenant.getName();
-                            String tenantBusinessType = tenant.getBusinessType();
-                            String contractId = "";
-                            if (tenant.getTenantContract() != null) {
-                                contractId = String.valueOf(tenant.getTenantContract().getId());
+                    <%String IP = (String) request.getSession().getAttribute("IP");%>
+
+                    <form action="ViewTenantDetail">
+                        <table id="tenantTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>ID</th>
+                                    <th>Tenant Name</th>
+                                    <th>Business Type</th>
+                                    <th>Contract ID</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    ArrayList<TenantEntity> allTenantList = (ArrayList<TenantEntity>) request.getSession().getAttribute("allTenantList");
+                                    for (int i = 0; i < allTenantList.size(); i++) {
+                                        TenantEntity tenant = allTenantList.get(i);
+                                        String tenantId = String.valueOf(tenant.getId());
+                                        String tenantName = tenant.getName();
+                                        String tenantBusinessType = tenant.getBusinessType();
+                                        String contractId = "";
+                                        if (tenant.getTenantContract() != null) {
+                                            contractId = String.valueOf(tenant.getTenantContract().getId());
+                                        } else {
+                                            contractId = "N.A.";
+                                        }
+
+                                %>
+                                <tr>
+                                    <td><input type="checkbox" class="radio" name="tenantId" value="<%=tenantId%>"></td>
+                                    <td><%=tenantId%></td>
+                                    <td><%=tenantName%></td>
+                                    <td><%=tenantBusinessType%></td>
+                                    <td><%=contractId%></td>
+                                </tr>
+                                <%
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                        <button type="submit" id="viewDetailButton" class="btn btn-default" disabled="disable">View detail</button>
+                    </form>
+                    <form action="LeasingOfficerMain"><button class="btn btn-default" type="submit">BACK</button></form>
+
+
+                    <script>
+                        $("input:checkbox").on('click', function () {
+                            // in the handler, 'this' refers to the box clicked on
+                            var $box = $(this);
+                            if ($box.is(":checked")) {
+                                document.getElementById("viewDetailButton").disabled = false;
+                                // the name of the box is retrieved using the .attr() method
+                                // as it is assumed and expected to be immutable
+                                var group = "input:checkbox[name='" + $box.attr("name") + "']";
+                                // the checked state of the group/box on the other hand will change
+                                // and the current value is retrieved using .prop() method
+                                $(group).prop("checked", false);
+                                $box.prop("checked", true);
                             } else {
-                                contractId = "N.A.";
+                                $box.prop("checked", false);
+                                document.getElementById("viewDetailButton").disabled = true;
                             }
-
-                    %>
-                    <tr>
-                        <td><input type="checkbox" class="radio" name="tenantId" value="<%=tenantId%>"></td>
-                        <td><%=tenantId%></td>
-                        <td><%=tenantName%></td>
-                        <td><%=tenantBusinessType%></td>
-                        <td><%=contractId%></td>
-                    </tr>
-                    <%
-                        }
-                    %>
-                </tbody>
-            </table>
-            <button type="submit" id="viewDetailButton" class="btn btn-default" disabled="disable">View detail</button>
-        </form>
-        <form action="LeasingOfficerMain"><button class="btn btn-default" type="submit">BACK</button></form>
+                        });
+                        $(document).ready(function () {
+                            $('#tenantTable').DataTable({
+                                "order": [[3, "desc"]]
+                            });
+                        });
+                    </script>
 
 
-        <script>
-            $("input:checkbox").on('click', function () {
-                // in the handler, 'this' refers to the box clicked on
-                var $box = $(this);
-                if ($box.is(":checked")) {
-                    document.getElementById("viewDetailButton").disabled=false;
-                    // the name of the box is retrieved using the .attr() method
-                    // as it is assumed and expected to be immutable
-                    var group = "input:checkbox[name='" + $box.attr("name") + "']";
-                    // the checked state of the group/box on the other hand will change
-                    // and the current value is retrieved using .prop() method
-                    $(group).prop("checked", false);
-                    $box.prop("checked", true);
-                } else {
-                    $box.prop("checked", false);
-                    document.getElementById("viewDetailButton").disabled=true;
-                }
-            });
-            $(document).ready(function () {
-                $('#tenantTable').DataTable({
-                    "order": [[3, "desc"]]
-                });
-            });
-        </script>
-        
-        
-        
-    <!-- END PAGE CONTENT INNER -->
+
+                    <!-- END PAGE CONTENT INNER -->
                 </div>
             </div>
             <!-- END PAGE CONTENT -->
@@ -237,7 +239,7 @@
         <script src="../assets/global/plugins/respond.min.js"></script>
         <script src="../assets/global/plugins/excanvas.min.js"></script> 
         <![endif]-->
-<!--        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
+        <!--        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
         <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -266,31 +268,31 @@
             String query = request.getQueryString();
             String timestamp = null;
         %>
-        <% if (referrer.matches("http://localhost:8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/adminHome")) {
+        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
+                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
+                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
                 timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
                 if ("=continue".equals(query)) {
         %>        
         <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.info('Welcome back!');
+            var ts = '<%= timestamp%>';
+            $(document).ready(function () {
+                // show when page load
+                toastr.info('Welcome back!');
 
-    });
+            });
         </script>
         <% } else {%>
         <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.success(ts, 'Login Successful!');
+            var ts = '<%= timestamp%>';
+            $(document).ready(function () {
+                // show when page load
+                toastr.success(ts, 'Login Successful!');
 
-    });
+            });
         </script>
         <%}
-    }%>
+            }%>
 
 
         <!-- END JAVASCRIPTS -->

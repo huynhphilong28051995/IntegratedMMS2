@@ -57,16 +57,7 @@
 
                                     <span class="username username-hide-mobile">Welcome, guest</span>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-default">
-                                    <li>
-                                        <a href="extra_profile">
-                                            <i class="icon-user"></i> User Settings </a>
-                                    </li>
-                                    <li>
-                                        <a href="logout">
-                                            <i class="icon-key"></i> Log Out </a>
-                                    </li>
-                                </ul>
+                                
                             </li>
                             <!-- END USER LOGIN DROPDOWN -->
                         </ul>
@@ -243,35 +234,7 @@
                 UIToastr.init(); // init Toastr Alert
             });
         </script>
-        <% String referrer = request.getHeader("referer");
-            String query = request.getQueryString();
-            String timestamp = null;
-        %>
-        <% if (referrer.matches("http://localhost:8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/adminHome")) {
-                timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
-                if ("=continue".equals(query)) {
-        %>        
-        <script language="javascript">
-            var ts = '<%= timestamp%>';
-            $(document).ready(function () {
-                // show when page load
-                toastr.info('Welcome back!');
-
-            });
-        </script>
-        <% } else {%>
-        <script language="javascript">
-            var ts = '<%= timestamp%>';
-            $(document).ready(function () {
-                // show when page load
-                toastr.success(ts, 'Login Successful!');
-
-            });
-        </script>
-        <%}
-            }%>
+        
 
 
         <!-- END JAVASCRIPTS -->

@@ -317,10 +317,10 @@ public class UnitManager {
         return "Succeed";
     }
 
-    public void setUnitDelete(HttpServletRequest request) {
+    public String setUnitDelete(HttpServletRequest request) {
         String locationCode = request.getParameter("locationCode");
         String mallName = (String) request.getSession().getAttribute("mallName");
-        unitManagerSessionLocal.setUnitDelete(mallName, locationCode);
+        return unitManagerSessionLocal.setUnitDelete(mallName, locationCode);
     }
 
     public void setOpenPublicBiddingPrototype(HttpServletRequest request) {

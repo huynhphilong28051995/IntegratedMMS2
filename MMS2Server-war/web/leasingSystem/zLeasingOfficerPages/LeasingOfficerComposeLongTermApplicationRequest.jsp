@@ -30,9 +30,9 @@
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
         <!-- END CUSTOM STYLES -->	
-	
-	<!--PERSONAL STYLE-->
-         <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/main.css" type="text/css">
+
+        <!--PERSONAL STYLE-->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/main.css" type="text/css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/jquery-ui.theme.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/jquery-ui.css">
         <script src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
@@ -42,6 +42,7 @@
     </head>
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
+        <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -64,7 +65,7 @@
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 
-                                    <span class="username username-hide-mobile">Welcome, <%=(String)request.getSession().getAttribute("staffFirstName")%></span>
+                                    <span class="username username-hide-mobile">Welcome, <%=(String) request.getSession().getAttribute("staffFirstName")%></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
@@ -72,7 +73,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -96,8 +97,8 @@
                             </span>
                         </div>
                     </form>
-                   <!-- END HEADER SEARCH BOX -->
-                   <div class="hor-menu ">
+                    <!-- END HEADER SEARCH BOX -->
+                    <div class="hor-menu ">
                         <ul class="nav navbar-nav">
                             <li class="">
                                 <a href="DeclareZone">Zone declaration</a>
@@ -105,11 +106,11 @@
                             <li class="">
                                 <a href="ChooseUnitForPublicBidding">Open public bidding</a>
                             </li>
-                            
+
                             <li class="">
                                 <a href="ViewAllPublicLongTermApplication">View public bidders</a>
                             </li>
-                            
+
                             <li class="">
                                 <a href="ViewAllTenants">View tenants</a>
                             </li>
@@ -142,19 +143,19 @@
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
                     
-                    
-                    
-        <body>
-        <div class="container">
-            <form action="SendLongTermApplicationApprovalRequest" method="GET">
-                <div class="form-group">
-                    <label for="requestDescription">Short request description :</label><br/>
-                    <textarea required="required" resize="none" name="requestDescription" rows="10" cols="180" placeholder="Enter tenant description"></textarea>
-                </div> 
-                <button type="submit" class="btn btn-default">Submit</button>
-            </form>
-        </div>
-    <!-- END PAGE CONTENT INNER -->
+
+
+
+                    <div class="container">
+                        <form action="SendLongTermApplicationApprovalRequest" method="GET">
+                            <div class="form-group">
+                                <label for="requestDescription">Short request description :</label><br/>
+                                <textarea required="required" resize="none" name="requestDescription" rows="10" cols="180" placeholder="Enter tenant description"></textarea>
+                            </div> 
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </form>
+                    </div>
+                    <!-- END PAGE CONTENT INNER -->
                 </div>
             </div>
             <!-- END PAGE CONTENT -->
@@ -177,7 +178,7 @@
         <script src="../assets/global/plugins/respond.min.js"></script>
         <script src="../assets/global/plugins/excanvas.min.js"></script> 
         <![endif]-->
-<!--        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
+        <!--        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
         <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -206,31 +207,31 @@
             String query = request.getQueryString();
             String timestamp = null;
         %>
-        <% if (referrer.matches("http://localhost:8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/adminHome")) {
+        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
+                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
+                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
                 timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
                 if ("=continue".equals(query)) {
         %>        
         <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.info('Welcome back!');
+            var ts = '<%= timestamp%>';
+            $(document).ready(function () {
+                // show when page load
+                toastr.info('Welcome back!');
 
-    });
+            });
         </script>
         <% } else {%>
         <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.success(ts, 'Login Successful!');
+            var ts = '<%= timestamp%>';
+            $(document).ready(function () {
+                // show when page load
+                toastr.success(ts, 'Login Successful!');
 
-    });
+            });
         </script>
         <%}
-    }%>
+            }%>
 
 
         <!-- END JAVASCRIPTS -->

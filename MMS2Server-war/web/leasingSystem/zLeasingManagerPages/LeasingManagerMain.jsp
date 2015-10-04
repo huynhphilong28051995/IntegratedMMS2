@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-         <title>Merlion Leasing System | Manager Main Page</title>
+        <title>Merlion Leasing System | Manager Main Page</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -29,10 +29,11 @@
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
         <!-- END CUSTOM STYLES -->	
-	
+
     </head>
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
+        <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -55,7 +56,7 @@
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 
-                                    <span class="username username-hide-mobile">Welcome, <%= (String)request.getSession().getAttribute("staffFirstName")%></span>
+                                    <span class="username username-hide-mobile">Welcome, <%= (String) request.getSession().getAttribute("staffFirstName")%></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
@@ -63,7 +64,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -108,7 +109,7 @@
                                     </li>
                                     <li class="">
                                         <a href="####">
-                                           #### </a>
+                                            #### </a>
                                     </li>
                                     <li class="">
                                         <a href="####">
@@ -122,7 +123,7 @@
                             <li class="">
                                 <a href="####">####</a>
                             </li>
-                             </ul>    
+                        </ul>    
                     </div>
                     <!-- END MEGA MENU -->
                 </div>
@@ -149,12 +150,11 @@
                 <div class="container">
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
-                    <!-- BEGIN PAGE CONTENT INNER -->
- 
+                    <!-- BEGIN PAGE CONTENT INNER --> 
                     
-                    
-                    
-    		<!-- END PAGE CONTENT INNER -->
+
+
+                    <!-- END PAGE CONTENT INNER -->
                 </div>
             </div>
             <!-- END PAGE CONTENT -->
@@ -206,31 +206,31 @@
             String query = request.getQueryString();
             String timestamp = null;
         %>
-        <% if (referrer.matches("http://localhost:8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/adminHome")) {
+        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
+                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
+                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
                 timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
                 if ("=continue".equals(query)) {
         %>        
         <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.info('Welcome back!');
+            var ts = '<%= timestamp%>';
+            $(document).ready(function () {
+                // show when page load
+                toastr.info('Welcome back!');
 
-    });
+            });
         </script>
         <% } else {%>
         <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.success(ts, 'Login Successful!');
+            var ts = '<%= timestamp%>';
+            $(document).ready(function () {
+                // show when page load
+                toastr.success(ts, 'Login Successful!');
 
-    });
+            });
         </script>
         <%}
-    }%>
+            }%>
 
 
         <!-- END JAVASCRIPTS -->

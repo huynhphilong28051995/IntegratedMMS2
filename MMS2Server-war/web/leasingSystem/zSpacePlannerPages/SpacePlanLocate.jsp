@@ -46,9 +46,9 @@
         <script src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/javascript/mainScript.js"></script>   
         <!--PERSONAL STYLE-->
     </head>
-    
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
+        <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -71,7 +71,7 @@
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 
-                                    <span class="username username-hide-mobile">Welcome, <%=(String)request.getSession().getAttribute("staffFirstName")%></span>
+                                    <span class="username username-hide-mobile">Welcome, <%=(String) request.getSession().getAttribute("staffFirstName")%></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
@@ -79,7 +79,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -135,7 +135,10 @@
                             <li class="">
                                 <a href="ComposeFloorplanRequest">Compose floor plan request</a>
                             </li>
-                             </ul>    
+                            <li class="">
+                                <a href="CheckSpacePlanRequestStatus">Request Status</a>
+                            </li>
+                        </ul>    
                     </div>
                     <!-- END MEGA MENU -->
                 </div>
@@ -162,73 +165,72 @@
                 <div class="container">
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
-                    <!-- BEGIN PAGE CONTENT INNER -->
-					
-    <%
-        int zIndex = 1;
-        String levelCode = (String) request.getAttribute("levelCode");
-        LevelEntity level = (LevelEntity) request.getSession().getAttribute("levelInstance");
-        String floorplanBackground = level.getFloorplanBackground();
-        int numOfUnit = level.getUnits().size();
-        ArrayList<String> positionList = (ArrayList<String>) level.getUnitPositionListPrototype();
-        String positionString = "";
-        for (int i = 0; i < positionList.size(); i++) {
-            positionString = positionString + "" + positionList.get(i);
-        }
-        //Seperate arraList into pushcart and non-pushcart
-        List allUnitList = new ArrayList(level.getUnits());
-        List unitList = new ArrayList();
-        for (int i = 0; i < allUnitList.size(); i++) {
-            UnitEntity unit = (UnitEntity) allUnitList.get(i);
-            if (!unit.isDeleteProposed()) {
-                unitList.add(unit);
-            }
-        }
-        ArrayList<UnitEntity> listOfStoreUnits = new ArrayList();
-        ArrayList<UnitEntity> listOfPushCartUnits = new ArrayList();
-        ArrayList<UnitEntity> listOfKioskUnits = new ArrayList();
-        ArrayList<UnitEntity> listOfEventUnits = new ArrayList();
-        for (int i = 0; i < unitList.size(); i++) {
-            String unitLocationCode = ((UnitEntity) unitList.get(i)).getLocationCode();
-            if (unitLocationCode.contains("PC")) {
-                listOfPushCartUnits.add((UnitEntity) unitList.get(i));
-            }
-            if (unitLocationCode.contains("EV")) {
-                listOfEventUnits.add((UnitEntity) unitList.get(i));
-            }
-            if (unitLocationCode.contains("KS")) {
-                listOfKioskUnits.add((UnitEntity) unitList.get(i));
-            }
-            if (unitLocationCode.contains("ST")) {
-                listOfStoreUnits.add((UnitEntity) unitList.get(i));
-            }
-        }
-        ArrayList<UnitEntity> unitListDelete = new ArrayList();
-        for (int i = 0; i < unitList.size(); i++) {
-            UnitEntity unit = (UnitEntity) unitList.get(i);
-            if (unit.isHasTenant() || unit.isOpenForPublicBidding()
-                    || unit.isOpenForInternalBidding() || unit.isOpenForPublicBiddingPrototype()
-                    || unit.isOpenForInternalBiddingPrototype()) {
-                //do nothing
-            } else {
-                unitListDelete.add(unit);
-            }
-        }
-    %>
+                    <!-- BEGIN PAGE CONTENT INNER --> 
+                    
 
-    <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png" 
-           stype="width:1000px; height: 1000px;"/>
+                    <%
+                        int zIndex = 1;
+                        String levelCode = (String) request.getAttribute("levelCode");
+                        LevelEntity level = (LevelEntity) request.getSession().getAttribute("levelInstance");
+                        String floorplanBackground = level.getFloorplanBackground();
+                        int numOfUnit = level.getUnits().size();
+                        ArrayList<String> positionList = (ArrayList<String>) level.getUnitPositionListPrototype();
+                        String positionString = "";
+                        for (int i = 0; i < positionList.size(); i++) {
+                            positionString = positionString + "" + positionList.get(i);
+                        }
+                        //Seperate arraList into pushcart and non-pushcart
+                        List allUnitList = new ArrayList(level.getUnits());
+                        List unitList = new ArrayList();
+                        for (int i = 0; i < allUnitList.size(); i++) {
+                            UnitEntity unit = (UnitEntity) allUnitList.get(i);
+                            if (!unit.isDeleteProposed()) {
+                                unitList.add(unit);
+                            }
+                        }
+                        ArrayList<UnitEntity> listOfStoreUnits = new ArrayList();
+                        ArrayList<UnitEntity> listOfPushCartUnits = new ArrayList();
+                        ArrayList<UnitEntity> listOfKioskUnits = new ArrayList();
+                        ArrayList<UnitEntity> listOfEventUnits = new ArrayList();
+                        for (int i = 0; i < unitList.size(); i++) {
+                            String unitLocationCode = ((UnitEntity) unitList.get(i)).getLocationCode();
+                            if (unitLocationCode.contains("PC")) {
+                                listOfPushCartUnits.add((UnitEntity) unitList.get(i));
+                            }
+                            if (unitLocationCode.contains("EV")) {
+                                listOfEventUnits.add((UnitEntity) unitList.get(i));
+                            }
+                            if (unitLocationCode.contains("KS")) {
+                                listOfKioskUnits.add((UnitEntity) unitList.get(i));
+                            }
+                            if (unitLocationCode.contains("ST")) {
+                                listOfStoreUnits.add((UnitEntity) unitList.get(i));
+                            }
+                        }
+                        ArrayList<UnitEntity> unitListDelete = new ArrayList();
+                        for (int i = 0; i < unitList.size(); i++) {
+                            UnitEntity unit = (UnitEntity) unitList.get(i);
+                            if (unit.isHasTenant() || unit.isOpenForPublicBidding()
+                                    || unit.isOpenForInternalBidding() || unit.isOpenForPublicBiddingPrototype()
+                                    || unit.isOpenForInternalBiddingPrototype()) {
+                                //do nothing
+                            } else {
+                                unitListDelete.add(unit);
+                            }
+                        }
+                    %>
 
-    <div>
-        <%
-            for (int i = 0; i < listOfStoreUnits.size(); i++) {
-                String locationCode = listOfStoreUnits.get(i).getLocationCode();
-        %>
-        <div id="<%=locationCode%>" class="DragResize" 
-             style="height:70px; width:70px; z-index:<%=zIndex%> ">
-            <button class="DragResizeButton" style="height:100%; width:100%;"><%=locationCode%></button>
-        </div>
-        <script>
+                    <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png"/>
+                    <div>
+                        <%
+                            for (int i = 0; i < listOfStoreUnits.size(); i++) {
+                                String locationCode = listOfStoreUnits.get(i).getLocationCode();
+                        %>
+                        <div id="<%=locationCode%>" class="DragResize" 
+                             style="height:70px; width:70px; z-index:<%=zIndex%> ">
+                            <button class="DragResizeButton" style="height:100%; width:100%;"><%=locationCode%></button>
+                        </div>
+                        <script>
             $("#<%=locationCode%>").draggable({
                 stop: function (event, ui) {
                     positions[this.id] = ui.position;
@@ -236,20 +238,20 @@
                     document.getElementById("positionString").disabled = false;
                 }
             });
-        </script>
-        <%
-                zIndex = zIndex + 1;
-            }
-        %>
-        <%
-            for (int i = 0; i < listOfPushCartUnits.size(); i++) {
-                String locationCode = listOfPushCartUnits.get(i).getLocationCode();
-        %>
-        <div id="<%=locationCode%>" class="DragResize"
-             style="height: 30px; width: 70px;z-index:<%=zIndex%>">
-            <button class="DragResizeButton" style="height:100%; width:100%;"><%=locationCode%></button>
-        </div>
-        <script>
+                        </script>
+                        <%
+                                zIndex = zIndex + 1;
+                            }
+                        %>
+                        <%
+                            for (int i = 0; i < listOfPushCartUnits.size(); i++) {
+                                String locationCode = listOfPushCartUnits.get(i).getLocationCode();
+                        %>
+                        <div id="<%=locationCode%>" class="DragResize"
+                             style="height: 30px; width: 70px;z-index:<%=zIndex%>">
+                            <button class="DragResizeButton" style="height:100%; width:100%;"><%=locationCode%></button>
+                        </div>
+                        <script>
             $("#<%=locationCode%>").draggable({
                 stop: function (event, ui) {
                     positions[this.id] = ui.position;
@@ -257,20 +259,20 @@
                     document.getElementById("positionString").disabled = false;
                 }
             });
-        </script>
-        <%
-                zIndex = zIndex + 1;
-            }
-        %>
-        <%
-            for (int i = 0; i < listOfKioskUnits.size(); i++) {
-                String locationCode = listOfKioskUnits.get(i).getLocationCode();
-        %>
-        <div id="<%=locationCode%>" class="DragResize"
-             style="height: 30px; width: 70px;z-index:<%=zIndex%>">
-            <button class="DragResizeButton" style="height:100%; width:100%;"><%=locationCode%></button>
-        </div>
-        <script>
+                        </script>
+                        <%
+                                zIndex = zIndex + 1;
+                            }
+                        %>
+                        <%
+                            for (int i = 0; i < listOfKioskUnits.size(); i++) {
+                                String locationCode = listOfKioskUnits.get(i).getLocationCode();
+                        %>
+                        <div id="<%=locationCode%>" class="DragResize"
+                             style="height: 30px; width: 70px;z-index:<%=zIndex%>">
+                            <button class="DragResizeButton" style="height:100%; width:100%;"><%=locationCode%></button>
+                        </div>
+                        <script>
             $("#<%=locationCode%>").draggable({
                 stop: function (event, ui) {
                     positions[this.id] = ui.position;
@@ -278,19 +280,19 @@
                     document.getElementById("positionString").disabled = false;
                 }
             });
-        </script>
-        <%
-                zIndex = zIndex + 1;
-            }
-        %>
-        <%
-            for (int i = 0; i < listOfEventUnits.size(); i++) {
-                String locationCode = listOfEventUnits.get(i).getLocationCode();
-        %>
-        <div id="<%=locationCode%>" class="DragResize" style="height: 100px; width: 100px">
-            <button class="DragResizeButton" style="height:100%; width:100%;"><%=locationCode%></button>
-        </div>
-        <script>
+                        </script>
+                        <%
+                                zIndex = zIndex + 1;
+                            }
+                        %>
+                        <%
+                            for (int i = 0; i < listOfEventUnits.size(); i++) {
+                                String locationCode = listOfEventUnits.get(i).getLocationCode();
+                        %>
+                        <div id="<%=locationCode%>" class="DragResize" style="height: 100px; width: 100px">
+                            <button class="DragResizeButton" style="height:100%; width:100%;"><%=locationCode%></button>
+                        </div>
+                        <script>
             $("#<%=locationCode%>").draggable({
                 stop: function (event, ui) {
                     positions[this.id] = ui.position;
@@ -298,74 +300,74 @@
                     document.getElementById("positionString").disabled = false;
                 }
             });
-        </script>
-        <%
-                zIndex = zIndex + 1;
-            }
-        %>
-    </div>
-    <script>
+                        </script>
+                        <%
+                                zIndex = zIndex + 1;
+                            }
+                        %>
+                    </div>
+                    <script>
         var positions = <%=positionString%>;
         $.each(positions, function (id, pos) {
             $("#" + id).css(pos);
         });
-    </script>
-    <!--DELETE UNIT-->
-    <div id="UnitProposeDeleteForm">
-        <form action="ProposeDeleteSingleUnit">
-            <div class="form-group">
-                <label>Unit to delete</label>
-                <select required="required" name="locationCode" >
-                    <%
-                        for (int i = 0; i < unitListDelete.size(); i++) {
-                            String locationCode = ((UnitEntity) unitListDelete.get(i)).getLocationCode();
-                    %>
-                    <option value="<%=locationCode%>"><%=locationCode%></option>
-                    <%
-                        }
-                    %>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-default">Delete</button>
-        </form>
-    </div>
-    <!--DELETE UNIT-->
-    <!--CHANGE FLOOR-->
-            <div id="changeFloor">
-            <form action="ChangeFloorplanLevelSpacePlanning" method="GET">
-                <div class="form_group">
-                    <label for="levelCode">Change floorplan view</label>
+                    </script>
+                    <!--DELETE UNIT-->
+                    <div id="UnitProposeDeleteForm">
+                        <form action="ProposeDeleteSingleUnit">
+                            <div class="form-group">
+                                <label>Unit to delete</label>
+                                <select required="required" name="locationCode" >
+                                    <%
+                                        for (int i = 0; i < unitListDelete.size(); i++) {
+                                            String locationCode = ((UnitEntity) unitListDelete.get(i)).getLocationCode();
+                                    %>
+                                    <option value="<%=locationCode%>"><%=locationCode%></option>
+                                    <%
+                                        }
+                                    %>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-default">Delete</button>
+                        </form>
+                    </div>
+                    <!--DELETE UNIT-->
+                    <!--CHANGE FLOOR-->
+                    <div id="changeFloor">
+                        <form action="ChangeFloorplanLevelSpacePlanning" method="GET">
+                            <div class="form_group">
+                                <label for="levelCode">Change floorplan view</label>
 
-                    <select name="levelCode">
-                        <%
-                            for (int i = 1; i <= (Integer) request.getSession().getAttribute("numOfLevel"); i++) {
-                        %>
-                        <option value="LV<%=i%>">LV<%=i%></option>
-                        <%
-                            }
-                        %>
-                    </select>
-                    <button type="submit" class="btn btn-default" >Go</button>
-                </div>
-            </form>
-        </div>
-        <!--CHANGE FLOOR-->
-        <div>
-            <form action="SaveUnitPosition" method="GET">
-                <button id="positionString"  value="" name="positionString" type="submit" 
-                        onclick="doSave()" disabled class="btn btn-default">SAVE</button>
-            </form>
-        </div>
-    
-    <script>
-        function doSave() {
-            document.getElementById("positionString").value = localStorage.positions;
-            localStorage.positions = "{}";
-        }
-        ;
-    </script>
-    
-					<!-- END PAGE CONTENT INNER -->
+                                <select name="levelCode">
+                                    <%
+                                        for (int i = 1; i <= (Integer) request.getSession().getAttribute("numOfLevel"); i++) {
+                                    %>
+                                    <option value="LV<%=i%>">LV<%=i%></option>
+                                    <%
+                                        }
+                                    %>
+                                </select>
+                                <button type="submit" class="btn btn-default" >Go</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!--CHANGE FLOOR-->
+                    <div>
+                        <form action="SaveUnitPosition" method="GET">
+                            <button id="positionString"  value="" name="positionString" type="submit" 
+                                    onclick="doSave()" disabled class="btn btn-default">SAVE</button>
+                        </form>
+                    </div>
+
+                    <script>
+                        function doSave() {
+                            document.getElementById("positionString").value = localStorage.positions;
+                            localStorage.positions = "{}";
+                        }
+                        ;
+                    </script>
+
+                    <!-- END PAGE CONTENT INNER -->
                 </div>
             </div>
             <!-- END PAGE CONTENT -->
@@ -388,7 +390,7 @@
         <script src="../assets/global/plugins/respond.min.js"></script>
         <script src="../assets/global/plugins/excanvas.min.js"></script> 
         <![endif]-->
-        
+
         <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -406,42 +408,67 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-            jQuery(document).ready(function () {
-                Custom.init(); // init custom core components
-                Layout.init(); // init current layout
-                UIIdleTimeout.init(); // init Idle Timeout
-                UIToastr.init(); // init Toastr Alert
-            });
+        jQuery(document).ready(function () {
+            Custom.init(); // init custom core components
+            Layout.init(); // init current layout
+            UIIdleTimeout.init(); // init Idle Timeout
+            UIToastr.init(); // init Toastr Alert
+        });
         </script>
         <% String referrer = request.getHeader("referer");
             String query = request.getQueryString();
             String timestamp = null;
         %>
-        <% if (referrer.matches("http://localhost:8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/adminHome")) {
+        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
+                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
+                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
                 timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
                 if ("=continue".equals(query)) {
         %>        
         <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.info('Welcome back!');
+            var ts = '<%= timestamp%>';
+            $(document).ready(function () {
+                // show when page load
+                toastr.info('Welcome back!');
 
-    });
+            });
         </script>
         <% } else {%>
         <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.success(ts, 'Login Successful!');
+            var ts = '<%= timestamp%>';
+            $(document).ready(function () {
+                // show when page load
+                toastr.success(ts, 'Login Successful!');
 
-    });
+            });
         </script>
         <%}
-    }%>
+            }%>
+
+        <%
+            if (request.getAttribute("unitDeleteStatus") != null) {
+                String unitDeleteStatus = (String) request.getAttribute("unitDeleteStatus");
+                if (unitDeleteStatus.contains("Successful")) {
+        %>
+        <script language="javascript">
+            $(document).ready(function () {
+                // show when page load
+                 toastr.success('<%=unitDeleteStatus%>');
+            });
+        </script>
+        <%
+        } else {
+        %>
+        <script language="javascript">
+            $(document).ready(function () {
+                // show when page load
+               toastr.error('<%=unitDeleteStatus%>');
+            });
+        </script>
+        <%
+                }
+            }
+        %>
 
 
         <!-- END JAVASCRIPTS -->

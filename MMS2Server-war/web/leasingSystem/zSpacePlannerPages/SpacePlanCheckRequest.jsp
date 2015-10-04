@@ -1,18 +1,14 @@
 <%-- 
-    Document   : indexLeasingOfficerViewTenantDetail
-    Created on : Sep 19, 2015, 7:41:05 PM
+    Document   : SpacePlanCheckRequest
+    Created on : Oct 3, 2015, 9:08:45 PM
     Author     : PhiLong
 --%>
 
-<%@page import="mms2.leasing.entity.TenantContractEntity"%>
-<%@page import="mms2.leasing.entity.TenantEntity"%>
-<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8"/>
-        <title>Merlion Leasing System | Tenant detail</title>
+        <title>Merlion Leasing System | Compose request</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -34,18 +30,10 @@
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
         <!-- END CUSTOM STYLES -->	
 
-        <!--PERSONAL STYLE-->
-         <!--<link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/bootstrap.css" type="text/css">-->
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" type="text/css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/main.css" type="text/css">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <!--PERSONAL STYLE-->
     </head>
+
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
-         <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -68,7 +56,7 @@
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 
-                                    <span class="username username-hide-mobile">Welcome, <%=(String) request.getSession().getAttribute("staffFirstName")%></span>
+                                    <span class="username username-hide-mobile">Welcome, <%= (String) request.getSession().getAttribute("staffFirstName")%></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
@@ -76,7 +64,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://"<%=IP%>":8080/MMS2Server-war/administration/logout">
+                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -103,19 +91,37 @@
                     <!-- END HEADER SEARCH BOX -->
                     <div class="hor-menu ">
                         <ul class="nav navbar-nav">
-                            <li class="">
-                                <a href="DeclareZone">Zone declaration</a>
+                            <li class="menu-dropdown classic-menu-dropdown">
+                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
+                                    Modification <i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-left">
+                                    <li class="">
+                                        <a href="AddStore">
+                                            Add store unit </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="AddPushCart">
+                                            Add pushcart unit </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="AddKiosk">
+                                            Add kiosk unit </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="AddEvent">
+                                            Add event unit </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="">
-                                <a href="ChooseUnitForPublicBidding">Open public bidding</a>
+                                <a href="LocateSpacePlan">Unit relocation</a>
                             </li>
-
                             <li class="">
-                                <a href="ViewAllPublicLongTermApplication">View public bidders</a>
+                                <a href="ComposeFloorplanRequest">Compose floor plan request</a>
                             </li>
-
                             <li class="active">
-                                <a href="ViewAllTenants">View tenants</a>
+                                <a href="CheckSpacePlanRequestStatus">Request Status</a>
                             </li>
                         </ul>    
                     </div>
@@ -132,7 +138,7 @@
                 <div class="container">
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">  
-                        <h1>Tenants Listing </h1>
+                        <h1>Request status </h1>
                     </div>
                     <!-- END PAGE TITLE -->
 
@@ -144,65 +150,69 @@
                 <div class="container">
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
-                    <!-- BEGIN PAGE CONTENT INNER --> 
-                   
+                    <!-- BEGIN PAGE CONTENT INNER -->
 
                     <%
-                        TenantEntity tenant = (TenantEntity) request.getAttribute("detailedTenant");
-                        String tenantName = tenant.getName();
-                        ArrayList<String> tenantDescriptionList = tenant.getDescription();
-                        String tenantDescriptionString = "";
-                        for (int i = 0; i < tenantDescriptionList.size(); i++) {
-                            tenantDescriptionString = tenantDescriptionString + "" + tenantDescriptionList.get(i);
-                        }
-                        String mallName = tenant.getMallName();
-                        String tenantAddress = tenant.getAddress();
-                        String tenantEmail = tenant.getEmail();
-                        String tenantTel = tenant.getTel();
-                        TenantContractEntity tenantContract = tenant.getTenantContract();
-                        String contractStartDate = tenantContract.getStartTimestamp().toString();
-                        String contractEndDate = tenantContract.getEndTimestamp().toString();
-                        double contractDeposit = tenantContract.getDeposit();
-                        double contractRate = tenantContract.getRate();
+                        
                     %>
-                    <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                        <tr>
-                            <th>Name:</th>
-                            <td><%=tenantName%></td>
-                        </tr>
-                        <tr>
-                            <th>Description</th>
-                            <td><%=tenantDescriptionString%></td>
-                        </tr>
-                        <tr>
-                            <th>Address</th>
-                            <td><%=tenantAddress%></td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td><%=tenantEmail%></td>
-                        </tr>
-                        <tr>
-                            <th>Tenant telephone</th>
-                            <td><%=tenantTel%></td>
-                        </tr>
-                        <tr>
-                            <th>Contract start date</th>
-                            <td><%=contractStartDate%></td>
-                        </tr>
-                        <tr>
-                            <th>Contract end date</th>
-                            <td><%=contractEndDate%></td>
-                        </tr>
-                        <tr>
-                            <th>Contract deposit</th>
-                            <td><%=contractDeposit%></td>
-                        </tr>
-                        <tr>
-                            <th>Contract rate</th>
-                            <td><%=contractRate%></td>
-                        </tr>
-                    </table>
+                    <form action="DeleteSpacePlanRequest">
+                        <table id="leasingRequestTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>ID</th>
+                                    <th>Sender username</th>
+                                    <th>Sender Position</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Confirmation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                   
+                                %>
+                                <tr>
+                                    <td><input type="checkbox" class="radio" name="leasingRequestId" value="<%=%>"></td>
+                                    <td><%=%></td>
+                                    <td><%=%></td>
+                                    <td><%=%></td>
+                                    <td><%=%></td>
+                                    <td><%=%></td>
+                                    
+                                </tr>
+                                <%
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                        <button class="btn btn-default" id="viewDetailButton" type="submit" disabled="true">DELETE</button>
+                    </form>
+                    <form action="LeasingManagerMain"><button class="btn btn-default" type="submit">BACK</button></form>
+                    <script>
+                        $("input:checkbox").on('click', function () {
+                            // in the handler, 'this' refers to the box clicked on
+                            var $box = $(this);
+                            if ($box.is(":checked")) {
+                                document.getElementById("viewDetailButton").disabled = false;
+                                // the name of the box is retrieved using the .attr() method
+                                // as it is assumed and expected to be immutable
+                                var group = "input:checkbox[name='" + $box.attr("name") + "']";
+                                // the checked state of the group/box on the other hand will change
+                                // and the current value is retrieved using .prop() method
+                                $(group).prop("checked", false);
+                                $box.prop("checked", true);
+                            } else {
+                                $box.prop("checked", false);
+                                document.getElementById("viewDetailButton").disabled = true;
+                            }
+                        });
+                        $(document).ready(function () {
+                            $('#leasingRequestTable').DataTable({
+                                "order": [[3, "desc"]]
+                            });
+                        });
+                    </script>   
 
                     <!-- END PAGE CONTENT INNER -->
                 </div>
@@ -227,7 +237,7 @@
         <script src="../assets/global/plugins/respond.min.js"></script>
         <script src="../assets/global/plugins/excanvas.min.js"></script> 
         <![endif]-->
-        <!--        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
+        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -252,40 +262,10 @@
                 UIToastr.init(); // init Toastr Alert
             });
         </script>
-        <% String referrer = request.getHeader("referer");
-            String query = request.getQueryString();
-            String timestamp = null;
-        %>
-        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
-                timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
-                if ("=continue".equals(query)) {
-        %>        
-        <script language="javascript">
-            var ts = '<%= timestamp%>';
-            $(document).ready(function () {
-                // show when page load
-                toastr.info('Welcome back!');
-
-            });
-        </script>
-        <% } else {%>
-        <script language="javascript">
-            var ts = '<%= timestamp%>';
-            $(document).ready(function () {
-                // show when page load
-                toastr.success(ts, 'Login Successful!');
-
-            });
-        </script>
-        <%}
-            }%>
-
+        
 
         <!-- END JAVASCRIPTS -->
 
     </body>
     <!-- END BODY -->
 </html>
-

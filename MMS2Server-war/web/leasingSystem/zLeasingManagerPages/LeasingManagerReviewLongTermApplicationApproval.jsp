@@ -10,7 +10,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-  <head>
+    <head>
         <meta charset="utf-8"/>
         <title>Merlion Leasing System | Floor Plan Review</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,20 +33,21 @@
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
         <!-- END CUSTOM STYLES -->	
-	
-        
+
+
 
         <!--PERSONAL STYLE-->
-       <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/main.css" type="text/css">
-        <!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/bootstrap.css" type="text/css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/jquery-ui.css">-->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/main.css" type="text/css">
+         <!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/bootstrap.css" type="text/css">
+         <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/jquery-ui.css">-->
         <script src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
         <script src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
         <script src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/javascript/mainScript.js"></script> 
         <!--PERSONAL STYLE-->
     </head>
-   <!-- BEGIN BODY -->
+    <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
+        <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -69,7 +70,7 @@
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 
-                                    <span class="username username-hide-mobile">Welcome, <%= (String)request.getSession().getAttribute("staffFirstName")%></span>
+                                    <span class="username username-hide-mobile">Welcome, <%= (String) request.getSession().getAttribute("staffFirstName")%></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
@@ -77,7 +78,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -101,7 +102,7 @@
                             </span>
                         </div>
                     </form>
-                   <!-- END HEADER SEARCH BOX -->
+                    <!-- END HEADER SEARCH BOX -->
                     <div class="hor-menu ">
                         <ul class="nav navbar-nav">
                             <li class="">
@@ -122,7 +123,7 @@
                                     </li>
                                     <li class="">
                                         <a href="####">
-                                           #### </a>
+                                            #### </a>
                                     </li>
                                     <li class="">
                                         <a href="####">
@@ -136,7 +137,7 @@
                             <li class="">
                                 <a href="####">####</a>
                             </li>
-                             </ul>    
+                        </ul>    
                     </div>
                     <!-- END MEGA MENU -->
                 </div>
@@ -163,96 +164,98 @@
                 <div class="container">
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
-                    <!-- BEGIN PAGE CONTENT INNER -->
-        <%
-            LongTermApplicationEntity longTermApplication = (LongTermApplicationEntity) request.getAttribute("longTermApplication");
-            String applicantName = longTermApplication.getApplicantName();
-            String applicantBusinessType = longTermApplication.getApplicantBusinessType();
-            ArrayList<String> applicantDescriptionList = longTermApplication.getApplicantDescription();
-            String applicantDescriptionString = "";
-            for (int i = 0; i < applicantDescriptionList.size(); i++) {
-                applicantDescriptionString = applicantDescriptionString + ""
-                        + applicantDescriptionList.get(i);
-            }
-            String applicantAddress = longTermApplication.getApplicantAddress();
-            String applicantEmail = longTermApplication.getApplicantEmail();
-            String applicantTel = longTermApplication.getApplicantTel();
-            ArrayList<String> applicantUnitList = longTermApplication.getApplyUnitList();
-            String applicantUnitString = "";
-            for (int i = 0; i < applicantUnitList.size(); i++) {
-                applicantUnitString = applicantUnitString + "  "
-                        + applicantUnitList.get(i);
-            }
-            double applicantBidRate = longTermApplication.getApplicantBidRate();
+                    <!-- BEGIN PAGE CONTENT INNER --> 
+                    
 
-            ArrayList<String> contractDescriptionList = longTermApplication.getContractDescription();
-            String contractDescriptionString = "";
-            for (int i = 0; i < contractDescriptionList.size(); i++) {
-                contractDescriptionString = contractDescriptionString
-                        + contractDescriptionList.get(i);
-            }
-            String contractStart = longTermApplication.getContractStart().toString();
-            String contractEnd = longTermApplication.getContractEnd().toString();
-            String contractDeposit = String.valueOf(longTermApplication.getContractDeposit());
+                    <%
+                        LongTermApplicationEntity longTermApplication = (LongTermApplicationEntity) request.getAttribute("longTermApplication");
+                        String applicantName = longTermApplication.getApplicantName();
+                        String applicantBusinessType = longTermApplication.getApplicantBusinessType();
+                        ArrayList<String> applicantDescriptionList = longTermApplication.getApplicantDescription();
+                        String applicantDescriptionString = "";
+                        for (int i = 0; i < applicantDescriptionList.size(); i++) {
+                            applicantDescriptionString = applicantDescriptionString + ""
+                                    + applicantDescriptionList.get(i);
+                        }
+                        String applicantAddress = longTermApplication.getApplicantAddress();
+                        String applicantEmail = longTermApplication.getApplicantEmail();
+                        String applicantTel = longTermApplication.getApplicantTel();
+                        ArrayList<String> applicantUnitList = longTermApplication.getApplyUnitList();
+                        String applicantUnitString = "";
+                        for (int i = 0; i < applicantUnitList.size(); i++) {
+                            applicantUnitString = applicantUnitString + "  "
+                                    + applicantUnitList.get(i);
+                        }
+                        double applicantBidRate = longTermApplication.getApplicantBidRate();
 
-        %>
-        <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-            <tr>
-                <th>Applicant name:</th>
-                <td><%=applicantName%></td>
-            </tr>
-            <tr>
-                <th>Applicant business type:</th>
-                <td><%=applicantBusinessType%></td>
-            </tr>
-            <tr>
-                <th>Applicant description</th>
-                <td><%=applicantDescriptionString%></td>
-            </tr>
-            <tr>
-                <th>Applicant address</th>
-                <td><%=applicantAddress%></td>
-            </tr>
-            <tr>
-                <th>Applicant email</th>
-                <td><%=applicantEmail%></td>
-            </tr>
-            <tr>
-                <th>Applicant telephone</th>
-                <td><%=applicantTel%></td>
-            </tr>
-            <tr>
-                <th>Apply unit(s)</th>
-                <td><%=applicantUnitString%></td>
-            </tr>
-            <tr>
-                <th>Apply bid rate</th>
-                <td><%=applicantBidRate%></td>
-            </tr>
-            <tr>
-                <th>Contract start date</th>
-                <td><%=contractStart%></td>
-            </tr>
-            <tr>
-                <th>Contract end date</th>
-                <td><%=contractEnd%></td>
-            </tr>
-            <tr>
-                <th>Contract deposit</th>
-                <td><%=contractDeposit%></td>
-            </tr>
-            <tr>
-                <th>Contract description</th>
-                <td><%=contractDescriptionString%></td>
-            </tr>
-        </table>
-        <form action="BackToViewAllLeasingRequests">
-            <button type="submit" class="btn btn-default">BACK</button>
-        </form>
-    
-            
-            
-            <!-- END PAGE CONTENT INNER -->
+                        ArrayList<String> contractDescriptionList = longTermApplication.getContractDescription();
+                        String contractDescriptionString = "";
+                        for (int i = 0; i < contractDescriptionList.size(); i++) {
+                            contractDescriptionString = contractDescriptionString
+                                    + contractDescriptionList.get(i);
+                        }
+                        String contractStart = longTermApplication.getContractStart().toString();
+                        String contractEnd = longTermApplication.getContractEnd().toString();
+                        String contractDeposit = String.valueOf(longTermApplication.getContractDeposit());
+
+                    %>
+                    <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <tr>
+                            <th>Applicant name:</th>
+                            <td><%=applicantName%></td>
+                        </tr>
+                        <tr>
+                            <th>Applicant business type:</th>
+                            <td><%=applicantBusinessType%></td>
+                        </tr>
+                        <tr>
+                            <th>Applicant description</th>
+                            <td><%=applicantDescriptionString%></td>
+                        </tr>
+                        <tr>
+                            <th>Applicant address</th>
+                            <td><%=applicantAddress%></td>
+                        </tr>
+                        <tr>
+                            <th>Applicant email</th>
+                            <td><%=applicantEmail%></td>
+                        </tr>
+                        <tr>
+                            <th>Applicant telephone</th>
+                            <td><%=applicantTel%></td>
+                        </tr>
+                        <tr>
+                            <th>Apply unit(s)</th>
+                            <td><%=applicantUnitString%></td>
+                        </tr>
+                        <tr>
+                            <th>Apply bid rate</th>
+                            <td><%=applicantBidRate%></td>
+                        </tr>
+                        <tr>
+                            <th>Contract start date</th>
+                            <td><%=contractStart%></td>
+                        </tr>
+                        <tr>
+                            <th>Contract end date</th>
+                            <td><%=contractEnd%></td>
+                        </tr>
+                        <tr>
+                            <th>Contract deposit</th>
+                            <td><%=contractDeposit%></td>
+                        </tr>
+                        <tr>
+                            <th>Contract description</th>
+                            <td><%=contractDescriptionString%></td>
+                        </tr>
+                    </table>
+                    <form action="BackToViewAllLeasingRequests">
+                        <button type="submit" class="btn btn-default">BACK</button>
+                    </form>
+
+
+
+                    <!-- END PAGE CONTENT INNER -->
                 </div>
             </div>
             <!-- END PAGE CONTENT -->
@@ -300,36 +303,7 @@
                 UIToastr.init(); // init Toastr Alert
             });
         </script>
-        <% String referrer = request.getHeader("referer");
-            String query = request.getQueryString();
-            String timestamp = null;
-        %>
-        <% if (referrer.matches("http://localhost:8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/adminHome")) {
-                timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
-                if ("=continue".equals(query)) {
-        %>        
-        <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.info('Welcome back!');
-
-    });
-        </script>
-        <% } else {%>
-        <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.success(ts, 'Login Successful!');
-
-    });
-        </script>
-        <%}
-    }%>
-
+       
 
         <!-- END JAVASCRIPTS -->
 

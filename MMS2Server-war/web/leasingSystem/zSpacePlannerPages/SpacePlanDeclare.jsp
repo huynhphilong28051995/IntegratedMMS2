@@ -8,6 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+    <%String IP = (String)request.getSession().getAttribute("IP");%>
     <!-- BEGIN HEAD -->
     <head>
         <meta charset="utf-8"/>
@@ -66,7 +67,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -123,10 +124,9 @@
                     <ul class="page-breadcrumb breadcrumb">
                     </ul>
                     <!-- END PAGE BREADCRUMB -->
-                    <!-- BEGIN PAGE CONTENT INNER -->
-
-
-
+                    <!-- BEGIN PAGE CONTENT INNER --> 
+                    
+                    
                     <%
                         String mallName = (String) request.getSession().getAttribute("mallName");
                         String actionToTake = (String) request.getSession().getAttribute("actionToTake");
@@ -330,9 +330,9 @@
             }
         %>
 
-        <% if (referrer.matches("http://localhost:8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/adminHome")) {
+        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
+                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
+                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
                 timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
                 if ("=continue".equals(query)) {
         %>        

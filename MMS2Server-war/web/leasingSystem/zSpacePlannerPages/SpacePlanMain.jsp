@@ -34,6 +34,7 @@
 
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
+        <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -56,7 +57,7 @@
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 
-                                    <span class="username username-hide-mobile">Welcome, <%=(String)request.getSession().getAttribute("staffFirstName")%></span>
+                                    <span class="username username-hide-mobile">Welcome, <%=(String) request.getSession().getAttribute("staffFirstName")%></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
@@ -64,7 +65,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -120,7 +121,10 @@
                             <li class="">
                                 <a href="ComposeFloorplanRequest">Compose floor plan request</a>
                             </li>
-                             </ul>    
+                            <li class="">
+                                <a href="CheckSpacePlanRequestStatus">Request Status</a>
+                            </li>
+                        </ul>    
                     </div>
                     <!-- END MEGA MENU -->
                 </div>
@@ -148,20 +152,14 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
-<!--                    <a href="InitializeSpacePlan">Initialize Space Plan General Information</a><br>
-                    <a href="LocateSpacePlan">Location Planing</a><br>
-                    <a href="AddPushCart">Add more pushcart unit</a><br>
-                    <a href="AddKiosk">Add more kiosk unit</a><br>
-                    <a href="AddEvent">Add more event unit</a><br>
-                    <a href="AddStore">Add more store unit</a><br>
-                    <a href="ComposeFloorplanRequest">Compose floorplan request</a></br>-->
+
                     <%
                         String floorplanRequestStatus = (String) request.getAttribute("floorplanRequestStatus");
                         if (floorplanRequestStatus != null) {
                     %>
-                    <h4>Your request has been successfully sent<h4><br>
-                    <h4>Leasing manager will soon process it<h4><br>
-                    
+                    <h4>Your request has been successfully sent</h4><br>
+                    <h4>Leasing manager will soon process it</h4><br>
+
                     <%
                         }
                     %>
@@ -218,9 +216,9 @@
             String query = request.getQueryString();
             String timestamp = null;
         %>
-        <% if (referrer.matches("http://localhost:8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/adminHome")) {
+        <% if (referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/login")
+                    || referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/logout")
+                    || referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/adminHome")) {
                 timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
                 if ("=continue".equals(query)) {
         %>        

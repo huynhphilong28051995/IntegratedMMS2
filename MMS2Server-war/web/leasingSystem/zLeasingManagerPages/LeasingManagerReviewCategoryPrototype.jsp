@@ -37,7 +37,7 @@
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
         <!-- END CUSTOM STYLES -->	
-	
+
         <!--PERSONAL STYLE-->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/main.css" type="text/css">
 <!--        <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/bootstrap.css" type="text/css">
@@ -47,8 +47,9 @@
         <script src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/javascript/mainScript.js"></script> 
         <!--PERSONAL STYLE-->
     </head>
-     <!-- BEGIN BODY -->
+    <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
+         <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -71,7 +72,7 @@
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 
-                                    <span class="username username-hide-mobile">Welcome, <%= (String)request.getSession().getAttribute("staffFirstName")%></span>
+                                    <span class="username username-hide-mobile">Welcome, <%= (String) request.getSession().getAttribute("staffFirstName")%></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
@@ -79,7 +80,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -103,7 +104,7 @@
                             </span>
                         </div>
                     </form>
-                   <!-- END HEADER SEARCH BOX -->
+                    <!-- END HEADER SEARCH BOX -->
                     <div class="hor-menu ">
                         <ul class="nav navbar-nav">
                             <li class="">
@@ -124,7 +125,7 @@
                                     </li>
                                     <li class="">
                                         <a href="####">
-                                           #### </a>
+                                            #### </a>
                                     </li>
                                     <li class="">
                                         <a href="####">
@@ -138,7 +139,7 @@
                             <li class="">
                                 <a href="####">####</a>
                             </li>
-                             </ul>    
+                        </ul>    
                     </div>
                     <!-- END MEGA MENU -->
                 </div>
@@ -165,149 +166,147 @@
                 <div class="container">
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
-                    <!-- BEGIN PAGE CONTENT INNER -->
-    
-        <%
-            String levelCode = (String) request.getSession().getAttribute("levelCode");
-            LevelEntity level = (LevelEntity) request.getSession().getAttribute("levelInstance");
-            String floorplanBackground = level.getFloorplanBackground();
-            int numOfUnit = level.getUnits().size();
+                    <!-- BEGIN PAGE CONTENT INNER --> 
+                   
 
-            ArrayList<String> positionList = (ArrayList<String>) level.getUnitPositionList();
-            String positionString = "";
-            for (int i = 0; i < positionList.size(); i++) {
-                positionString = positionString + "" + positionList.get(i);
-            }
-            //Seperate arraList into pushcart and non-pushcart
-            List unitList = new ArrayList(level.getUnits());
-            ArrayList<UnitEntity> listOfStoreUnits = new ArrayList();
-            ArrayList<UnitEntity> listOfPushCartUnits = new ArrayList();
-            ArrayList<UnitEntity> listOfKioskUnits = new ArrayList();
-            ArrayList<UnitEntity> listOfEventUnits = new ArrayList();
-            for (int i = 0; i < unitList.size(); i++) {
-                UnitEntity unit = (UnitEntity) unitList.get(i);
-                String unitLocationCode = unit.getLocationCode();
-                boolean show = unit.isShow();
-                if (show) {
-                    if (unitLocationCode.contains("PC")) {
-                        listOfPushCartUnits.add((UnitEntity) unitList.get(i));
-                    }
-                    if (unitLocationCode.contains("EV")) {
-                        listOfEventUnits.add((UnitEntity) unitList.get(i));
-                    }
-                    if (unitLocationCode.contains("KS")) {
-                        listOfKioskUnits.add((UnitEntity) unitList.get(i));
-                    }
-                    if (unitLocationCode.contains("ST")) {
-                        listOfStoreUnits.add((UnitEntity) unitList.get(i));
-                    }
-                }
-            }
-        %>
+                    <%
+                        String levelCode = (String) request.getSession().getAttribute("levelCode");
+                        LevelEntity level = (LevelEntity) request.getSession().getAttribute("levelInstance");
+                        String floorplanBackground = level.getFloorplanBackground();
+                        int numOfUnit = level.getUnits().size();
 
-        <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png" 
-               stype="width:1000px; height: 1000px;"/>
-        <div>
-            <%
-                for (int i = 0; i < listOfStoreUnits.size(); i++) {
-                    String locationCode = ((UnitEntity) listOfStoreUnits.get(i)).getLocationCode();
-            %>
-            <div id="<%=locationCode%>" class="NonDragResize">
-                <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
-            </div>
-            <%
-                }
-            %>
-        </div>
-        <div>
-            <%
-                for (int i = 1; i <= listOfPushCartUnits.size(); i++) {
-                    String locationCode = ((UnitEntity) listOfPushCartUnits.get(i - 1)).getLocationCode();
-            %>
-            <div id="<%=locationCode%>" class="NonDragResize" style="height:30px; width: 70px;">
-                <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
-            </div>
-            <%
-                }
-            %>
-        </div>
-        <div>
-            <%
-                for (int i = 1; i <= listOfKioskUnits.size(); i++) {
-                    String locationCode = ((UnitEntity) listOfKioskUnits.get(i - 1)).getLocationCode();
-            %>
-            <div id="<%=locationCode%>" class="NonDragResize" style="height:30px; width: 70px;">
-                <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
-            </div>
-            <%
-                }
-            %>
-        </div>
-        <div>
-            <%
-                for (int i = 1; i <= listOfEventUnits.size(); i++) {
-                    String locationCode = ((UnitEntity) listOfEventUnits.get(i - 1)).getLocationCode();
-            %>
-            <div id="<%=locationCode%>" class="NonDragResize" style="height:100px; width: 100px;">
-                <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
-            </div>
-            <%
-                }
-            %>
-        </div>
-        <script>
+                        ArrayList<String> positionList = (ArrayList<String>) level.getUnitPositionList();
+                        String positionString = "";
+                        for (int i = 0; i < positionList.size(); i++) {
+                            positionString = positionString + "" + positionList.get(i);
+                        }
+                        //Seperate arraList into pushcart and non-pushcart
+                        List unitList = new ArrayList(level.getUnits());
+                        ArrayList<UnitEntity> listOfStoreUnits = new ArrayList();
+                        ArrayList<UnitEntity> listOfPushCartUnits = new ArrayList();
+                        ArrayList<UnitEntity> listOfKioskUnits = new ArrayList();
+                        ArrayList<UnitEntity> listOfEventUnits = new ArrayList();
+                        for (int i = 0; i < unitList.size(); i++) {
+                            UnitEntity unit = (UnitEntity) unitList.get(i);
+                            String unitLocationCode = unit.getLocationCode();
+                            boolean show = unit.isShow();
+                            if (show) {
+                                if (unitLocationCode.contains("PC")) {
+                                    listOfPushCartUnits.add((UnitEntity) unitList.get(i));
+                                }
+                                if (unitLocationCode.contains("EV")) {
+                                    listOfEventUnits.add((UnitEntity) unitList.get(i));
+                                }
+                                if (unitLocationCode.contains("KS")) {
+                                    listOfKioskUnits.add((UnitEntity) unitList.get(i));
+                                }
+                                if (unitLocationCode.contains("ST")) {
+                                    listOfStoreUnits.add((UnitEntity) unitList.get(i));
+                                }
+                            }
+                        }
+                    %>
+
+                    <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png" 
+                           stype="width:1000px; height: 1000px;"/>
+                    <div>
+                        <%
+                            for (int i = 0; i < listOfStoreUnits.size(); i++) {
+                                String locationCode = ((UnitEntity) listOfStoreUnits.get(i)).getLocationCode();
+                        %>
+                        <div id="<%=locationCode%>" class="NonDragResize">
+                            <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
+                        </div>
+                        <%
+                            }
+                        %>
+                    </div>
+                    <div>
+                        <%
+                            for (int i = 1; i <= listOfPushCartUnits.size(); i++) {
+                                String locationCode = ((UnitEntity) listOfPushCartUnits.get(i - 1)).getLocationCode();
+                        %>
+                        <div id="<%=locationCode%>" class="NonDragResize" style="height:30px; width: 70px;">
+                            <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
+                        </div>
+                        <%
+                            }
+                        %>
+                    </div>
+                    <div>
+                        <%
+                            for (int i = 1; i <= listOfKioskUnits.size(); i++) {
+                                String locationCode = ((UnitEntity) listOfKioskUnits.get(i - 1)).getLocationCode();
+                        %>
+                        <div id="<%=locationCode%>" class="NonDragResize" style="height:30px; width: 70px;">
+                            <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
+                        </div>
+                        <%
+                            }
+                        %>
+                    </div>
+                    <div>
+                        <%
+                            for (int i = 1; i <= listOfEventUnits.size(); i++) {
+                                String locationCode = ((UnitEntity) listOfEventUnits.get(i - 1)).getLocationCode();
+                        %>
+                        <div id="<%=locationCode%>" class="NonDragResize" style="height:100px; width: 100px;">
+                            <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
+                        </div>
+                        <%
+                            }
+                        %>
+                    </div>
+                    <script>
             var positions = <%=positionString%>;
             $.each(positions, function (id, pos) {
                 $("#" + id).css(pos);
             });
-        </script>
-        <!--CHANGE FLOOR-->
-        <div id="changeFloor">
-            <form action="ChangeFloorplanLevelReviewCategoryPrototype" method="GET">
-                <div class="form_group">
-                    <label for="levelCode">Change floorplan view</label>
-                    <select name="levelCode">
-                        <%
-                            for (int i = 1; i <= (Integer) request.getSession().getAttribute("numOfLevel"); i++) {
-                        %>
-                        <option value="LV<%=i%>">LV<%=i%></option>
-                        <%
-                            }
-                        %>
-                    </select>
-                    <button type="submit" class="btn btn-default">Go</button>
-                </div>
-            </form>
-        </div>
-        <!--CHANGE FLOOR-->
-        <!--COLOR BUTTONS-->
-        <%
-            Vector unitColorVector = (Vector) request.getAttribute("unitColorVector");
-            if (!unitColorVector.isEmpty()) {
-                ArrayList<String> arrayLocationCode = (ArrayList) unitColorVector.get(0);
-                ArrayList<String> arrayColor = (ArrayList) unitColorVector.get(1);
-                for (int i = 0; i < arrayColor.size(); i++) {
-                    String locationCode = arrayLocationCode.get(i);
-                    String color = arrayColor.get(i);
+                    </script>
+                    <!--CHANGE FLOOR-->
+                    <div id="changeFloor">
+                        <form action="ChangeFloorplanLevelReviewCategoryPrototype" method="GET">
+                            <div class="form_group">
+                                <label for="levelCode">Change floorplan view</label>
+                                <select name="levelCode">
+                                    <%
+                                        for (int i = 1; i <= (Integer) request.getSession().getAttribute("numOfLevel"); i++) {
+                                    %>
+                                    <option value="LV<%=i%>">LV<%=i%></option>
+                                    <%
+                                        }
+                                    %>
+                                </select>
+                                <button type="submit" class="btn btn-default">Go</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!--CHANGE FLOOR-->
+                    <!--COLOR BUTTONS-->
+                    <%
+                        Vector unitColorVector = (Vector) request.getAttribute("unitColorVector");
+                        if (!unitColorVector.isEmpty()) {
+                            ArrayList<String> arrayLocationCode = (ArrayList) unitColorVector.get(0);
+                            ArrayList<String> arrayColor = (ArrayList) unitColorVector.get(1);
+                            for (int i = 0; i < arrayColor.size(); i++) {
+                                String locationCode = arrayLocationCode.get(i);
+                                String color = arrayColor.get(i);
 
-        %> 
-        <script>
+                    %> 
+                    <script>
             document.getElementById("<%=locationCode%>_button").style.background = "<%=color%>";
-        </script>
-        <%
-                }
-            }
-        %>
-        <!--COLOR BUTTONS-->
-        <form action="BackToViewAllLeasingRequests">
-            <button type="submit" class="btn btn-default">BACK</button>
-        </form>
-   
-        
-        
-        
-        
-        <!-- END PAGE CONTENT INNER -->
+                    </script>
+                    <%
+                            }
+                        }
+                    %>
+                    <!--COLOR BUTTONS-->
+                    <form action="BackToViewAllLeasingRequests">
+                        <button type="submit" class="btn btn-default">BACK</button>
+                    </form>
+
+                    
+                    <!-- END PAGE CONTENT INNER -->
                 </div>
             </div>
             <!-- END PAGE CONTENT -->
@@ -355,36 +354,7 @@
                 UIToastr.init(); // init Toastr Alert
             });
         </script>
-        <% String referrer = request.getHeader("referer");
-            String query = request.getQueryString();
-            String timestamp = null;
-        %>
-        <% if (referrer.matches("http://localhost:8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://localhost:8080/MMS2Server-war/administration/adminHome")) {
-                timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
-                if ("=continue".equals(query)) {
-        %>        
-        <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.info('Welcome back!');
-
-    });
-        </script>
-        <% } else {%>
-        <script language="javascript">
-    var ts = '<%= timestamp%>';
-    $(document).ready(function () {
-        // show when page load
-        toastr.success(ts, 'Login Successful!');
-
-    });
-        </script>
-        <%}
-    }%>
-
+       
 
         <!-- END JAVASCRIPTS -->
 
