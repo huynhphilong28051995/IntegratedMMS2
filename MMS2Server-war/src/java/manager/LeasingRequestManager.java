@@ -8,6 +8,7 @@ package manager;
 import mms2.leasing.entity.LeasingSystemRequestEntity;
 import mms2.leasing.session.LeasingSystemRequestManagerSessionLocal;
 import java.util.ArrayList;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -63,18 +64,28 @@ public class LeasingRequestManager {
     }
     public Long getLongTermApplicationId(HttpServletRequest request){
         Long requestId = Long.parseLong(request.getParameter("leasingRequestId"));
+        System.out.println("LEASING EQUEST ID " +requestId);
         ArrayList<LeasingSystemRequestEntity> requestList = (ArrayList<LeasingSystemRequestEntity>)
                 request.getSession().getAttribute("leasingRequestList");
+        System.out.println("REQUEST LIST SIZE "+requestList.size());
         for(int i=0; i<requestList.size(); i++){
+            System.out.println("REQUEST LIST REQUEST ID "+requestList.get(i).getId());
             LeasingSystemRequestEntity leasingRequest = requestList.get(i);
-            if(requestId == leasingRequest.getId())
-                return leasingRequest.getApplicationId();
-            
+            if(Objects.equals(requestId, leasingRequest.getId()))
+                return leasingRequest.getApplicationId(); 
         }
         return new Long(0);
     }
     public void deleteAllCollideRequestAndApplication(Long leasingRequestId, Long applicationId){
          leasingSystemRequestManagerSessionLocal.deleteAllCollideRequestAndApplication(
                  leasingRequestId, applicationId);
+    }
+    public ArrayList<LeasingSystemRequestEntity> getRequestsByUserName(HttpServletRequest request){
+        String userName = (String) request.getSession().getAttribute("staffUserName");
+        return leasingSystemRequestManagerSessionLocal.getRequestsByUserName(userName);
+    }
+    public void deleteLeasingRequestById(HttpServletRequest request){
+        Long leasingRequestId = Long.parseLong(request.getParameter("leasingRequestId"));
+        leasingSystemRequestManagerSessionLocal.deleteLeasingRequestById(leasingRequestId);
     }
 }

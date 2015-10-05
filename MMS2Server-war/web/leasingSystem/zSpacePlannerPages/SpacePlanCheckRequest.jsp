@@ -1,14 +1,17 @@
 <%-- 
     Document   : SpacePlanCheckRequest
-    Created on : Oct 3, 2015, 9:08:45 PM
+    Created on : Sep 24, 2015, 3:04:09 PM
     Author     : PhiLong
 --%>
 
+<%@page import="mms2.leasing.entity.LeasingSystemRequestEntity"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Merlion Leasing System | Compose request</title>
+        <meta charset="utf-8"/>
+        <title>Merlion Leasing System | Request Status</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -30,10 +33,18 @@
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
         <!-- END CUSTOM STYLES -->	
 
+        <!--PERSONAL STYLE-->
+         <!--<link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/bootstrap.css" type="text/css">-->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/main.css" type="text/css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!--PERSONAL STYLE-->
     </head>
-
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
+        <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -49,9 +60,7 @@
                     <!-- END RESPONSIVE MENU TOGGLER -->
                     <!-- BEGIN TOP NAVIGATION MENU -->
                     <div class="top-menu">
-                        <ul class="nav navbar-nav pull-right">
-                            <span class="separator"></span>
-                            </li>
+                        <ul class="nav navbar-nav pull-right">                         
                             <!-- BEGIN USER LOGIN DROPDOWN -->
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -64,7 +73,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://localhost:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -138,7 +147,7 @@
                 <div class="container">
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">  
-                        <h1>Request status </h1>
+                        <h1>All requests </h1>
                     </div>
                     <!-- END PAGE TITLE -->
 
@@ -150,63 +159,54 @@
                 <div class="container">
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
-                    <!-- BEGIN PAGE CONTENT INNER -->
+                    <!-- BEGIN PAGE CONTENT INNER --> 
 
-                    <%
-                        
-                    %>
-                    <form action="DeleteSpacePlanRequest">
+
+                    <form>
                         <table id="leasingRequestTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th></th>
                                     <th>ID</th>
-                                    <th>Sender username</th>
-                                    <th>Sender Position</th>
                                     <th>Type</th>
                                     <th>Description</th>
-                                    <th>Confirmation</th>
+                                    <th>Status</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <%
-                                   
+                                    ArrayList<LeasingSystemRequestEntity> requestList
+                                            = (ArrayList<LeasingSystemRequestEntity>) request.getAttribute("requestList");
+                                    for (int i = 0; i < requestList.size(); i++) {
+                                        LeasingSystemRequestEntity leasingRequest = requestList.get(i);
+                                        Long requestID = leasingRequest.getId();
+                                        String requestType = leasingRequest.getType();
+                                        ArrayList<String> requestDescriptionList = leasingRequest.getDescription();
+                                        String requestDescriptionString = "";
+                                        for (int j = 0; j < requestDescriptionList.size(); j++) {
+                                            requestDescriptionString = requestDescriptionString + ""
+                                                    + requestDescriptionList.get(j);
+                                        }
+                                        requestDescriptionString = requestDescriptionString.replaceAll("\n","<br>");
+                                        String requestStatus = leasingRequest.getStatus();
                                 %>
                                 <tr>
-                                    <td><input type="checkbox" class="radio" name="leasingRequestId" value="<%=%>"></td>
-                                    <td><%=%></td>
-                                    <td><%=%></td>
-                                    <td><%=%></td>
-                                    <td><%=%></td>
-                                    <td><%=%></td>
-                                    
+                                    <td><%=requestID%></td>
+                                    <td><%=requestType%></td>
+                                    <td><%=requestDescriptionString%></td>
+                                    <td><%=requestStatus%></td>
+                                    <td>
+                                        <a href="DeleteFloorPlanRequest?leasingRequestId=<%=requestID%>">
+                                            DELETE</a>   
+                                    </td>
                                 </tr>
                                 <%
                                     }
                                 %>
                             </tbody>
                         </table>
-                        <button class="btn btn-default" id="viewDetailButton" type="submit" disabled="true">DELETE</button>
                     </form>
-                    <form action="LeasingManagerMain"><button class="btn btn-default" type="submit">BACK</button></form>
                     <script>
-                        $("input:checkbox").on('click', function () {
-                            // in the handler, 'this' refers to the box clicked on
-                            var $box = $(this);
-                            if ($box.is(":checked")) {
-                                document.getElementById("viewDetailButton").disabled = false;
-                                // the name of the box is retrieved using the .attr() method
-                                // as it is assumed and expected to be immutable
-                                var group = "input:checkbox[name='" + $box.attr("name") + "']";
-                                // the checked state of the group/box on the other hand will change
-                                // and the current value is retrieved using .prop() method
-                                $(group).prop("checked", false);
-                                $box.prop("checked", true);
-                            } else {
-                                $box.prop("checked", false);
-                                document.getElementById("viewDetailButton").disabled = true;
-                            }
-                        });
                         $(document).ready(function () {
                             $('#leasingRequestTable').DataTable({
                                 "order": [[3, "desc"]]
@@ -220,7 +220,6 @@
             <!-- END PAGE CONTENT -->
         </div>
         <!-- END PAGE CONTAINER -->
-
         <!-- BEGIN FOOTER -->
         <div class="page-footer">
             <div class="container">
@@ -237,7 +236,7 @@
         <script src="../assets/global/plugins/respond.min.js"></script>
         <script src="../assets/global/plugins/excanvas.min.js"></script> 
         <![endif]-->
-        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+        <!--        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
         <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -255,17 +254,28 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-            jQuery(document).ready(function () {
-                Custom.init(); // init custom core components
-                Layout.init(); // init current layout
-                UIIdleTimeout.init(); // init Idle Timeout
-                UIToastr.init(); // init Toastr Alert
+                        jQuery(document).ready(function () {
+                            Custom.init(); // init custom core components
+                            Layout.init(); // init current layout
+                            UIIdleTimeout.init(); // init Idle Timeout
+                            UIToastr.init(); // init Toastr Alert
+                        });
+        </script>
+        <%
+            String deleteRequestStatus = null;
+            if (request.getAttribute("deleteRequestStatus") != null) {
+                deleteRequestStatus =(String) request.getAttribute("deleteRequestStatus");
+        %>
+        <script language="javascript">
+            $(document).ready(function () {
+                // show when page load
+                 toastr.success('<%=deleteRequestStatus%>');
             });
         </script>
-        
-
+        <%
+            }
+        %>
         <!-- END JAVASCRIPTS -->
-
     </body>
     <!-- END BODY -->
 </html>

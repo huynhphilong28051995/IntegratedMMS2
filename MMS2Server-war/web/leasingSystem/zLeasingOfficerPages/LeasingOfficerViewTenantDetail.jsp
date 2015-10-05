@@ -113,9 +113,11 @@
                             <li class="">
                                 <a href="ViewAllPublicLongTermApplication">View public bidders</a>
                             </li>
-
                             <li class="active">
                                 <a href="ViewAllTenants">View tenants</a>
+                            </li>
+                            <li class="">
+                                <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
                             </li>
                         </ul>    
                     </div>
@@ -155,6 +157,7 @@
                         for (int i = 0; i < tenantDescriptionList.size(); i++) {
                             tenantDescriptionString = tenantDescriptionString + "" + tenantDescriptionList.get(i);
                         }
+                        tenantDescriptionString  = tenantDescriptionString.replaceAll("\n","<br>");
                         String mallName = tenant.getMallName();
                         String tenantAddress = tenant.getAddress();
                         String tenantEmail = tenant.getEmail();

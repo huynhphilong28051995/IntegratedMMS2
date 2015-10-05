@@ -94,6 +94,18 @@
         <servlet-name>SpacePlanUpload</servlet-name>
         <jsp-file>/leasingSystem/zSpacePlannerPages/SpacePlanUpload.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>SpacePlanCheckRequest</servlet-name>
+        <jsp-file>/leasingSystem/zSpacePlannerPages/SpacePlanCheckRequest.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>LeasingOfficerCheckRequest</servlet-name>
+        <jsp-file>/leasingSystem/zLeasingOfficerPages/LeasingOfficerCheckRequest.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>PublicApplicationPortalChooseMall</servlet-name>
+        <jsp-file>/leasingSystem/zPublicApplicationPortal/PublicApplicationPortalChooseMall.jsp</jsp-file>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
@@ -276,8 +288,8 @@
         <jsp-file>/leasingSystem/zPublicApplicationPortal/PublicApplicationPortalLongTermApply.jsp</jsp-file>
     </servlet>
     <servlet>
-        <servlet-name>PublictApplicationPortalIndex</servlet-name>
-        <jsp-file>/leasingSystem/zPublicApplicationPortal/PublictApplicationPortalIndex.jsp</jsp-file>
+        <servlet-name>PublicApplicationPortalIndex</servlet-name>
+        <jsp-file>/leasingSystem/zPublicApplicationPortal/PublicApplicationPortalIndex.jsp</jsp-file>
     </servlet>
     <servlet>
         <servlet-name>PublicApplicationPortalServlet</servlet-name>
@@ -408,10 +420,6 @@
         <url-pattern>/PublicApplicationPortalLongTermApply</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>PublictApplicationPortalIndex</servlet-name>
-        <url-pattern>/PublictApplicationPortalIndex</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>PublicApplicationPortalServlet</servlet-name>
         <url-pattern>/PublicApplicationPortalServlet/*</url-pattern>
     </servlet-mapping>
@@ -455,6 +463,22 @@
     <servlet-mapping>
         <servlet-name>SpacePlanUpload</servlet-name>
         <url-pattern>/SpacePlanUpload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PublicApplicationPortalIndex</servlet-name>
+        <url-pattern>/PublicApplicationPortalIndex</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SpacePlanCheckRequest</servlet-name>
+        <url-pattern>/SpacePlanCheckRequest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LeasingOfficerCheckRequest</servlet-name>
+        <url-pattern>/LeasingOfficerCheckRequest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PublicApplicationPortalChooseMall</servlet-name>
+        <url-pattern>/PublicApplicationPortalChooseMall</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

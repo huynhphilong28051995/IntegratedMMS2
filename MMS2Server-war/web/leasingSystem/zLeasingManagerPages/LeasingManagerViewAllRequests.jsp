@@ -193,7 +193,7 @@
                                             requestDescriptionString = requestDescriptionString + ""
                                                     + requestDescriptionList.get(j);
                                         }
-
+                                        requestDescriptionString = requestDescriptionString.replaceAll("\n","<br>");
                                 %>
                                 <tr>
                                     <td><input type="checkbox" class="radio" name="leasingRequestId" value="<%=requestID%>"></td>
@@ -317,10 +317,7 @@
         </script>
         <%}
             }%>
-
-
         <!-- END JAVASCRIPTS -->
-
     </body>
     <!-- END BODY -->
 </html>

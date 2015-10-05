@@ -469,6 +469,23 @@
                 }
             }
         %>
+        
+        
+        <%
+            if (request.getAttribute("sendRequestStatus") != null) {
+                String sendRequestStatus = (String)request.getAttribute("sendRequestStatus");
+                
+        %>
+        <script language="javascript">
+            $(document).ready(function () {
+                // show when page load
+                 toastr.success('<%=sendRequestStatus%>');
+            });
+        </script>
+        <%
+                
+            }
+        %>
 
 
         <!-- END JAVASCRIPTS -->

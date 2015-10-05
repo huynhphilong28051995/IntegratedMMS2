@@ -64,6 +64,11 @@ public class PublicApplicationPortalServlet extends HttpServlet {
             ServletContext servletContext = getServletContext();
             String page = request.getPathInfo().substring(1);
             switch (page) {
+                case "PublicApplicationPortalChooseMall":
+                    ArrayList<String> mallNameList = doGetMallListWithOpenPublicUnit();
+                    request.setAttribute("mallNameList", mallNameList);
+                    page="PublicApplicationPortalChooseMall";
+                    break;
                 case "EnterPublicPortal":
                     mallName = request.getParameter("mallName");
                     request.getSession().setAttribute("mallName", mallName);
@@ -84,9 +89,8 @@ public class PublicApplicationPortalServlet extends HttpServlet {
                     page = "PublicApplicationPortalLongTermApply";
                     break;
                 case "AddUnitToApplyUnitList":
-                    String status = doAddUnitToApplyUnitList(request);
-                    String errorMessage = status;
-                    request.getSession().setAttribute("errorMessage", errorMessage);
+                    String chooseUnitStatus = doAddUnitToApplyUnitList(request);
+                    request.setAttribute("chooseUnitStatus", chooseUnitStatus);
                     page = "PublicApplicationPortalLongTermApply";
                     break;
                 case "FillApplicantInformationForLongTerm":
@@ -223,5 +227,8 @@ public class PublicApplicationPortalServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    public ArrayList<String> doGetMallListWithOpenPublicUnit(){
+        UnitManager unitManager = new UnitManager(unitManagerSessionLocal);
+        return unitManager.getMallListWithOpenPublicUnit();
+    }
 }

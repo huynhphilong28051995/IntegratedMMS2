@@ -68,14 +68,19 @@ public class LeasingControllerServlet extends HttpServlet {
             ArrayList<String> unitListToAddTenant;
             String leasingRequestType;
             Long leasingRequestId;
+            ArrayList<LeasingSystemRequestEntity> requestList;
+                    
             switch (page) {
 //START-FUNCTION FOR LEASING MANAGER
                 case "ViewAllRequests":
                     page = "LeasingManagerViewAllRequests";
                     break;
                 case "ViewLeasingRequestDetail":
+                    System.out.println("TEST 0");
                     leasingRequestId = Long.parseLong(request.getParameter("leasingRequestId"));
+                     System.out.println("TEST 0.1");
                     leasingRequestType = determineLeasingRequestType(leasingRequestId, request);
+                     System.out.println("TEST 0.2 "+leasingRequestType);
                     if (leasingRequestType.equals("FloorplanModify")) {
                         request.getSession().setAttribute("levelCode", "LV1");
                         page = "LeasingManagerReviewFloorPlanPrototype";
@@ -94,6 +99,9 @@ public class LeasingControllerServlet extends HttpServlet {
                     if (leasingRequestType.equals("LongTermApplicationApproval")) {
                         LongTermApplicationEntity longTermApplication
                                 = doGetLongTermApplication(request);
+                        System.out.println(longTermApplication.getApplicantName());
+                        System.out.println(longTermApplication.getApplicantAddress());
+                        System.out.println(longTermApplication.getContractDeposit());
                         request.setAttribute("longTermApplication", longTermApplication);
                         page = "LeasingManagerReviewLongTermApplicationApproval";
                     }
@@ -166,7 +174,8 @@ public class LeasingControllerServlet extends HttpServlet {
                     page = "LeasingOfficerZoneDeclare";
                     break;
                 case "SaveStoreZonePrototypeCategory":
-                    String saveZoneInformationStatus = doSaveStoreZonePrototypeCategory(request);
+                    String saveZoneStatus = doSaveStoreZonePrototypeCategory(request);
+                    request.setAttribute("saveZoneStatus", saveZoneStatus);
                     page = "LeasingOfficerZoneDeclare";
                     break;
                 case "SavePushCartOrKioskPrototypeCategory":
@@ -243,8 +252,20 @@ public class LeasingControllerServlet extends HttpServlet {
                     doSendLongTermApplicationApprovalRequest(request);
                     request.setAttribute("sendRequestStatus", "Your request has successfully been sent");
                     page = "LeasingOfficerZoneDeclare";
-                    page = "LeasingOfficerZoneDeclare";
                     break;
+                case "CheckLeasingOfficerRequestStatus":
+                    requestList= doGetRequestsByUserName(request);
+                    request.setAttribute("requestList", requestList);
+                    page="LeasingOfficerCheckRequest";
+                    break;
+                case "DeleteLeasingOfficerRequest":
+                    doDeleteLeasingRequestById(request);
+                    request.setAttribute("deleteRequestStatus","Your request has successfully been deleted");
+                    requestList= doGetRequestsByUserName(request);
+                    request.setAttribute("requestList", requestList);
+                    page="LeasingOfficerCheckRequest";
+                    break;
+                    /////case of delete and (function)list request is on space planner side
 //END-FUNCTION FOR LEASING OFFICER
 //START-FUNCTION FOR SPACE PLAN OFFICER
                 case "SpacePlanMain":
@@ -281,7 +302,6 @@ public class LeasingControllerServlet extends HttpServlet {
                     page = "SpacePlanDeclare";
                     break;
                 case "DeclareFloorplanBackground":
-                    System.out.println("|||||||||||||||||||||||||||||||||||||||||||||||||||" + request.getParameter("floorplanBackgroundLV1"));
                     ArrayList<ArrayList<String>> levelNameNumUnitBackgroundList = doGetLevelNameNumUnitBackgroundList(request);
                     request.getSession().setAttribute("levelNameNumUnitBackgroundList", levelNameNumUnitBackgroundList);
                     request.getSession().setAttribute("actionToTake", "FinalConfirmation");
@@ -346,21 +366,24 @@ public class LeasingControllerServlet extends HttpServlet {
                     break;
                 case "SendFloorplanRequest":
                     doSendFloorplanRequest(request);
-                    request.setAttribute("floorplanRequestStatus", "Succeed");
+                    request.setAttribute("sendRequestStatus", "Your request has successfully been sent");
                     page = "SpacePlanLocate";
                     break;
                 case "ProposeDeleteSingleUnit":
                     request.setAttribute("unitDeleteStatus", doSetUnitDelete(request));
                     page = "SpacePlanLocate";
                     break;
-                case "logout":
-                    try {
-                        request.getSession().invalidate();
-                    } catch (Exception ex) {
-
-                    }
-                    page = "login";
-                    System.out.println("Entering Page: " + page);
+                case "CheckSpacePlanRequestStatus":
+                    requestList= doGetRequestsByUserName(request);
+                    request.setAttribute("requestList", requestList);
+                    page="SpacePlanCheckRequest";
+                    break;
+                case "DeleteFloorPlanRequest":
+                    doDeleteLeasingRequestById(request);
+                    request.setAttribute("deleteRequestStatus","Your request has successfully been deleted");
+                    requestList= doGetRequestsByUserName(request);
+                    request.setAttribute("requestList", requestList);
+                    page="SpacePlanCheckRequest";
                     break;
             }
 
@@ -433,14 +456,8 @@ public class LeasingControllerServlet extends HttpServlet {
     }
 
     public String determineLeasingRequestType(Long leasingRequestId, HttpServletRequest request) {
-        ArrayList<LeasingSystemRequestEntity> allLeasingRequestList
-                = (ArrayList<LeasingSystemRequestEntity>) request.getSession().getAttribute("leasingRequestList");
-        for (int i = 0; i < allLeasingRequestList.size(); i++) {
-            if (leasingRequestId == allLeasingRequestList.get(i).getId()) {
-                return allLeasingRequestList.get(i).getType();
-            }
-        }
-        return "blabla";
+        LeasingSystemRequestEntity lre = leasingSystemRequestManagerSessionLocal.getLeasingRequestById(leasingRequestId);
+        return lre.getType();
     }
 
     public void doAcceptUpdateFloorPlanAndUpdateRequest(HttpServletRequest request) {
@@ -622,6 +639,14 @@ public class LeasingControllerServlet extends HttpServlet {
     public boolean doCheckInitialization(HttpServletRequest request){
         LevelManager levelManager = new LevelManager(levelManagerSessionLocal);
         return levelManager.checkInitialization(request);
+    }
+    public ArrayList<LeasingSystemRequestEntity> doGetRequestsByUserName(HttpServletRequest request){
+        LeasingRequestManager requestManager = new LeasingRequestManager(leasingSystemRequestManagerSessionLocal);
+        return requestManager.getRequestsByUserName(request);
+    }
+    public void doDeleteLeasingRequestById(HttpServletRequest request){
+        LeasingRequestManager requestManager = new LeasingRequestManager(leasingSystemRequestManagerSessionLocal);
+        requestManager.deleteLeasingRequestById(request);
     }
 ///////////////////////////////////END FOR SPACE PLANNER///////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////

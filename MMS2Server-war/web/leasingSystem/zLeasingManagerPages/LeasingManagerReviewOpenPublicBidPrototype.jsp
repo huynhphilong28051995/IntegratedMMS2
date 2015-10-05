@@ -211,8 +211,7 @@
 
                     %>
 
-                    <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png" 
-                           stype="width:1000px; height: 1000px;"/>
+                    <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png"/>
                     <div>
                         <%
                             for (int i = 0; i < listOfStoreUnits.size(); i++) {

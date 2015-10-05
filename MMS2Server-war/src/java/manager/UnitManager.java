@@ -43,7 +43,6 @@ public class UnitManager {
         String category = request.getParameter("category");
         Integer first = Integer.valueOf(firstLocationCode);
         Integer last = Integer.valueOf(lastLocationCode);
-        System.out.println("Declare zone store "+first+"    "+last);
         if (last < first) {
             Integer temp = last;
             last = first;
@@ -51,19 +50,19 @@ public class UnitManager {
         }
         for (int i = first; i <= last; i++) {
             String locationCode = LVST + "" + String.valueOf(i);
-            
-            System.out.println("inside loop 1"+locationCode);
             UnitEntity unit = getUnitByMallNameAndLocationCode(mallName, locationCode);
-            if (unit.isHasTenant()) {
-                return "Unavailable";
-            }
+            if (unit.isHasTenant()) 
+                return "Unsuccessful! Cannot recategorize unavailable unit(s)";
+            if(unit.isOpenForInternalBidding())
+                return "Unsuccessful! Cannot recategorize unit(s) that is already opened for internal bidding";
+            if(unit.isOpenForPublicBidding())
+                return "Unsuccessful! Cannot recategorize unit(s) that is already opened for open bidding";
         }
         for (int i = first; i <= last; i++) {
             String locationCode = LVST + "" + String.valueOf(i);
-            System.out.println("inside loop 2"+locationCode);
             unitManagerSessionLocal.declareUnitPrototypeCategory(mallName, locationCode, category);
         }
-        return "Succeed";
+        return "Successful! Zone category prototype has been modified";
     }
 
     public Vector getAllUnitColorForCurrentMall(HttpServletRequest request) {
@@ -338,15 +337,19 @@ public class UnitManager {
         boolean alreadyInOfficialList = checkPendingUnitListAlreadyInUnitListToAddTenant(
                 applyUnitList ,pendingUnitList);
         if (alreadyInOfficialList) {
-            return "Collide";
+            return "Unsuccessful! Unit(s) collide with chosen ones";
         }
         boolean differentInCategory = checkCategoryDifferent(mallName, applyUnitList
                 , pendingUnitList);
         if (differentInCategory) {
-            return "DifferentCategory";
+            return "Unsuccessful! Unit(s) are of different categories";
         }
         applyUnitList.add(unit.getLocationCode());
         request.getSession().setAttribute("applyUnitList", applyUnitList);
-        return "Succeed";
+        return "Successful!";
+    }
+    
+    public ArrayList<String> getMallListWithOpenPublicUnit(){
+        return unitManagerSessionLocal.getMallListWithOpenPublicUnit();
     }
 }

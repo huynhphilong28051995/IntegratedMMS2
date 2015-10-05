@@ -43,7 +43,7 @@
     </head>
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
-         <%String IP = (String) request.getSession().getAttribute("IP");%>
+        <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -115,6 +115,9 @@
                             <li class="">
                                 <a href="ViewAllTenants">View tenants</a>
                             </li>
+                            <li class="">
+                                <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
+                            </li>
                         </ul>    
                     </div>
                     <!-- END MEGA MENU -->
@@ -143,7 +146,7 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER --> 
-                   
+
 
                     <form action="PrepareContractForLongTermApplicant">
                         <table id="leasingRequestTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
@@ -177,6 +180,7 @@
                                             descriptionString = descriptionString + ""
                                                     + descriptionList.get(j);
                                         }
+                                        descriptionString = descriptionString.replaceAll("\n","<br>");
                                         String address = longTermApplication.getApplicantAddress();
                                         String email = longTermApplication.getApplicantEmail();
                                         String tel = longTermApplication.getApplicantTel();
@@ -190,7 +194,7 @@
 
                                 %>
                                 <tr>
-                                    <td><input type="checkbox" class="radio" name="applicantId" value="<%=id%>"></td>
+                                    <td><input id="checkBox" type="checkbox" class="radio" name="applicantId" value="<%=id%>"></td>
                                     <td><%=id%></td>
                                     <td><%=name%></td>
                                     <td><%=businessType%></td>
@@ -208,6 +212,7 @@
                         </table>
                         <button id="proceedButton" class="btn btn-default" type="submit" disabled="true">Prepare contract</button>
                     </form>
+
                     <form action="LeasingOfficerMain"><button class="btn btn-default" type="submit">BACK</button></form>
                     <script>
                         $("input:checkbox").on('click', function () {
@@ -232,9 +237,7 @@
                                 "order": [[3, "desc"]]
                             });
                         });
-                    </script>   
-
-
+                    </script>
                     <!-- END PAGE CONTENT INNER -->
                 </div>
             </div>
@@ -276,20 +279,20 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-            jQuery(document).ready(function () {
-                Custom.init(); // init custom core components
-                Layout.init(); // init current layout
-                UIIdleTimeout.init(); // init Idle Timeout
-                UIToastr.init(); // init Toastr Alert
-            });
+                        jQuery(document).ready(function () {
+                            Custom.init(); // init custom core components
+                            Layout.init(); // init current layout
+                            UIIdleTimeout.init(); // init Idle Timeout
+                            UIToastr.init(); // init Toastr Alert
+                        });
         </script>
         <% String referrer = request.getHeader("referer");
             String query = request.getQueryString();
             String timestamp = null;
         %>
-        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
+        <% if (referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/login")
+                    || referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/logout")
+                    || referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/adminHome")) {
                 timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
                 if ("=continue".equals(query)) {
         %>        

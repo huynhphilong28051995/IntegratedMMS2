@@ -109,6 +109,9 @@
                             <li class="">
                                 <a href="ViewAllTenants">View tenants</a>
                             </li>
+                            <li class="">
+                                <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
+                            </li>
                         </ul>    
                     </div>
                     <!-- END MEGA MENU -->

@@ -1,3 +1,9 @@
+span.description {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 150px;
+}
 textarea{
     resize: none;
 }

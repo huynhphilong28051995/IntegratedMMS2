@@ -1,15 +1,17 @@
 <%-- 
-    Document   : LeasingOfficerComposeLongTermApplicationRequest
-    Created on : Sep 27, 2015, 8:35:52 AM
-    Author     : PhiLong
+   Document   : LeasingOfficerCheckRequest
+   Created on : 5 Oct, 2015, 3:04:09 PM
+   Author     : PhiLong
 --%>
 
+<%@page import="mms2.leasing.entity.LeasingSystemRequestEntity"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>Merlion Leasing System | Prepare contract</title>
+        <title>Merlion Leasing System | Request Status</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -32,12 +34,12 @@
         <!-- END CUSTOM STYLES -->	
 
         <!--PERSONAL STYLE-->
+         <!--<link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/bootstrap.css" type="text/css">-->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/main.css" type="text/css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/jquery-ui.theme.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/jquery-ui.css">
-        <script src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
-        <script src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
-
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!--PERSONAL STYLE-->
     </head>
     <!-- BEGIN BODY -->
@@ -58,14 +60,12 @@
                     <!-- END RESPONSIVE MENU TOGGLER -->
                     <!-- BEGIN TOP NAVIGATION MENU -->
                     <div class="top-menu">
-                        <ul class="nav navbar-nav pull-right">
-                            <span class="separator"></span>
-                            </li>
+                        <ul class="nav navbar-nav pull-right">                         
                             <!-- BEGIN USER LOGIN DROPDOWN -->
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 
-                                    <span class="username username-hide-mobile">Welcome, <%=(String) request.getSession().getAttribute("staffFirstName")%></span>
+                                    <span class="username username-hide-mobile">Welcome, <%= (String) request.getSession().getAttribute("staffFirstName")%></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
@@ -101,9 +101,9 @@
                     <div class="hor-menu ">
                         <ul class="nav navbar-nav">
                             <li class="">
-                                <a href="DeclareZone">Zone declaration</a>
+                                <a href="DeclareZone">Zone declare</a>
                             </li>
-                            <li class="">
+                            <li class="active">
                                 <a href="ChooseUnitForPublicBidding">Open public bidding</a>
                             </li>
 
@@ -114,7 +114,7 @@
                             <li class="">
                                 <a href="ViewAllTenants">View tenants</a>
                             </li>
-                            <li class="">
+                            <li class="active">
                                 <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
                             </li>
                         </ul>    
@@ -132,7 +132,7 @@
                 <div class="container">
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">  
-                        <h1>Prepare contract </h1>
+                        <h1>All requests </h1>
                     </div>
                     <!-- END PAGE TITLE -->
 
@@ -144,27 +144,95 @@
                 <div class="container">
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
-                    <!-- BEGIN PAGE CONTENT INNER -->
-                    
+                    <!-- BEGIN PAGE CONTENT INNER --> 
 
 
+                    <form>
+                        <table id="leasingRequestTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Application ID</th>
+                                    <th>Apply unit(s)</th>
+                                    <th>Public open unit(s)</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    ArrayList<LeasingSystemRequestEntity> requestList
+                                            = (ArrayList<LeasingSystemRequestEntity>) request.getAttribute("requestList");
+                                    for (int i = 0; i < requestList.size(); i++) {
+                                        LeasingSystemRequestEntity leasingRequest = requestList.get(i);
+                                        Long requestID = leasingRequest.getId();
+                                        String requestType = leasingRequest.getType();
+                                        ArrayList<String> requestDescriptionList = leasingRequest.getDescription();
+                                        String requestDescriptionString = "";
+                                        for (int j = 0; j < requestDescriptionList.size(); j++) {
+                                            requestDescriptionString = requestDescriptionString + "<br>"
+                                                    + requestDescriptionList.get(j);
+                                        }
+                                        requestDescriptionString = requestDescriptionString.replaceAll("\n", "<br>");
+                                        
+                                        String requestStatus = leasingRequest.getStatus();
+                                        String applicationID = "N.A.";
+                                        String applyUnitList = "N.A.";
+                                        String publicOpenUnitList = "N.A.";
+                                        if (requestType.equals("CategoryModify")) {
+                                            //nothing happens
+                                        } else if (requestType.equals("PublicOpenBid")) {
+                                            ArrayList<String> tempList = leasingRequest.getListOfUnitOpenForBidding();
+                                            String tempString = "";
+                                            for (int j = 0; j < tempList.size(); j++) {
+                                                tempString = tempString + tempList.get(j)+ "<br>";
+                                               }
+                                            publicOpenUnitList = tempString;
+                                        } else {
+                                            applicationID = String.valueOf(leasingRequest.getApplicationId());
+                                            ArrayList<String> tempList = leasingRequest.getApplyUnitList();
+                                            String tempString = "";
+                                            for (int j = 0; j < tempList.size(); j++) {
+                                                tempString = tempString+ tempList.get(j)+"<br>";
+                                            }
+                                            applyUnitList = tempString;
+                                        }
+                                %>
+                                <tr>
+                                    <td><%=requestID%></td>
+                                    <td><%=requestType%></td>
+                                    <td><%=requestDescriptionString%></td>
+                                    <td><%=applicationID%></td>
+                                    <td><%=applyUnitList%></td>
+                                    <td><span class="description"><%=publicOpenUnitList%></span></td>
+                                    <td><%=requestStatus%></td>
+                                    <td>
+                                        <a href="DeleteLeasingOfficerRequest?leasingRequestId=<%=requestID%>">
+                                            DELETE</a>   
+                                    </td>
+                                </tr>
+                                <%
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                    </form>
+                    <script>
+                        $(document).ready(function () {
+                            $('#leasingRequestTable').DataTable({
+                                "order": [[3, "desc"]]
+                            });
+                        });
+                    </script>   
 
-                    <div class="container">
-                        <form action="SendLongTermApplicationApprovalRequest" method="GET">
-                            <div class="form-group">
-                                <label for="requestDescription">Short request description :</label><br/>
-                                <textarea required="required" resize="none" name="requestDescription" rows="10" cols="180" placeholder="Enter tenant description"></textarea>
-                            </div> 
-                            <button type="submit" class="btn btn-default">Submit</button>
-                        </form>
-                    </div>
                     <!-- END PAGE CONTENT INNER -->
                 </div>
             </div>
             <!-- END PAGE CONTENT -->
         </div>
         <!-- END PAGE CONTAINER -->
-
         <!-- BEGIN FOOTER -->
         <div class="page-footer">
             <div class="container">
@@ -199,49 +267,46 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-            jQuery(document).ready(function () {
-                Custom.init(); // init custom core components
-                Layout.init(); // init current layout
-                UIIdleTimeout.init(); // init Idle Timeout
-                UIToastr.init(); // init Toastr Alert
-            });
+                        jQuery(document).ready(function () {
+                            Custom.init(); // init custom core components
+                            Layout.init(); // init current layout
+                            UIIdleTimeout.init(); // init Idle Timeout
+                            UIToastr.init(); // init Toastr Alert
+                        });
         </script>
-        <% String referrer = request.getHeader("referer");
-            String query = request.getQueryString();
-            String timestamp = null;
+        <%
+            String deleteRequestStatus = null;
+            if (request.getAttribute("deleteRequestStatus") != null) {
+                deleteRequestStatus = (String) request.getAttribute("deleteRequestStatus");
         %>
-        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
-                timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
-                if ("=continue".equals(query)) {
-        %>        
         <script language="javascript">
-            var ts = '<%= timestamp%>';
             $(document).ready(function () {
                 // show when page load
-                toastr.info('Welcome back!');
-
+                toastr.success('<%=deleteRequestStatus%>');
             });
         </script>
-        <% } else {%>
-        <script language="javascript">
-            var ts = '<%= timestamp%>';
-            $(document).ready(function () {
-                // show when page load
-                toastr.success(ts, 'Login Successful!');
-
-            });
-        </script>
-        <%}
-            }%>
-
-
+        <%
+            }
+        %>
         <!-- END JAVASCRIPTS -->
-
     </body>
     <!-- END BODY -->
 </html>
 
 
-</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

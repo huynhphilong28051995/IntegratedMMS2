@@ -116,6 +116,9 @@
                             <li class="">
                                 <a href="ViewAllTenants">View tenants</a>
                             </li>
+                            <li class="">
+                                <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
+                            </li>
                         </ul>    
                     </div>
                     <!-- END MEGA MENU -->
@@ -184,8 +187,7 @@
                         }
                     %>
 
-                    <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png" 
-                           stype="width:1000px; height: 1000px;"/>
+                    <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png" />
                     <div>
                         <%
                             for (int i = 0; i < listOfStoreUnits.size(); i++) {
@@ -479,6 +481,32 @@
             });
         </script>
         <%
+            }
+        %>
+        
+        <%
+            
+            if (request.getAttribute("saveZoneStatus") != null) {
+                String saveZoneStatus = (String)request.getAttribute("saveZoneStatus");                
+                if (saveZoneStatus.contains("Successful!")) {
+        %>
+        <script language="javascript">
+            $(document).ready(function () {
+                // show when page load
+                toastr.success('<%= saveZoneStatus%>');
+            });
+        </script>
+        <%
+        } else {
+        %>
+        <script language="javascript">
+            $(document).ready(function () {
+                // show when page load
+                toastr.error('<%=saveZoneStatus%>');
+            });
+        </script>
+        <%
+                }
             }
         %>
 

@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-     <head>
+    <head>
         <title>Merlion Leasing System | Public Portal Main</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -57,7 +57,7 @@
 
                                     <span class="username username-hide-mobile">Welcome, guest</span>
                                 </a>
-                                
+
                             </li>
                             <!-- END USER LOGIN DROPDOWN -->
                         </ul>
@@ -144,49 +144,52 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
-        <%
-            String applicantName = (String)request.getSession().getAttribute("applicantName");
-             String applicantBusinessType = (String)request.getSession().getAttribute("applicantBusinessType");
-            String applicantDescription = (String)request.getSession().getAttribute("applicantDescription");
-            String applicantAddress = (String)request.getSession().getAttribute("applicantAddress");
-            String applicantTel = (String)request.getSession().getAttribute("applicantTel");
-            String applicantEmail = (String)request.getSession().getAttribute("applicantEmail");
-            String applicantBidRate = (String)request.getSession().getAttribute("applicantBidRate");
-        %>
-        <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-            <tr>
-                <th>Applicant name:</th>
-                <td><%=applicantName%></td>
-            </tr>
-            <tr>
-                <th>Applicant business type:</th>
-                <td><%=applicantBusinessType%></td>
-            </tr>
-            <tr>
-                <th>Applicant Description</th>
-                <td><%=applicantDescription%></td>
-            </tr>
-            <tr>
-                <th>Applicant address</th>
-                <td><%=applicantAddress%></td>
-            </tr>
-            <tr>
-                <th>Applicant email</th>
-                <td><%=applicantEmail%></td>
-            </tr>
-            <tr>
-                <th>Applicant telephone</th>
-                <td><%=applicantTel%></td>
-            </tr>
-            <tr>
-                <th>Bidding rate</th>
-                <td><%=applicantBidRate%></td>
-            </tr>
-            <form action="SubmitLongTermApplication">
-                <button type="submit" class="btn btn-default" >CONFIRM</button>
-            </form>
-        </table>
-      <!-- END PAGE CONTENT INNER -->
+                    <%
+                        String applicantName = (String) request.getSession().getAttribute("applicantName");
+                        String applicantBusinessType = (String) request.getSession().getAttribute("applicantBusinessType");
+                        String applicantDescription = (String) request.getSession().getAttribute("applicantDescription");
+                        applicantDescription =  applicantDescription.replaceAll("\n","<br>");
+                        String applicantAddress = (String) request.getSession().getAttribute("applicantAddress");
+                        String applicantTel = (String) request.getSession().getAttribute("applicantTel");
+                        String applicantEmail = (String) request.getSession().getAttribute("applicantEmail");
+                        String applicantBidRate = (String) request.getSession().getAttribute("applicantBidRate");
+                    %>
+                    <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <tr>
+                            <th>Applicant name:</th>
+                            <td><%=applicantName%></td>
+                        </tr>
+                        <tr>
+                            <th>Applicant business type:</th>
+                            <td><%=applicantBusinessType%></td>
+                        </tr>
+                        <tr>
+                            <th>Applicant Description</th>
+                            <td><%=applicantDescription%></td>
+                        </tr>
+                        <tr>
+                            <th>Applicant address</th>
+                            <td><%=applicantAddress%></td>
+                        </tr>
+                        <tr>
+                            <th>Applicant email</th>
+                            <td><%=applicantEmail%></td>
+                        </tr>
+                        <tr>
+                            <th>Applicant telephone</th>
+                            <td><%=applicantTel%></td>
+                        </tr>
+                        <tr>
+                            <th>Bidding rate</th>
+                            <td><%=applicantBidRate%></td>
+                        </tr>
+
+                    </table>
+                    <form action="SubmitLongTermApplication">
+                        <button type="submit" class="btn btn-default" >CONFIRM</button>
+                    </form>
+
+                    <!-- END PAGE CONTENT INNER -->
                 </div>
             </div>
             <!-- END PAGE CONTENT -->
@@ -234,7 +237,7 @@
                 UIToastr.init(); // init Toastr Alert
             });
         </script>
-        
+
 
 
         <!-- END JAVASCRIPTS -->

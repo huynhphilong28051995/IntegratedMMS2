@@ -152,7 +152,7 @@
                 <div class="container">
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">  
-                        <h1>Floor plan prototype </h1>
+                        <h1>Application Review </h1>
                     </div>
                     <!-- END PAGE TITLE -->
 
@@ -167,7 +167,7 @@
                     <!-- BEGIN PAGE CONTENT INNER --> 
                     
 
-                    <%
+                    <%  
                         LongTermApplicationEntity longTermApplication = (LongTermApplicationEntity) request.getAttribute("longTermApplication");
                         String applicantName = longTermApplication.getApplicantName();
                         String applicantBusinessType = longTermApplication.getApplicantBusinessType();
@@ -177,6 +177,7 @@
                             applicantDescriptionString = applicantDescriptionString + ""
                                     + applicantDescriptionList.get(i);
                         }
+                        applicantDescriptionString = applicantDescriptionString.replaceAll("\n","<br>");
                         String applicantAddress = longTermApplication.getApplicantAddress();
                         String applicantEmail = longTermApplication.getApplicantEmail();
                         String applicantTel = longTermApplication.getApplicantTel();

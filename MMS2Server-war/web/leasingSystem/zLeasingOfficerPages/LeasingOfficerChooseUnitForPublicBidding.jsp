@@ -120,6 +120,9 @@
                             <li class="">
                                 <a href="ViewAllTenants">View tenants</a>
                             </li>
+                            <li class="">
+                                <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
+                            </li>
                         </ul>      
                     </div>
                     <!-- END MEGA MENU -->
@@ -148,9 +151,6 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
-
-
-
                     <%
                         String levelCode = (String) request.getSession().getAttribute("levelCode");
                         LevelEntity level = (LevelEntity) request.getSession().getAttribute("levelInstance");
@@ -196,8 +196,7 @@
                         }
                     %>
 
-                    <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png" 
-                           stype="width:1000px; height: 1000px;"/>
+                    <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png"/>
                     <div>
                         <%
                             for (int i = 0; i < listOfStoreUnits.size(); i++) {
@@ -473,9 +472,9 @@
 
         <%
             if (chooseUnitStatus != null) {
-                chooseUnitStatus = chooseUnitStatus  +" | "+ locationCodeList;
+                chooseUnitStatus = chooseUnitStatus + " | " + locationCodeList;
                 if (chooseUnitStatus.contains("Successful!")) {
-%>
+        %>
         <script language="javascript">
             $(document).ready(function () {
                 // show when page load
@@ -484,7 +483,7 @@
         </script>
         <%
         } else {
-%>
+        %>
         <script language="javascript">
             $(document).ready(function () {
                 // show when page load
@@ -492,7 +491,7 @@
             });
         </script>
         <%
-                      }
+                }
             }
         %>
 
