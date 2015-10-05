@@ -136,10 +136,32 @@ public class LeasingSystemRequestManagerSession implements LeasingSystemRequestM
         return em.find(LeasingSystemRequestEntity.class, requestId);
     }
     @Override
+    public void deleteLeasingRequestById(Long requestId){
+        Query query = em.createQuery("SELECT r FROM LeasingSystemRequestEntity r "
+                + "WHERE r.id = :inId");
+        query.setParameter("inId", requestId);
+        LeasingSystemRequestEntity re =(LeasingSystemRequestEntity) query.getResultList().get(0);
+        em.remove(re);
+        em.flush();
+    }
+    
+    @Override
+    public ArrayList<LeasingSystemRequestEntity> getRequestsByUserName(String userName){
+        ArrayList<LeasingSystemRequestEntity> resultList = new ArrayList();
+        Query query = em.createQuery("SELECT re FROM LeasingSystemRequestEntity re "
+                + "WHERE re.senderUserName =:inUserName");
+        query.setParameter("inUserName", userName);
+        for (Object o: query.getResultList()){
+            LeasingSystemRequestEntity re = (LeasingSystemRequestEntity) o;
+            resultList.add(re);
+        }
+        return resultList;
+    }
+    
+    @Override
     public void addPublicApplicationApprovalRequest(String staffUserName, 
             String mallName,Long applicantId, String descriptionString){
-        System.out.println(descriptionString);
-         ArrayList<String> descriptionStringList = new ArrayList<String>();
+        ArrayList<String> descriptionStringList = new ArrayList<String>();
         while (descriptionString.length() > 0) {
             int length = descriptionString.length();
             if (length > 255) {
@@ -156,6 +178,8 @@ public class LeasingSystemRequestManagerSession implements LeasingSystemRequestM
                         "LeasingManager", "LongTermApplicationApproval", mallName);
         leasingRequest.setDescription(descriptionStringList);
         leasingRequest.setApplicationId(applicantId);
+        LongTermApplicationEntity applicant = em.find(LongTermApplicationEntity.class, applicantId);
+        leasingRequest.setApplyUnitList(applicant.getApplyUnitList());
         em.persist(leasingRequest);
     }
     
@@ -163,21 +187,38 @@ public class LeasingSystemRequestManagerSession implements LeasingSystemRequestM
     public void deleteAllCollideRequestAndApplication(Long requestId, Long applicationId){
         LeasingSystemRequestEntity leasingRequest  =em.find(LeasingSystemRequestEntity.class, requestId);
         leasingRequest.setStatus("ACCEPTED");
-        LongTermApplicationEntity longTermApplication = em.find(LongTermApplicationEntity.class,
-                applicationId);
-        ArrayList<String> applyUnitList = longTermApplication.getApplyUnitList();
-        String mallName = longTermApplication.getMallName();
+        ArrayList<String> applyUnitList = leasingRequest.getApplyUnitList();
+        
+        String mallName = leasingRequest.getMallName();
+        
         Query query = em.createQuery("SELECT a FROM LongTermApplicationEntity a "
                 + "WHERE a.mallName =:inMallName");
         query.setParameter("inMallName", mallName);
-        ArrayList<LongTermApplicationEntity> resultList = new
-            ArrayList<LongTermApplicationEntity>(query.getResultList());
-        for(int i=0; i<resultList.size(); i++){
-            LongTermApplicationEntity tempApplication = resultList.get(i);
+       
+        for(Object o: query.getResultList()){
+            LongTermApplicationEntity tempApplication =(LongTermApplicationEntity) o;
             ArrayList<String> tempUnitList = tempApplication.getApplyUnitList();
             for (int j=0; j<applyUnitList.size(); j++){
-                if(tempUnitList.contains(applyUnitList.get(j)))
+                if(tempUnitList.contains(applyUnitList.get(j))){
                     em.remove(tempApplication);
+                    em.flush();
+                    break;
+                }
+            }
+        }
+        
+        Query query2 = em.createQuery("SELECT a FROM LeasingSystemRequestEntity a "
+                + "WHERE a.mallName =:inMallName AND a.id <> :inId");
+        query2.setParameter("inMallName", mallName);
+        query2.setParameter("inId", requestId);
+        ArrayList<LeasingSystemRequestEntity> resultList2 = new
+            ArrayList<>(query2.getResultList());
+        for(int i=0; i<resultList2.size(); i++){
+            LeasingSystemRequestEntity tempRequest = resultList2.get(i);
+            ArrayList<String> tempUnitList = tempRequest.getApplyUnitList();
+            for (int j=0; j<applyUnitList.size(); j++){
+                if(tempUnitList.contains(applyUnitList.get(j)))
+                    em.remove(tempRequest);
                 em.flush();
             }
         }

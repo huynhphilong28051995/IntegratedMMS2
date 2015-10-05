@@ -85,9 +85,6 @@ public class LevelManagerSession implements LevelManagerSessionLocal {
 
     @Override
     public void implementFloorPlanPrototype(String mallName) {
-        System.out.println("SHITTTTT " + mallName);
-        System.out.println("SHITTTTT " + mallName);
-        System.out.println("SHITTTTT " + mallName);
         Query query1 = em.createQuery("SELECT l FROM LevelEntity l "
                 + "WHERE l.mallName = :inMallName");
         query1.setParameter("inMallName", mallName);
@@ -103,12 +100,10 @@ public class LevelManagerSession implements LevelManagerSessionLocal {
             }
             em.merge(level);
         }
-        System.out.println("SHITTTTT " + mallName);
         Query query2 = em.createQuery("SELECT u FROM UnitEntity u "
                 + "WHERE u.mallName = :inMallName AND u.deleteProposed =:inDelete");
         query2.setParameter("inMallName", mallName);
         query2.setParameter("inDelete", true);
-        System.out.println("-----------------------" + query2.getResultList().size());
 
         for (Object o : query2.getResultList()) {
             UnitEntity unit = (UnitEntity) o;

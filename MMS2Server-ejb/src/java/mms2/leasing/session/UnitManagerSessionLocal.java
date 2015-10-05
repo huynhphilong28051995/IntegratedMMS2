@@ -42,4 +42,6 @@ public interface UnitManagerSessionLocal {
     public String setUnitDelete(String mallName, String locationCode);
 
     public void setOpenPublicBiddingPrototype(String mallName, ArrayList<String> chosenUnitList);
+
+    public ArrayList<String> getMallListWithOpenPublicUnit();
 }

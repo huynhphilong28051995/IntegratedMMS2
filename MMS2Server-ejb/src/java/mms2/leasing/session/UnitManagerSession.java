@@ -238,7 +238,6 @@ public class UnitManagerSession implements UnitManagerSessionLocal {
             int numOfExistingPushCart = query2.getResultList().size();
             for (int j = (numOfExistingPushCart+1); j <= (numOfExistingPushCart + numOfPushCart); j++) {
                 String locationCode = "LV"+i+"PC" + j;
-                System.out.println("0000000000000000000000000000000000000000000000000000000000"+j);
                 UnitEntity unit = new UnitEntity(level, mallName, locationCode, true, false, false);
                 level.getUnits().add(unit);
                 em.persist(unit);
@@ -266,7 +265,6 @@ public class UnitManagerSession implements UnitManagerSessionLocal {
             int numOfExistingKiosk = query2.getResultList().size();
             for (int j = (numOfExistingKiosk+1); j <= (numOfExistingKiosk + numOfKiosk); j++) {
                 String locationCode = "LV"+i+"KS" + j;
-                System.out.println("0000000000000000000000000000000000000000000000000000000000"+j);
                 UnitEntity unit = new UnitEntity(level, mallName, locationCode, false, true,false);
                 level.getUnits().add(unit);
                 em.persist(unit);
@@ -294,7 +292,6 @@ public class UnitManagerSession implements UnitManagerSessionLocal {
             int numOfExistingEvent = query2.getResultList().size();
             for (int j = (numOfExistingEvent+1); j <= (numOfExistingEvent + numOfEvent); j++) {
                 String locationCode = "LV"+i+"EV" + j;
-                System.out.println("0000000000000000000000000000000000000000000000000000000000"+j);
                 UnitEntity unit = new UnitEntity(level, mallName, locationCode, false, false, true);
                 unit.setCategory("Event");
                 unit.setCategoryPrototype("Event");
@@ -327,7 +324,6 @@ public class UnitManagerSession implements UnitManagerSessionLocal {
             int numOfExistingStore = query2.getResultList().size();
             for (int j = (numOfExistingStore+1); j <= (numOfExistingStore + numOfStore); j++) {
                 String locationCode = "LV"+i+"ST" + j;
-                System.out.println("0000000000000000000000000000000000000000000000000000000000"+j);
                 UnitEntity unit = new UnitEntity(level, mallName, locationCode, false, false, false);
                 level.getUnits().add(unit);
                 em.persist(unit);
@@ -374,5 +370,14 @@ public class UnitManagerSession implements UnitManagerSessionLocal {
             em.merge(unit);
             em.flush();
         }
+    }
+    
+    @Override
+    public ArrayList<String> getMallListWithOpenPublicUnit(){
+        ArrayList<String> mallNameList = new ArrayList();
+        Query query = em.createQuery("SELECT DISTINCT u.mallName FROM UnitEntity u "
+                + "WHERE u.openForPublicBidding = :inOpen");
+        query.setParameter("inOpen", true);
+        return new ArrayList<String>(query.getResultList());
     }
 }

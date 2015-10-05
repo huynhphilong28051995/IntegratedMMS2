@@ -113,6 +113,11 @@ public class TenantManagerSession implements TenantManagerSessionLocal {
             query.setParameter("inLocationCode", locationCode);
             query.setParameter("inMallName", mallName);
             UnitEntity unit = (UnitEntity) (query.getResultList().get(0));
+            unit.setOpenForPublicBidding(false);
+            unit.setOpenForPublicBiddingPrototype(false);
+            unit.setOpenForInternalBidding(false);
+            unit.setOpenForInternalBiddingPrototype(false);
+            unit.setHasTenant(true);
             unit.setTenant(newTenant);
             em.merge(unit);
             em.flush();

@@ -15,10 +15,11 @@ import javax.ejb.Local;
  */
 @Local
 public interface LeasingSystemRequestManagerSessionLocal {
+
     public void updateLeasingRequestStatus(Long leasingRequestId, String status);
 
     public ArrayList<LeasingSystemRequestEntity> getListOfAllPendingLeasingRequests(String mallName);
-    
+
     public void addFloorplanRequest(String staffUserName, String mallName, String descriptionString);
 
     public void addCategoryRequest(String staffUserName, String mallName, String descriptionString);
@@ -27,8 +28,12 @@ public interface LeasingSystemRequestManagerSessionLocal {
 
     public LeasingSystemRequestEntity getLeasingRequestById(Long requestId);
 
+    public void deleteLeasingRequestById(Long requestId);
+
     public void addPublicApplicationApprovalRequest(String staffUserName, String mallName, Long applicantId, String descriptionString);
 
     public void deleteAllCollideRequestAndApplication(Long requestId, Long applicationId);
+
+    public ArrayList<LeasingSystemRequestEntity> getRequestsByUserName(String userName);
     
 }
