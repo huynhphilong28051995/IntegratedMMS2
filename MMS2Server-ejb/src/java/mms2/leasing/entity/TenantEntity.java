@@ -34,6 +34,10 @@ public class TenantEntity implements Serializable {
     private String address;
     private String tel;
     private String email;
+    
+    private String status="Pending";
+    private ArrayList<String> pendingUnitList= new ArrayList<>();
+    
     @OneToOne
     private TenantContractEntity tenantContract;
     @OneToMany(cascade={CascadeType.ALL},mappedBy = "tenant")
@@ -213,6 +217,34 @@ public class TenantEntity implements Serializable {
      */
     public void setDescription(ArrayList<String> description) {
         this.description = description;
+    }
+
+    /**
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /**
+     * @return the pendingUnitList
+     */
+    public ArrayList<String> getPendingUnitList() {
+        return pendingUnitList;
+    }
+
+    /**
+     * @param pendingUnitList the pendingUnitList to set
+     */
+    public void setPendingUnitList(ArrayList<String> pendingUnitList) {
+        this.pendingUnitList = pendingUnitList;
     }
 
 }

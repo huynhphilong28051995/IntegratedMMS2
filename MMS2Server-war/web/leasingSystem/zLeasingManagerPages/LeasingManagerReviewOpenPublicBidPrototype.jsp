@@ -3,6 +3,18 @@
     Created on : Sep 26, 2015, 8:57:43 AM
     Author     : PhiLong
 --%>
+<%@page import="org.jfree.chart.JFreeChart"%>
+<%@page import="org.jfree.data.general.DefaultPieDataset"%>
+<%@page import="org.jfree.chart.ChartFactory"%>
+<%@page import="org.jfree.chart.plot.PiePlot"%>
+<%@page import="org.jfree.chart.labels.StandardPieSectionLabelGenerator"%>
+<%@page import="org.jfree.chart.ChartUtilities"%>
+<%@page import="java.awt.Color"%>
+<%@page import="java.awt.Color"%>
+<%@page import="org.jfree.chart.entity.StandardEntityCollection"%>
+<%@page import="org.jfree.chart.entity.StandardEntityCollection"%>
+<%@page import="java.io.File"%>
+<%@page import="org.jfree.chart.ChartRenderingInfo"%>
 <%@page import="mms2.leasing.entity.UnitEntity"%>
 <%@page import="mms2.leasing.entity.LevelEntity"%>
 <%@page import="mms2.leasing.entity.LeasingSystemRequestEntity"%>
@@ -212,6 +224,7 @@
                     %>
 
                     <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png"/>
+                     <img class="legendImage" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/legend/legend.png" />
                     <div>
                         <%
                             for (int i = 0; i < listOfStoreUnits.size(); i++) {
@@ -298,6 +311,71 @@
                             $("#" + id).css(pos);
                         });
                     </script>
+                    <!--START MAKE PIE CHART-->
+                    <%
+                        //START CALCULATE PERCENTAGE OF PROTOTYPE CATEGORY
+                        int numTotal = unitList.size();
+                        int numFB = 0;
+                        int numRT = 0;
+                        int numET = 0;
+                        int numEV = 0;
+                        int numUndefined = 0;
+                        for (int i = 0; i < unitList.size(); i++) {
+                            UnitEntity unit = (UnitEntity) unitList.get(i);
+                            boolean show = unit.isShow();
+                            if (show) {
+                                String prototypeCategory = unit.getCategoryPrototype();
+                                if (prototypeCategory.equals("Food&Beverage")) {
+                                    numFB++;
+                                } else if (prototypeCategory.equals("Retail")) {
+                                    numRT++;
+                                } else if (prototypeCategory.equals("Entertainment")) {
+                                    numET++;
+                                } else if (prototypeCategory.equals("Event")) {
+                                    numEV++;
+                                } else {
+                                    numUndefined++;
+                                }
+                            }
+                        }
+                        double percentFB = ((double) numFB) / numTotal;
+                        double percentRT = ((double) numRT) / numTotal;
+                        double percentET = ((double) numET) / numTotal;
+                        double percentEV = ((double) numEV) / numTotal;
+                        double percentUndefined = ((double) numUndefined) / numTotal;
+                        //END CALCULATE PERCENTAGE OF PROTOTYPE CATEGORY
+                        //START CREATE PIE CHART
+                        DefaultPieDataset pieDataset = new DefaultPieDataset();
+                        pieDataset.setValue("F&B", percentFB);
+                        pieDataset.setValue("Retail", percentRT);
+                        pieDataset.setValue("Entertainment", percentET);
+                        pieDataset.setValue("Event", percentEV);
+                        pieDataset.setValue("Undefined", percentUndefined);
+                        System.out.println("Test2");
+                        JFreeChart chart = ChartFactory.createPieChart(" Prototype Tenant Mix ",
+                                pieDataset, true, true, false);
+                        //chart.setBackgroundPaint(new Color(222, 222, 255));
+                        final PiePlot plot = (PiePlot) chart.getPlot();
+                        plot.setBackgroundPaint(Color.white);
+                        plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0} {2}"));
+                        plot.setCircular(true);
+                        plot.setSectionPaint("F&B", new Color(87, 210, 252));
+                        plot.setSectionPaint("Retail", new Color(226,141,142));
+                        plot.setSectionPaint("Entertainment", new Color(86, 182, 159));
+                        plot.setSectionPaint("Event", new Color(252, 248, 152));
+                        plot.setSectionPaint("Undefined", new Color(217, 221, 219));
+                        try {
+                            final ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
+                            final File file1 = new File(getServletContext().getRealPath("") + "/leasingSystem/leasingSystemAssets/chart/piechart.png");
+                            ChartUtilities.saveChartAsPNG(file1, chart, 600, 400, info);
+                        } catch (Exception e) {
+                            System.out.println(e);
+                        }
+
+                    %>
+                    <img class="chartImage" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/chart/piechart.png" 
+                         WIDTH="500" HEIGHT="333" BORDER="0"/>
+                    <!--END MAKE PIE CHART-->
                     <!--CHANGE FLOOR-->
                     <div class="changeFloor">
                         <form action="ChangeFloorplanLevelReviewPublicOpenBidPrototype" method="GET">

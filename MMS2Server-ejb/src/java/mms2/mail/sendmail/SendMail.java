@@ -152,8 +152,8 @@ public class SendMail implements SendMailLocal {
     private class SMTPAuthenticator extends javax.mail.Authenticator {
             @Override
             public PasswordAuthentication getPasswordAuthentication() {
-                String username =  "noreply.merlionmallasia@gmail.com";           // specify your email id here (sender's email id)
-                String password = "GohEngChi";                          // specify your password here
+                String username =  "huynhphilong28051995";           // specify your email id here (sender's email id)
+                String password = "bonidom2805";                          // specify your password here
                 return new PasswordAuthentication(username, password);
             }
       }

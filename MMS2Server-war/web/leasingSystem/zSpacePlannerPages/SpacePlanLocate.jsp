@@ -182,10 +182,20 @@
                         //Seperate arraList into pushcart and non-pushcart
                         List allUnitList = new ArrayList(level.getUnits());
                         List unitList = new ArrayList();
+                        boolean cannotDeleteMoreStore = false;
+                        boolean cannotDeleteMorePushCart = false;
+                        boolean cannotDeleteMoreKiosk = false;
+                        boolean cannotDeleteMoreEvent = false;
                         for (int i = 0; i < allUnitList.size(); i++) {
                             UnitEntity unit = (UnitEntity) allUnitList.get(i);
                             if (!unit.isDeleteProposed()) {
                                 unitList.add(unit);
+                            }else{
+                                String type  = unit.getLocationCode().substring(3,5);
+                                if(type.equals("ST")) cannotDeleteMoreStore = true;
+                                if(type.equals("PC")) cannotDeleteMorePushCart = true;
+                                if(type.equals("KS")) cannotDeleteMoreKiosk = true;
+                                if(type.equals("EV")) cannotDeleteMoreEvent = true;
                             }
                         }
                         ArrayList<UnitEntity> listOfStoreUnits = new ArrayList();
@@ -208,16 +218,51 @@
                             }
                         }
                         ArrayList<UnitEntity> unitListDelete = new ArrayList();
-                        for (int i = 0; i < unitList.size(); i++) {
-                            UnitEntity unit = (UnitEntity) unitList.get(i);
-                            if (unit.isHasTenant() || unit.isOpenForPublicBidding()
-                                    || unit.isOpenForInternalBidding() || unit.isOpenForPublicBiddingPrototype()
-                                    || unit.isOpenForInternalBiddingPrototype()) {
-                                //do nothing
-                            } else {
-                                unitListDelete.add(unit);
+                        int max=0;
+                        int position=0;
+                        if((listOfStoreUnits.size()!=0)&&(!cannotDeleteMoreStore)){
+                        for (int i = 0; i < listOfStoreUnits.size(); i++) {
+                            int value = Integer.parseInt(listOfStoreUnits.get(i).getLocationCode().substring(5, 6));
+                            if(value>max){
+                                max=value;
+                                position=i;
                             }
                         }
+                        unitListDelete.add(listOfStoreUnits.get(position));}
+                        max=0;
+                        position=0;
+                        if((listOfPushCartUnits.size()!=0)&&(!cannotDeleteMorePushCart)){
+                        for (int i = 0; i < listOfPushCartUnits.size(); i++) {
+                            int value = Integer.parseInt(listOfPushCartUnits.get(i).getLocationCode().substring(5, 6));
+                            if(value>max){
+                                max=value;
+                                position=i;
+                            }
+                        }
+                        unitListDelete.add(listOfPushCartUnits.get(position));}
+                        max=0;
+                        position=0;
+                        if((listOfKioskUnits.size()!=0)&&(!cannotDeleteMoreKiosk)){
+                        for (int i = 0; i < listOfKioskUnits.size(); i++) {
+                            int value = Integer.parseInt(listOfKioskUnits.get(i).getLocationCode().substring(5, 6));
+                            if(value>max){
+                                max=value;
+                                position=i;
+                            }
+                        }
+                        unitListDelete.add(listOfKioskUnits.get(position));}
+                        max=0;
+                        position=0;
+                        if((listOfEventUnits.size()!=0) && (!cannotDeleteMoreEvent)){
+                        for (int i = 0; i < listOfEventUnits.size(); i++) {
+                            int value = Integer.parseInt(listOfEventUnits.get(i).getLocationCode().substring(5, 6));
+                            if(value>max){
+                                max=value;
+                                position=i;
+                            }
+                        }
+                        unitListDelete.add(listOfEventUnits.get(position));}
+                        
                     %>
 
                     <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png"/>
@@ -347,6 +392,7 @@
                                 <label>Unit to delete</label>
                                 <select required="required" name="locationCode" >
                                     <%
+                                        
                                         for (int i = 0; i < unitListDelete.size(); i++) {
                                             String locationCode = ((UnitEntity) unitListDelete.get(i)).getLocationCode();
                                     %>
@@ -492,8 +538,6 @@
 
 
         <!-- END JAVASCRIPTS -->
-<img src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/chart/piechart.png" 
-     WIDTH="600" HEIGHT="400" BORDER="0"/>
     </body>
     <!-- END BODY -->
 </html>

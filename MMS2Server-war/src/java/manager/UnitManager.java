@@ -11,6 +11,8 @@ import mms2.leasing.session.UnitManagerSessionLocal;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
+import mms2.leasing.entity.TenantContractEntity;
+import mms2.leasing.entity.TenantEntity;
 
 /**
  *
@@ -53,6 +55,8 @@ public class UnitManager {
             UnitEntity unit = getUnitByMallNameAndLocationCode(mallName, locationCode);
             if (unit.isHasTenant()) 
                 return "Unsuccessful! Cannot recategorize unavailable unit(s)";
+            if(unit.isHasPendingTenant())
+                return "Unsuccessful! Cannot recategorize unit(s) with pending tenant";
             if(unit.isOpenForInternalBidding())
                 return "Unsuccessful! Cannot recategorize unit(s) that is already opened for internal bidding";
             if(unit.isOpenForPublicBidding())
@@ -124,14 +128,19 @@ public class UnitManager {
             UnitEntity unit = unitManagerSessionLocal.getUnitByMallNameAndLocationCode(mallName, locationCode);
             pendingUnitList.add(unit);
         }
+        boolean currentTenantExpireSoon= checkCurrentTenantExpireSoon(pendingUnitList);
+        if(!currentTenantExpireSoon){
+            return "Unsuccessful! Tenant of unit is not expiring";
+        }
+        
         boolean alreadyInOfficialList = checkPendingUnitListAlreadyInUnitListToAddTenant(unitListToAddTenant,
                 pendingUnitList);
         if (alreadyInOfficialList) {
             return "Unsuccessful! Unit(s) collide with chosen ones";
         }
-        boolean alreadyHasTenant = checkPendingUnitListAlreadyHasTenant(pendingUnitList);
+        boolean alreadyHasTenant = checkPendingUnitListAlreadyHasPendingTenant(pendingUnitList);
         if (alreadyHasTenant) {
-            return "Unsuccessful! Unit(s) already have tenant";
+            return "Unsuccessful! Unit(s) already have pending tenant";
         }
         boolean categoryNotDefined = checkCategoryNotDefined(pendingUnitList);
         if (categoryNotDefined) {
@@ -236,7 +245,36 @@ public class UnitManager {
         }
         return false;
     }
-
+    
+    private boolean checkPendingUnitListAlreadyHasPendingTenant(ArrayList<UnitEntity> pendingUnitList){
+        for (int i = 0; i < pendingUnitList.size(); i++) {
+            UnitEntity unit = pendingUnitList.get(i);
+            if (unit.isHasPendingTenant()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean checkCurrentTenantExpireSoon(ArrayList<UnitEntity> pendingUnitList){
+        for (int i = 0; i < pendingUnitList.size(); i++) {
+            UnitEntity unit = pendingUnitList.get(i);
+            if (!unit.isHasTenant()) {
+                return true;
+            }else{
+                System.out.println("UnitManager.java: this unit has tenant, checking for expiry...");
+                TenantEntity tenant = unit.getTenant();
+                TenantContractEntity contract = tenant.getTenantContract();
+                java.util.Date date= new java.util.Date();
+                long contractEnd = contract.getEndTimestamp().getTime();
+                long currentTime =date.getTime();
+                int difference = (int) ((((contractEnd-currentTime)/1000)/86400)/30);
+                System.out.println("UnitManager.java: expired in "+difference+"month");
+                return difference <= 3;
+            }
+        }
+        return false;
+    }
+    
     private boolean checkPendingUnitListAlreadyInUnitListToAddTenant(ArrayList<String> unitListToAddTenant,
             ArrayList<UnitEntity> pendingUnitList) {
         for (int i = 0; i < pendingUnitList.size(); i++) {

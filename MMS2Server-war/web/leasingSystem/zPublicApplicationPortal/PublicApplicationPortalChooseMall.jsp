@@ -116,7 +116,7 @@
                     <!-- BEGIN PAGE CONTENT INNER -->
 
                     <form action="EnterPublicPortal" method="GET">
-                        <select name="mallName">
+                        <select name="mallName" required="require">
                             <%
                                 ArrayList<String> mallNameList = (ArrayList<String>) request.getAttribute("mallNameList");
                                 for (int i = 0; i < mallNameList.size(); i++) {

@@ -42,6 +42,10 @@ public class UnitEntity implements Serializable {
     private boolean pushCart=false; //default is false because its a store unit
     private boolean kiosk = false;
     private boolean event = false;
+    
+    private boolean hasPendingTenant = false;
+    
+    
     public UnitEntity() {
     }
 
@@ -328,6 +332,20 @@ public class UnitEntity implements Serializable {
      */
     public void setOpenForInternalBidding(boolean openForInternalBidding) {
         this.openForInternalBidding = openForInternalBidding;
+    }
+
+    /**
+     * @return the hasPendingTenant
+     */
+    public boolean isHasPendingTenant() {
+        return hasPendingTenant;
+    }
+
+    /**
+     * @param hasPendingTenant the hasPendingTenant to set
+     */
+    public void setHasPendingTenant(boolean hasPendingTenant) {
+        this.hasPendingTenant = hasPendingTenant;
     }
 
 

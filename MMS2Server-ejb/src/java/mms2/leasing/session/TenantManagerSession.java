@@ -102,7 +102,7 @@ public class TenantManagerSession implements TenantManagerSessionLocal {
         ArrayList<String> contractDescription = longTermApplication.getContractDescription();
         TenantEntity newTenant = new TenantEntity(mallName, name, businessType,
                 applicantDescription, address, email, tel);
-
+        newTenant.setPendingUnitList(unitListString);
         em.persist(newTenant);
         ArrayList<UnitEntity> applyUnitList = new ArrayList();
         for (int i = 0; i < unitListString.size(); i++) {
@@ -117,8 +117,7 @@ public class TenantManagerSession implements TenantManagerSessionLocal {
             unit.setOpenForPublicBiddingPrototype(false);
             unit.setOpenForInternalBidding(false);
             unit.setOpenForInternalBiddingPrototype(false);
-            unit.setHasTenant(true);
-            unit.setTenant(newTenant);
+            unit.setHasPendingTenant(true);
             em.merge(unit);
             em.flush();
             applyUnitList.add(unit);

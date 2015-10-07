@@ -277,7 +277,6 @@ public class LeasingControllerServlet extends HttpServlet {
 //END-FUNCTION FOR LEASING OFFICER
 //START-FUNCTION FOR SPACE PLAN OFFICER
                 case "SpacePlanMain":
-                    doGetChart();
                     boolean alreadyInitialized = doCheckInitialization(request);
                     if (!alreadyInitialized) {
                         page = "SpacePlanDeclare";
@@ -550,7 +549,7 @@ public class LeasingControllerServlet extends HttpServlet {
         LeasingSystemRequestEntity leasingRequest = leasingRequestManager.getRequestById(leasingRequestId);
         Long applicationId = leasingRequest.getApplicationId();
         TenantManager tenantManager = new TenantManager(tenantManagerSessionLocal);
-        tenantManager.createTenantAndContractForApprovedLongTermApplication(applicationId);
+        tenantManager.createPendingTenantAndContractForApprovedLongTermApplication(applicationId);
         leasingRequestManager.deleteAllCollideRequestAndApplication(leasingRequestId, applicationId);
     }
 ///////////////////////////////////END FOR LEASING MANAGER/////////////////////////////////////////////////// 

@@ -48,7 +48,7 @@ public class TenantManager {
         Long tenantId  = Long.parseLong(request.getParameter("tenantId"));
         return tenantManagerSessionLocal.getTenantById(tenantId);
     }
-    public void createTenantAndContractForApprovedLongTermApplication(Long applicationId){
+    public void createPendingTenantAndContractForApprovedLongTermApplication(Long applicationId){
         tenantManagerSessionLocal.createTenantAndContractForApprovedLongTermApplication(applicationId);
     }
 }

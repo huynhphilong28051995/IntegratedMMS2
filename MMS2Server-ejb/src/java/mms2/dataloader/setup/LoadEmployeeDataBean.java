@@ -82,14 +82,34 @@ public class LoadEmployeeDataBean implements LoadEmployeeDataBeanRemote {
         createPosition("Leasing Officer");
         associateDepartmentPosition("Leasing");
         try {
-            createEmployee("SG0002M", "Jason", "Wong", 87821819, 63140127, 'M',
+            createEmployee("SG0002M", "Long Officer", "Huynh", 87821819, 63140127, 'M',
                     "Blk 465 Jurong West Road #09-12", "", sdf.parse("23/05/2012"), sdf.parse("23/12/2015"),
-                    "annawong86@gmail.com", encryptedPW, "SG",
+                    "long@gmail.com", encryptedPW, "SG",
                     sdf.parse("13/06/1986"), "", 3800, dateFormatter.format(now));
         } catch (ParseException ex) {
             Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        createPosition("Leasing Manager");
+        associateDepartmentPosition("Leasing");
+        try {
+            createEmployee("SG0002K", "Long Manager", "Wong", 87821819, 63140127, 'M',
+                    "Blk 465 Jurong West Road #09-12", "", sdf.parse("23/05/2012"), sdf.parse("23/12/2015"),
+                    "hplong95@gmail.com", encryptedPW, "SG",
+                    sdf.parse("13/06/1986"), "", 3800, dateFormatter.format(now));
+        } catch (ParseException ex) {
+            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        createPosition("Space Plan Officer");
+        associateDepartmentPosition("Leasing");
+        try {
+            createEmployee("SG0002F", "Long Space", "Wong", 87821819, 63140127, 'M',
+                    "Blk 465 Jurong West Road #09-12", "", sdf.parse("23/05/2012"), sdf.parse("23/12/2015"),
+                    "huynhphilong28051995@gmail.com", encryptedPW, "SG",
+                    sdf.parse("13/06/1986"), "", 3800, dateFormatter.format(now));
+        } catch (ParseException ex) {
+            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         //createDepartment("Finance", 67263724, "2 Orchard Turn", "238801", "06-01"); 
         
