@@ -14,6 +14,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.swing.JFrame;
 
 /**
  *
@@ -100,33 +101,32 @@ public class UnitManagerSession implements UnitManagerSessionLocal {
                 if (hasTenant) {
                     switch (category) {
                         case "Food&Beverage":
-                            color = "#247be7";
+                            color = "#3c93b0";
                             break;
                         case "Retail":
-                            color = "#0ee77f";
+                            color = "#b47071";
                             break;
                         case "Entertainment":
-                            color = "#f1af30";
+                            color = "#44917f";
                             break;
                         case "Event":
-                            color = "#ff55d9";
+                            color = "#fbf56c";
                             break;
                     }
                 } else {
                     switch (category) {
                         case "Food&Beverage":
-                            color = "#6bacfb";
+                            color = "#57d2fc";
                             break;
                         case "Retail":
-                            color = "#55f1a6";
+                            color = "#e28d8e";
                             break;
                         case "Entertainment":
-                            color = "#f3c66f";
+                            color = "#56b69f";
                             break;
                         case "Event":
-                            color = "#ff55d9";
+                            color = "#fcf898";
                             break;
-
                     }
                 }
 
@@ -161,33 +161,33 @@ public class UnitManagerSession implements UnitManagerSessionLocal {
                 if (hasTenant) {
                     switch (category) {
                         case "Food&Beverage":
-                            color = "#247be7";
+                            color = "#3c93b0";
                             break;
                         case "Retail":
-                            color = "#0ee77f";
+                            color = "#b47071";
                             break;
                         case "Entertainment":
-                            color = "#f1af30";
+                            color = "#44917f";
                             break;
                         case "Event":
-                            color = "#ff55d9";
+                            color = "#fbf56c";
                             break;
+                        
                     }
                 } else {
                     switch (category) {
                         case "Food&Beverage":
-                            color = "#6bacfb";
+                            color = "#57d2fc";
                             break;
                         case "Retail":
-                            color = "#55f1a6";
+                            color = "#e28d8e";
                             break;
                         case "Entertainment":
-                            color = "#f3c66f";
+                            color = "#56b69f";
                             break;
                         case "Event":
-                            color = "#ff55d9";
+                            color = "#fcf898";
                             break;
-
                     }
                 }
 
@@ -379,5 +379,10 @@ public class UnitManagerSession implements UnitManagerSessionLocal {
                 + "WHERE u.openForPublicBidding = :inOpen");
         query.setParameter("inOpen", true);
         return new ArrayList<String>(query.getResultList());
+    }
+    
+    @Override
+    public void getChart(){
+        
     }
 }

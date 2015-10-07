@@ -44,4 +44,6 @@ public interface UnitManagerSessionLocal {
     public void setOpenPublicBiddingPrototype(String mallName, ArrayList<String> chosenUnitList);
 
     public ArrayList<String> getMallListWithOpenPublicUnit();
+
+    public void getChart();
 }
