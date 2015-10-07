@@ -209,7 +209,8 @@
                                     <td><span class="description"><%=publicOpenUnitList%></span></td>
                                     <td><%=requestStatus%></td>
                                     <td>
-                                        <a href="DeleteLeasingOfficerRequest?leasingRequestId=<%=requestID%>">
+                                        <a onclick="return confirm('Proceed deleting this request?')"
+                                            href="DeleteLeasingOfficerRequest?leasingRequestId=<%=requestID%>">
                                             DELETE</a>   
                                     </td>
                                 </tr>

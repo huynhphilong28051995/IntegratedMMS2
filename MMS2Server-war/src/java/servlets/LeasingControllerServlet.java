@@ -5,6 +5,8 @@
  */
 package servlets;
 
+import java.awt.Color;
+import java.io.File;
 import mms2.leasing.entity.LeasingSystemRequestEntity;
 import mms2.leasing.entity.LevelEntity;
 import mms2.leasing.entity.LongTermApplicationEntity;
@@ -32,6 +34,15 @@ import manager.LevelManager;
 import manager.LongTermApplicationManager;
 import manager.UnitManager;
 import manager.TenantManager;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartRenderingInfo;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.StandardEntityCollection;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
 
 /**
  *
@@ -69,7 +80,7 @@ public class LeasingControllerServlet extends HttpServlet {
             String leasingRequestType;
             Long leasingRequestId;
             ArrayList<LeasingSystemRequestEntity> requestList;
-                    
+
             switch (page) {
 //START-FUNCTION FOR LEASING MANAGER
                 case "ViewAllRequests":
@@ -78,9 +89,9 @@ public class LeasingControllerServlet extends HttpServlet {
                 case "ViewLeasingRequestDetail":
                     System.out.println("TEST 0");
                     leasingRequestId = Long.parseLong(request.getParameter("leasingRequestId"));
-                     System.out.println("TEST 0.1");
+                    System.out.println("TEST 0.1");
                     leasingRequestType = determineLeasingRequestType(leasingRequestId, request);
-                     System.out.println("TEST 0.2 "+leasingRequestType);
+                    System.out.println("TEST 0.2 " + leasingRequestType);
                     if (leasingRequestType.equals("FloorplanModify")) {
                         request.getSession().setAttribute("levelCode", "LV1");
                         page = "LeasingManagerReviewFloorPlanPrototype";
@@ -99,9 +110,6 @@ public class LeasingControllerServlet extends HttpServlet {
                     if (leasingRequestType.equals("LongTermApplicationApproval")) {
                         LongTermApplicationEntity longTermApplication
                                 = doGetLongTermApplication(request);
-                        System.out.println(longTermApplication.getApplicantName());
-                        System.out.println(longTermApplication.getApplicantAddress());
-                        System.out.println(longTermApplication.getContractDeposit());
                         request.setAttribute("longTermApplication", longTermApplication);
                         page = "LeasingManagerReviewLongTermApplicationApproval";
                     }
@@ -254,26 +262,27 @@ public class LeasingControllerServlet extends HttpServlet {
                     page = "LeasingOfficerZoneDeclare";
                     break;
                 case "CheckLeasingOfficerRequestStatus":
-                    requestList= doGetRequestsByUserName(request);
+                    requestList = doGetRequestsByUserName(request);
                     request.setAttribute("requestList", requestList);
-                    page="LeasingOfficerCheckRequest";
+                    page = "LeasingOfficerCheckRequest";
                     break;
                 case "DeleteLeasingOfficerRequest":
                     doDeleteLeasingRequestById(request);
-                    request.setAttribute("deleteRequestStatus","Your request has successfully been deleted");
-                    requestList= doGetRequestsByUserName(request);
+                    request.setAttribute("deleteRequestStatus", "Your request has successfully been deleted");
+                    requestList = doGetRequestsByUserName(request);
                     request.setAttribute("requestList", requestList);
-                    page="LeasingOfficerCheckRequest";
+                    page = "LeasingOfficerCheckRequest";
                     break;
-                    /////case of delete and (function)list request is on space planner side
+                /////case of delete and (function)list request is on space planner side
 //END-FUNCTION FOR LEASING OFFICER
 //START-FUNCTION FOR SPACE PLAN OFFICER
                 case "SpacePlanMain":
-                    boolean alreadyInitialized=doCheckInitialization(request);
-                    if(!alreadyInitialized)
-                        page="SpacePlanDeclare";
-                    else {
-                        page="SpacePlanLocate";
+                    doGetChart();
+                    boolean alreadyInitialized = doCheckInitialization(request);
+                    if (!alreadyInitialized) {
+                        page = "SpacePlanDeclare";
+                    } else {
+                        page = "SpacePlanLocate";
                         request.getSession().setAttribute("levelCode", "LV1");
                     }
                     request.getSession().setAttribute("actionToTake", "UploadFloorplanBackground");
@@ -374,16 +383,16 @@ public class LeasingControllerServlet extends HttpServlet {
                     page = "SpacePlanLocate";
                     break;
                 case "CheckSpacePlanRequestStatus":
-                    requestList= doGetRequestsByUserName(request);
+                    requestList = doGetRequestsByUserName(request);
                     request.setAttribute("requestList", requestList);
-                    page="SpacePlanCheckRequest";
+                    page = "SpacePlanCheckRequest";
                     break;
                 case "DeleteFloorPlanRequest":
                     doDeleteLeasingRequestById(request);
-                    request.setAttribute("deleteRequestStatus","Your request has successfully been deleted");
-                    requestList= doGetRequestsByUserName(request);
+                    request.setAttribute("deleteRequestStatus", "Your request has successfully been deleted");
+                    requestList = doGetRequestsByUserName(request);
                     request.setAttribute("requestList", requestList);
-                    page="SpacePlanCheckRequest";
+                    page = "SpacePlanCheckRequest";
                     break;
             }
 
@@ -546,6 +555,7 @@ public class LeasingControllerServlet extends HttpServlet {
     }
 ///////////////////////////////////END FOR LEASING MANAGER/////////////////////////////////////////////////// 
 ///////////////////////////////////START FOR SPACE PLANNER///////////////////////////////////////////////////
+
     public int doGetNumOfLevel(String mallName) {
         LevelManager levelManager = new LevelManager(levelManagerSessionLocal);
         return levelManager.getNumOfLevel(mallName);
@@ -636,17 +646,48 @@ public class LeasingControllerServlet extends HttpServlet {
         UnitManager unitManager = new UnitManager(unitManagerSessionLocal);
         return unitManager.setUnitDelete(request);
     }
-    public boolean doCheckInitialization(HttpServletRequest request){
+
+    public boolean doCheckInitialization(HttpServletRequest request) {
         LevelManager levelManager = new LevelManager(levelManagerSessionLocal);
         return levelManager.checkInitialization(request);
     }
-    public ArrayList<LeasingSystemRequestEntity> doGetRequestsByUserName(HttpServletRequest request){
+
+    public ArrayList<LeasingSystemRequestEntity> doGetRequestsByUserName(HttpServletRequest request) {
         LeasingRequestManager requestManager = new LeasingRequestManager(leasingSystemRequestManagerSessionLocal);
         return requestManager.getRequestsByUserName(request);
     }
-    public void doDeleteLeasingRequestById(HttpServletRequest request){
+
+    public void doDeleteLeasingRequestById(HttpServletRequest request) {
         LeasingRequestManager requestManager = new LeasingRequestManager(leasingSystemRequestManagerSessionLocal);
         requestManager.deleteLeasingRequestById(request);
+    }
+
+    public void doGetChart() {
+        PieDataset pieDataset = createDataset();
+        JFreeChart chart = ChartFactory.createPieChart("Tenant Mix ", 
+                pieDataset, true, true, false);
+        //chart.setBackgroundPaint(new Color(222, 222, 255));
+        final PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setBackgroundPaint(Color.white);
+        plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0} {2}"));
+        plot.setCircular(true);
+        plot.setSectionPaint("F&B", new Color(15,192,252));
+        try {
+            final ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
+            final File file1 = new File(getServletContext().getRealPath("")+ "/leasingSystem/leasingSystemAssets/chart/piechart.png");
+            ChartUtilities.saveChartAsPNG(file1, chart, 600, 400, info);
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
+    }
+    private PieDataset createDataset(){
+        DefaultPieDataset result = new DefaultPieDataset();
+        result.setValue("F&B", 25);
+        result.setValue("Retail", 0);
+        result.setValue("Entertainment", 25);
+        result.setValue("Event", 25);
+        return result;
     }
 ///////////////////////////////////END FOR SPACE PLANNER///////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////

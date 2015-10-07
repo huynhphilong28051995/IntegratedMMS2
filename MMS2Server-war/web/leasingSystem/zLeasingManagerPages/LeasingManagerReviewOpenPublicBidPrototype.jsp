@@ -299,7 +299,7 @@
                         });
                     </script>
                     <!--CHANGE FLOOR-->
-                    <div id="changeFloor">
+                    <div class="changeFloor">
                         <form action="ChangeFloorplanLevelReviewPublicOpenBidPrototype" method="GET">
                             <div class="form_group">
                                 <label for="levelCode">Change floorplan view</label>

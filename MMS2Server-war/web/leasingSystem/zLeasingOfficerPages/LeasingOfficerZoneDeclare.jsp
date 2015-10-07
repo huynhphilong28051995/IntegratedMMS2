@@ -1,3 +1,14 @@
+<%@page import="org.jfree.data.general.DefaultPieDataset"%>
+<%@page import="org.jfree.chart.ChartUtilities"%>
+<%@page import="org.jfree.chart.entity.StandardEntityCollection"%>
+<%@page import="java.io.File"%>
+<%@page import="org.jfree.chart.ChartRenderingInfo"%>
+<%@page import="org.jfree.chart.labels.StandardPieSectionLabelGenerator"%>
+<%@page import="java.awt.Color"%>
+<%@page import="org.jfree.chart.JFreeChart"%>
+<%@page import="org.jfree.chart.plot.PiePlot"%>
+<%@page import="org.jfree.chart.ChartFactory"%>
+<%@page import="org.jfree.data.general.PieDataset"%>
 <%@page import="mms2.leasing.entity.UnitEntity"%>
 <%@page import="mms2.leasing.entity.LevelEntity"%>
 <%@page import="java.util.List"%>
@@ -186,11 +197,13 @@
                             }
                         }
                     %>
-
                     <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png" />
+                    <img class="legendImage" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/legend/legend.png" />
                     <div>
                         <%
-                            for (int i = 0; i < listOfStoreUnits.size(); i++) {
+                            for (int i = 0;
+                                    i < listOfStoreUnits.size();
+                                    i++) {
                                 String locationCode = ((UnitEntity) listOfStoreUnits.get(i)).getLocationCode();
                         %>
                         <div id="<%=locationCode%>" class="NonDragResize">
@@ -202,7 +215,10 @@
                     </div>
                     <div>
                         <%
-                            for (int i = 1; i <= listOfPushCartUnits.size(); i++) {
+                            for (int i = 1;
+                                    i
+                                    <= listOfPushCartUnits.size();
+                                    i++) {
                                 String locationCode = ((UnitEntity) listOfPushCartUnits.get(i - 1)).getLocationCode();
                         %>
                         <div id="<%=locationCode%>" class="NonDragResize" style="height:30px; width: 70px;">
@@ -214,7 +230,10 @@
                     </div>
                     <div>
                         <%
-                            for (int i = 1; i <= listOfKioskUnits.size(); i++) {
+                            for (int i = 1;
+                                    i
+                                    <= listOfKioskUnits.size();
+                                    i++) {
                                 String locationCode = ((UnitEntity) listOfKioskUnits.get(i - 1)).getLocationCode();
                         %>
                         <div id="<%=locationCode%>" class="NonDragResize" style="height:30px; width: 70px;">
@@ -226,7 +245,10 @@
                     </div>
                     <div>
                         <%
-                            for (int i = 1; i <= listOfEventUnits.size(); i++) {
+                            for (int i = 1;
+                                    i
+                                    <= listOfEventUnits.size();
+                                    i++) {
                                 String locationCode = ((UnitEntity) listOfEventUnits.get(i - 1)).getLocationCode();
                         %>
                         <div id="<%=locationCode%>" class="NonDragResize" style="height:100px; width: 100px;">
@@ -242,14 +264,81 @@
                             $("#" + id).css(pos);
                         });
                     </script>
+
+                    <!--START MAKE PIE CHART-->
+                    <%
+                        //START CALCULATE PERCENTAGE OF PROTOTYPE CATEGORY
+                        int numTotal = unitList.size();
+                        int numFB = 0;
+                        int numRT = 0;
+                        int numET = 0;
+                        int numEV = 0;
+                        int numUndefined = 0;
+                        for (int i = 0; i < unitList.size(); i++) {
+                            UnitEntity unit = (UnitEntity) unitList.get(i);
+                            boolean show = unit.isShow();
+                            if (show) {
+                                String prototypeCategory = unit.getCategoryPrototype();
+                                if (prototypeCategory.equals("Food&Beverage")) {
+                                    numFB++;
+                                } else if (prototypeCategory.equals("Retail")) {
+                                    numRT++;
+                                } else if (prototypeCategory.equals("Entertainment")) {
+                                    numET++;
+                                } else if (prototypeCategory.equals("Event")) {
+                                    numEV++;
+                                } else {
+                                    numUndefined++;
+                                }
+                            }
+                        }
+                        double percentFB = ((double) numFB) / numTotal;
+                        double percentRT = ((double) numRT) / numTotal;
+                        double percentET = ((double) numET) / numTotal;
+                        double percentEV = ((double) numEV) / numTotal;
+                        double percentUndefined = ((double) numUndefined) / numTotal;
+                        //END CALCULATE PERCENTAGE OF PROTOTYPE CATEGORY
+                        //START CREATE PIE CHART
+                        DefaultPieDataset pieDataset = new DefaultPieDataset();
+                        pieDataset.setValue("F&B", percentFB);
+                        pieDataset.setValue("Retail", percentRT);
+                        pieDataset.setValue("Entertainment", percentET);
+                        pieDataset.setValue("Event", percentEV);
+                        pieDataset.setValue("Undefined", percentUndefined);
+                        System.out.println("Test2");
+                        JFreeChart chart = ChartFactory.createPieChart(" Prototype Tenant Mix ",
+                                pieDataset, true, true, false);
+                        //chart.setBackgroundPaint(new Color(222, 222, 255));
+                        final PiePlot plot = (PiePlot) chart.getPlot();
+                        plot.setBackgroundPaint(Color.white);
+                        plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0} {2}"));
+                        plot.setCircular(true);
+                        plot.setSectionPaint("F&B", new Color(87, 210, 252));
+                        plot.setSectionPaint("Retail", new Color(226,141,142));
+                        plot.setSectionPaint("Entertainment", new Color(86, 182, 159));
+                        plot.setSectionPaint("Event", new Color(252, 248, 152));
+                        plot.setSectionPaint("Undefined", new Color(217, 221, 219));
+                        try {
+                            final ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
+                            final File file1 = new File(getServletContext().getRealPath("") + "/leasingSystem/leasingSystemAssets/chart/piechart.png");
+                            ChartUtilities.saveChartAsPNG(file1, chart, 600, 400, info);
+                        } catch (Exception e) {
+                            System.out.println(e);
+                        }
+
+                    %>
+                    <img class="chartImage" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/chart/piechart.png" 
+                         WIDTH="500" HEIGHT="333" BORDER="0"/>
+                    <!--END MAKE PIE CHART-->
                     <!--CHANGE FLOOR-->
-                    <div id="changeFloor">
+                    <div class="changeFloor">
                         <form action="ChangeFloorplanLevelZoneDeclare" method="GET">
                             <div class="form_group">
                                 <label for="levelCode">Change floorplan view</label>
                                 <select name="levelCode">
-                                    <%
-                                        for (int i = 1; i <= (Integer) request.getSession().getAttribute("numOfLevel"); i++) {
+                                    <%                                        for (int i = 1;
+                                                i <= (Integer) request.getSession()
+                                                .getAttribute("numOfLevel"); i++) {
                                     %>
                                     <option value="LV<%=i%>">LV<%=i%></option>
                                     <%
@@ -261,114 +350,129 @@
                         </form>
                     </div>
                     <!--CHANGE FLOOR-->
+                    <!--START COMPOSE CATEGORY REQUEST-->
+                    <form action="ComposeCategoryRequest">
+                        <button type="submit" class="btn btn-default">Compose category request</button>
+                    </form>
+                    <!--END COMPOSE CATEGORY REQUEST-->
+
                     <!--MASS UNIT DECLARATION-->
-                    <div id="MassCategoryDeclareForm">
-                        <h2>STORE DECLARATION</h2>
-                        <form action="SaveStoreZonePrototypeCategory">
+                    <div class="MassDeclareSection">
+                        <div class="MassDeclareForm">
+                            <h2>STORE DECLARATION</h2>
+                            <form action="SaveStoreZonePrototypeCategory">
+                                <div class="form-group">
+                                    <label class="test">From</label>
+                                    <select required="required" name="firstLocationCode" class="test">
+                                        <%                                        for (int i = 0;
+                                                    i < listOfStoreUnits.size();
+                                                    i++) {
+                                                String locationCode = listOfStoreUnits.get(i).getLocationCode();
 
-                            <div class="form-group">
-                                <label class="test">From</label>
-                                <select required="required" name="firstLocationCode" class="test">
-                                    <%
-                                        for (int i = 0; i < listOfStoreUnits.size(); i++) {
-                                            String locationCode = listOfStoreUnits.get(i).getLocationCode();
+                                        %>
+                                        <option value="<%=locationCode%>"><%=locationCode%></option>
+                                        <%
+                                            }
+                                        %>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>To</label>
+                                    <select required="required" name="lastLocationCode" >
+                                        <%
+                                            for (int i = 0;
+                                                    i < listOfStoreUnits.size();
+                                                    i++) {
+                                                String locationCode = listOfStoreUnits.get(i).getLocationCode();
 
-                                    %>
-                                    <option value="<%=locationCode%>"><%=locationCode%></option>
-                                    <%
-                                        }
-                                    %>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>To</label>
-                                <select required="required" name="lastLocationCode" >
-                                    <%
-                                        for (int i = 0; i < listOfStoreUnits.size(); i++) {
-                                            String locationCode = listOfStoreUnits.get(i).getLocationCode();
+                                        %>
+                                        <option value="<%=locationCode%>"> <%=locationCode%></option>
+                                        <%
+                                            }
+                                        %>
+                                    </select>
+                                </div>
+                                <br/><br/>
+                                <div class="form-group">
+                                    <label >Category</label>
+                                    <select name="category">
+                                        <option value="">None</option>
+                                        <option value="Food&Beverage">F&B</option>
+                                        <option value="Retail">Retail</option>
+                                        <option value="Entertainment">Entertainment</option>
+                                    </select>
+                                </div>
+                                <br/><br/><br/><button type="submit" class="btn btn-default">Submit</button>
+                            </form>
+                        </div>
+                        <div class="MassDeclareForm">
+                            <h2>PUSHCART DECLARATION</h2>
+                            <form action="SavePushCartOrKioskPrototypeCategory">
+                                <div class="form-group">
+                                    <label>PushCart </label>
+                                    <select required="required" name="pushCartOrKioskLocationCode" >
+                                        <%
+                                            for (int i = 0;
+                                                    i < listOfPushCartUnits.size();
+                                                    i++) {
+                                                String locationCode = listOfPushCartUnits.get(i).getLocationCode();
 
-                                    %>
-                                    <option value="<%=locationCode%>"> <%=locationCode%></option>
-                                    <%
-                                        }
-                                    %>
-                                </select>
-                            </div>
-                            <br/><br/>
-                            <div class="form-group">
-                                <label >Category</label>
-                                <select name="category">
-                                    <option value="">None</option>
-                                    <option value="Food&Beverage">F&B</option>
-                                    <option value="Retail">Retail</option>
-                                    <option value="Entertainment">Entertainment</option>
-                                </select>
-                            </div>
-                            <br/><br/><br/><button type="submit" class="btn btn-default">Submit</button>
-                        </form>
-                    </div>
-                    <div id="MassCategoryDeclareForm">
-                        <h2>PUSHCART DECLARATION</h2>
-                        <form action="SavePushCartOrKioskPrototypeCategory">
-                            <div class="form-group">
-                                <label>PushCart </label>
-                                <select required="required" name="pushCartOrKioskLocationCode" >
-                                    <%
-                                        for (int i = 0; i < listOfPushCartUnits.size(); i++) {
-                                            String locationCode = listOfPushCartUnits.get(i).getLocationCode();
+                                        %>
+                                        <option value="<%=locationCode%>"><%=locationCode%></option>
+                                        <%
+                                            }
+                                        %>
+                                    </select>
+                                </div>
+                                <br/><br/>
+                                <div class="form-group">
+                                    <label >Category</label>
+                                    <select name="pushCartOrKioskCategory">
+                                        <option value="">None</option>
+                                        <option value="Food&Beverage">F&B</option>
+                                        <option value="Retail">Retail</option>
+                                    </select>
+                                </div>
+                                <br/><br/><br/><button class="btn btn-default" type="submit">Submit</button>
+                            </form>
+                        </div>
+                        <div class="MassDeclareForm">
+                            <h2>KIOSK DECLARATION</h2>
+                            <form action="SavePushCartOrKioskPrototypeCategory">
+                                <div class="form-group">
+                                    <label>Kiosk </label>
+                                    <select required="required" name="pushCartOrKioskLocationCode" >
+                                        <%
+                                            for (int i = 0;
+                                                    i < listOfKioskUnits.size();
+                                                    i++) {
+                                                String locationCode = listOfKioskUnits.get(i).getLocationCode();
 
-                                    %>
-                                    <option value="<%=locationCode%>"><%=locationCode%></option>
-                                    <%
-                                        }
-                                    %>
-                                </select>
-                            </div>
-                            <br/><br/>
-                            <div class="form-group">
-                                <label >Category</label>
-                                <select name="pushCartOrKioskCategory">
-                                    <option value="">None</option>
-                                    <option value="Food&Beverage">F&B</option>
-                                    <option value="Retail">Retail</option>
-                                </select>
-                            </div>
-                            <br/><br/><br/><button class="btn btn-default" type="submit">Submit</button>
-                        </form>
-                    </div>
-                    <div id="MassCategoryDeclareForm">
-                        <h2>KIOSK DECLARATION</h2>
-                        <form action="SavePushCartOrKioskPrototypeCategory">
-                            <div class="form-group">
-                                <label>Kiosk </label>
-                                <select required="required" name="pushCartOrKioskLocationCode" >
-                                    <%
-                                        for (int i = 0; i < listOfKioskUnits.size(); i++) {
-                                            String locationCode = listOfKioskUnits.get(i).getLocationCode();
-
-                                    %>
-                                    <option value="<%=locationCode%>"><%=locationCode%></option>
-                                    <%
-                                        }
-                                    %>
-                                </select>
-                            </div>
-                            <br/><br/>
-                            <div class="form-group">
-                                <label>Category</label>
-                                <select name="pushCartOrKioskCategory">
-                                    <option value="">None</option>
-                                    <option value="Food&Beverage">F&B</option>
-                                    <option value="Retail">Retail</option>
-                                </select>
-                            </div>
-                            <br/><br/><br/><button class="btn btn-default" type="submit">Submit</button>
-                        </form>
+                                        %>
+                                        <option value="<%=locationCode%>"><%=locationCode%></option>
+                                        <%
+                                            }
+                                        %>
+                                    </select>
+                                </div>
+                                <br/><br/>
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select name="pushCartOrKioskCategory">
+                                        <option value="">None</option>
+                                        <option value="Food&Beverage">F&B</option>
+                                        <option value="Retail">Retail</option>
+                                    </select>
+                                </div>
+                                <br/><br/><br/><button class="btn btn-default" type="submit">Submit</button>
+                            </form>
+                        </div>
                     </div>
                     <!--MASS UNIT DECLARATION-->
                     <!--COLOR BUTTONS-->
                     <%
                         Vector unitColorVector = (Vector) request.getAttribute("unitColorVector");
+
                         if (!unitColorVector.isEmpty()) {
                             ArrayList<String> arrayLocationCode = (ArrayList) unitColorVector.get(0);
                             ArrayList<String> arrayColor = (ArrayList) unitColorVector.get(1);
@@ -385,11 +489,10 @@
                         }
                     %>
                     <!--COLOR BUTTONS-->
-                    <!--BACK TO MAIN-->
 
-                    <form action="ComposeCategoryRequest">
-                        <button type="submit" class="btn btn-default">Compose category request</button>
-                    </form>
+
+
+
 
                     <!-- END PAGE CONTENT INNER -->
                 </div>
@@ -443,7 +546,8 @@
             String query = request.getQueryString();
             String timestamp = null;
         %>
-        <% if (referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/login")
+        <% if (referrer.matches(
+                    "http://" + IP + ":8080/MMS2Server-war/administration/login")
                     || referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/logout")
                     || referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/adminHome")) {
                 timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
@@ -470,7 +574,8 @@
             }
         %>
         <%
-            if (request.getAttribute("sendRequestStatus") != null) {
+            if (request.getAttribute(
+                    "sendRequestStatus") != null) {
                 String sendRequestStatus = (String) request.getAttribute("sendRequestStatus");
         %>
         <script language="javascript">
@@ -483,11 +588,11 @@
         <%
             }
         %>
-        
+
         <%
-            
-            if (request.getAttribute("saveZoneStatus") != null) {
-                String saveZoneStatus = (String)request.getAttribute("saveZoneStatus");                
+            if (request.getAttribute(
+                    "saveZoneStatus") != null) {
+                String saveZoneStatus = (String) request.getAttribute("saveZoneStatus");
                 if (saveZoneStatus.contains("Successful!")) {
         %>
         <script language="javascript">

@@ -284,7 +284,7 @@
                         });
                     </script>
                     <!--CHANGE FLOOR-->
-                    <div id="changeFloor">
+                    <div class="changeFloor">
                         <form action="ChangeFloorplanLevelReviewFloorPlanPrototype" method="GET">
                             <div class="form_group">
                                 <label for="levelCode">Change floorplan view</label>

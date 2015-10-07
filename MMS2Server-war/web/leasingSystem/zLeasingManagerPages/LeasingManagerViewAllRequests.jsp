@@ -203,9 +203,11 @@
                                     <td><%=requestType%></td>
                                     <td><%=requestDescriptionString%></td>
                                     <td>
-                                        <a href="AcceptLeasingRequest?leasingRequestId=<%=requestID%>">
+                                        <a onclick="return confirm('Proceed accepting this request?')"
+                                            href="AcceptLeasingRequest?leasingRequestId=<%=requestID%>">
                                             ACCEPT</a>   
-                                        <a href="RejectLeasingRequest?leasingRequestId=<%=requestID%>">
+                                        <a onclick="return confirm('Proceed rejecting this request?')"
+                                            href="RejectLeasingRequest?leasingRequestId=<%=requestID%>">
                                             REJECT</a>
                                     </td>
                                 </tr>

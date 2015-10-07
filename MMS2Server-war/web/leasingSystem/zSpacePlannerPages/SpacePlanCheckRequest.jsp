@@ -196,7 +196,8 @@
                                     <td><%=requestDescriptionString%></td>
                                     <td><%=requestStatus%></td>
                                     <td>
-                                        <a href="DeleteFloorPlanRequest?leasingRequestId=<%=requestID%>">
+                                        <a onclick="return confirm('Proceed deleting this request?')"
+                                            href="DeleteFloorPlanRequest?leasingRequestId=<%=requestID%>">
                                             DELETE</a>   
                                     </td>
                                 </tr>

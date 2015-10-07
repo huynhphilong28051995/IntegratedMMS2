@@ -312,28 +312,9 @@
             $("#" + id).css(pos);
         });
                     </script>
-                    <!--DELETE UNIT-->
-                    <div id="UnitProposeDeleteForm">
-                        <form action="ProposeDeleteSingleUnit">
-                            <div class="form-group">
-                                <label>Unit to delete</label>
-                                <select required="required" name="locationCode" >
-                                    <%
-                                        for (int i = 0; i < unitListDelete.size(); i++) {
-                                            String locationCode = ((UnitEntity) unitListDelete.get(i)).getLocationCode();
-                                    %>
-                                    <option value="<%=locationCode%>"><%=locationCode%></option>
-                                    <%
-                                        }
-                                    %>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-default">Delete</button>
-                        </form>
-                    </div>
-                    <!--DELETE UNIT-->
+                    
                     <!--CHANGE FLOOR-->
-                    <div id="changeFloor">
+                    <div class="changeFloor">
                         <form action="ChangeFloorplanLevelSpacePlanning" method="GET">
                             <div class="form_group">
                                 <label for="levelCode">Change floorplan view</label>
@@ -358,6 +339,28 @@
                                     onclick="doSave()" disabled class="btn btn-default">SAVE</button>
                         </form>
                     </div>
+                    
+                    <!--DELETE UNIT-->
+                    <div id="UnitProposeDeleteForm">
+                        <form action="ProposeDeleteSingleUnit">
+                            <div class="form-group">
+                                <label>Unit to delete</label>
+                                <select required="required" name="locationCode" >
+                                    <%
+                                        for (int i = 0; i < unitListDelete.size(); i++) {
+                                            String locationCode = ((UnitEntity) unitListDelete.get(i)).getLocationCode();
+                                    %>
+                                    <option value="<%=locationCode%>"><%=locationCode%></option>
+                                    <%
+                                        }
+                                    %>
+                                </select>
+                            </div>
+                                <button type="submit" onclick="return confirm('Proceed deleting unit(s)?')"
+                                        class="btn btn-default">Delete</button>
+                        </form>
+                    </div>
+                    <!--DELETE UNIT-->
 
                     <script>
                         function doSave() {
@@ -489,7 +492,8 @@
 
 
         <!-- END JAVASCRIPTS -->
-
+<img src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/chart/piechart.png" 
+     WIDTH="600" HEIGHT="400" BORDER="0"/>
     </body>
     <!-- END BODY -->
 </html>

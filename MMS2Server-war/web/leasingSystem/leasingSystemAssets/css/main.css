@@ -1,3 +1,10 @@
+.legendImage{
+    border: solid 0.5px #d9dddb;
+}
+.chartImage{
+    position: relative;
+    border: solid 0.5px #d9dddb;
+}
 span.description {
     display: inline-block;
     overflow: hidden;
@@ -6,9 +13,6 @@ span.description {
 }
 textarea{
     resize: none;
-}
-#section1SpaceLocate{
-    float: right;
 }
 .DragResizeButton{
     width: 50px;
@@ -33,17 +37,23 @@ textarea{
 }
 
 .changeFloor{
-    top: 100px;
+    position: relative;
     width: 300px;
-    border: solid black 1px;
     padding: 10px;
+    background-color: white;
+    border: solid 0.5px #d9dddb;
+    border-radius: 5px;
 }
-#MassCategoryDeclareForm{
+.MassDeclareForm{
     float: right;
     height: 400px;
     width: 300px;
     border: solid black 1px;
     padding: 20px;
+}
+.MassDeclareSection{
+    float:right;
+    clear: both;
 }
 .SelectUnitToAddTenantForm{
     display: inline-block;
