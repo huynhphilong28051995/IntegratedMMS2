@@ -11,6 +11,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+
+
 /**
  *
  * @author GOHENGCHI
@@ -104,6 +106,7 @@ public class SendMail implements SendMailLocal {
               props.put("mail.smtp.starttls.enable","true" );
               props.put("mail.smtp.host",smtpServ);
               props.put("mail.smtp.auth", "true" );
+              props.put("mail.smtp.ssl.enable", "true");
               Authenticator auth = new SMTPAuthenticator();
               Session session = Session.getInstance(props, auth);
               // -- Create a new message --
@@ -128,7 +131,7 @@ public class SendMail implements SendMailLocal {
                         "solely for the person to whom it is addressed. If you are not the intended recipient,\n" +
                         "please notify the sender, and please delete the message and any other record of it\n" +
                         "from your system immediately.";
-              msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
+              msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to,false));
               msg.setSubject(subject);
               msg.setText(message);
               // -- Set some other header information --
@@ -152,8 +155,8 @@ public class SendMail implements SendMailLocal {
     private class SMTPAuthenticator extends javax.mail.Authenticator {
             @Override
             public PasswordAuthentication getPasswordAuthentication() {
-                String username =  "huynhphilong28051995";           // specify your email id here (sender's email id)
-                String password = "bonidom2805";                          // specify your password here
+                String username =  "noreply.merlionmallasia@gmail.com";           // specify your email id here (sender's email id)
+                String password = "GohEngChi";                          // specify your password here
                 return new PasswordAuthentication(username, password);
             }
       }
