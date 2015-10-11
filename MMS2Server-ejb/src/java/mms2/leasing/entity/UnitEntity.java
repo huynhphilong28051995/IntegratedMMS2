@@ -30,8 +30,6 @@ public class UnitEntity implements Serializable {
     private String mallName;
     private boolean openForPublicBiddingPrototype= false;
     private boolean openForPublicBidding = false;
-    private boolean openForInternalBiddingPrototype = false;
-    private boolean openForInternalBidding = false;
     private boolean deleteProposed = false;
     //this is a Many to One relationship
     private TenantEntity tenant;
@@ -304,34 +302,6 @@ public class UnitEntity implements Serializable {
      */
     public void setOpenForPublicBidding(boolean openForPublicBidding) {
         this.openForPublicBidding = openForPublicBidding;
-    }
-
-    /**
-     * @return the openForInternalBiddingPrototype
-     */
-    public boolean isOpenForInternalBiddingPrototype() {
-        return openForInternalBiddingPrototype;
-    }
-
-    /**
-     * @param openForInternalBiddingPrototype the openForInternalBiddingPrototype to set
-     */
-    public void setOpenForInternalBiddingPrototype(boolean openForInternalBiddingPrototype) {
-        this.openForInternalBiddingPrototype = openForInternalBiddingPrototype;
-    }
-
-    /**
-     * @return the openForInternalBidding
-     */
-    public boolean isOpenForInternalBidding() {
-        return openForInternalBidding;
-    }
-
-    /**
-     * @param openForInternalBidding the openForInternalBidding to set
-     */
-    public void setOpenForInternalBidding(boolean openForInternalBidding) {
-        this.openForInternalBidding = openForInternalBidding;
     }
 
     /**

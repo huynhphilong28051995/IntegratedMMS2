@@ -194,6 +194,22 @@
                     UIToastr.init(); // init Toastr Alert
                 });
         </script>
+        <% String referrer = request.getHeader("referer");
+            String query = request.getQueryString();
+            String timestamp = null;
+                if ("=continue".equals(query)) {
+        %>        
+        <script language="javascript">
+            var ts = '<%= timestamp%>';
+            $(document).ready(function () {
+                // show when page load
+                toastr.info('Welcome back!');
+
+            });
+        </script>
+        <%
+                }
+        %>
         <!-- END JAVASCRIPTS -->
 
     </body>

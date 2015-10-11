@@ -76,8 +76,7 @@
                     <!-- BEGIN TOP NAVIGATION MENU -->
                     <div class="top-menu">
                         <ul class="nav navbar-nav pull-right">
-                            <span class="separator"></span>
-                            </li>
+                            
                             <!-- BEGIN USER LOGIN DROPDOWN -->
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -177,7 +176,7 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER --> 
-                   
+                    
 
                     <%
                         String levelCode = (String) request.getSession().getAttribute("levelCode");
@@ -216,65 +215,8 @@
                             }
                         }
                     %>
-
-                    <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png" />
-                    <img class="legendImage" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/legend/legend.png" />
-                    <div>
-                        <%
-                            for (int i = 0; i < listOfStoreUnits.size(); i++) {
-                                String locationCode = ((UnitEntity) listOfStoreUnits.get(i)).getLocationCode();
-                        %>
-                        <div id="<%=locationCode%>" class="NonDragResize">
-                            <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
-                        </div>
-                        <%
-                            }
-                        %>
-                    </div>
-                    <div>
-                        <%
-                            for (int i = 1; i <= listOfPushCartUnits.size(); i++) {
-                                String locationCode = ((UnitEntity) listOfPushCartUnits.get(i - 1)).getLocationCode();
-                        %>
-                        <div id="<%=locationCode%>" class="NonDragResize" style="height:30px; width: 70px;">
-                            <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
-                        </div>
-                        <%
-                            }
-                        %>
-                    </div>
-                    <div>
-                        <%
-                            for (int i = 1; i <= listOfKioskUnits.size(); i++) {
-                                String locationCode = ((UnitEntity) listOfKioskUnits.get(i - 1)).getLocationCode();
-                        %>
-                        <div id="<%=locationCode%>" class="NonDragResize" style="height:30px; width: 70px;">
-                            <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
-                        </div>
-                        <%
-                            }
-                        %>
-                    </div>
-                    <div>
-                        <%
-                            for (int i = 1; i <= listOfEventUnits.size(); i++) {
-                                String locationCode = ((UnitEntity) listOfEventUnits.get(i - 1)).getLocationCode();
-                        %>
-                        <div id="<%=locationCode%>" class="NonDragResize" style="height:100px; width: 100px;">
-                            <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
-                        </div>
-                        <%
-                            }
-                        %>
-                    </div>
-                    <script>
-            var positions = <%=positionString%>;
-            $.each(positions, function (id, pos) {
-                $("#" + id).css(pos);
-            });
-                    </script>
                     
-                    <!--START MAKE PIE CHART-->
+                     <!--START MAKE PIE CHART-->
                     <%
                         //START CALCULATE PERCENTAGE OF PROTOTYPE CATEGORY
                         int numTotal = unitList.size();
@@ -336,6 +278,65 @@
                         }
 
                     %>
+
+                    <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png" />
+                    <img class="legendImage" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/legend/legend.png" />
+                    <div>
+                        <%
+                            for (int i = 0; i < listOfStoreUnits.size(); i++) {
+                                String locationCode = ((UnitEntity) listOfStoreUnits.get(i)).getLocationCode();
+                        %>
+                        <div id="<%=locationCode%>" class="NonDragResize">
+                            <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
+                        </div>
+                        <%
+                            }
+                        %>
+                    </div>
+                    <div>
+                        <%
+                            for (int i = 1; i <= listOfPushCartUnits.size(); i++) {
+                                String locationCode = ((UnitEntity) listOfPushCartUnits.get(i - 1)).getLocationCode();
+                        %>
+                        <div id="<%=locationCode%>" class="NonDragResize" style="height:30px; width: 70px;">
+                            <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
+                        </div>
+                        <%
+                            }
+                        %>
+                    </div>
+                    <div>
+                        <%
+                            for (int i = 1; i <= listOfKioskUnits.size(); i++) {
+                                String locationCode = ((UnitEntity) listOfKioskUnits.get(i - 1)).getLocationCode();
+                        %>
+                        <div id="<%=locationCode%>" class="NonDragResize" style="height:30px; width: 70px;">
+                            <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
+                        </div>
+                        <%
+                            }
+                        %>
+                    </div>
+                    <div>
+                        <%
+                            for (int i = 1; i <= listOfEventUnits.size(); i++) {
+                                String locationCode = ((UnitEntity) listOfEventUnits.get(i - 1)).getLocationCode();
+                        %>
+                        <div id="<%=locationCode%>" class="NonDragResize" style="height:100px; width: 100px;">
+                            <button disabled id = "<%=locationCode%>_button" style="height:100%; width:100%;"><%=locationCode%></button>
+                        </div>
+                        <%
+                            }
+                        %>
+                    </div>
+                    <script>
+            var positions = <%=positionString%>;
+            $.each(positions, function (id, pos) {
+                $("#" + id).css(pos);
+            });
+                    </script>
+                    
+                   
                     <img class="chartImage" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/chart/piechart.png" 
                          WIDTH="500" HEIGHT="333" BORDER="0"/>
                     <!--END MAKE PIE CHART-->

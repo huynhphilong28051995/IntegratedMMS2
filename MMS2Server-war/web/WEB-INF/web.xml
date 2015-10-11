@@ -106,6 +106,22 @@
         <servlet-name>PublicApplicationPortalChooseMall</servlet-name>
         <jsp-file>/leasingSystem/zPublicApplicationPortal/PublicApplicationPortalChooseMall.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>LeasingOfficerViewExpiringTenant</servlet-name>
+        <jsp-file>/leasingSystem/zLeasingOfficerPages/LeasingOfficerViewExpiringTenant.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>leasingSystemError</servlet-name>
+        <jsp-file>/leasingSystem/leasingSystemError.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>PublicApplicationPortalFillInformationEvent</servlet-name>
+        <jsp-file>/leasingSystem/zPublicApplicationPortal/PublicApplicationPortalFillInformationEvent.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>PublicApplicationPortalEventApplicantConfirm</servlet-name>
+        <jsp-file>/leasingSystem/zPublicApplicationPortal/PublicApplicationPortalEventApplicantConfirm.jsp</jsp-file>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
@@ -479,6 +495,22 @@
     <servlet-mapping>
         <servlet-name>PublicApplicationPortalChooseMall</servlet-name>
         <url-pattern>/PublicApplicationPortalChooseMall</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LeasingOfficerViewExpiringTenant</servlet-name>
+        <url-pattern>/LeasingOfficerViewExpiringTenant</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>leasingSystemError</servlet-name>
+        <url-pattern>/leasingSystemError</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PublicApplicationPortalFillInformationEvent</servlet-name>
+        <url-pattern>/PublicApplicationPortalFillInformationEvent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PublicApplicationPortalEventApplicantConfirm</servlet-name>
+        <url-pattern>/PublicApplicationPortalEventApplicantConfirm</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

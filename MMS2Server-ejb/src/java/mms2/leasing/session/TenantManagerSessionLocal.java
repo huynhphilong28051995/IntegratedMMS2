@@ -30,4 +30,8 @@ public interface TenantManagerSessionLocal {
 
     public void createTenantAndContractForApprovedLongTermApplication(Long applicationId);
 
+    public ArrayList<Object[]> getExpiringTenant(String mallName);
+
+    public int sendContractRenewalEmail(long tenantId);
+
 }

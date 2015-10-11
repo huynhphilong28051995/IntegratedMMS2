@@ -23,9 +23,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import manager.EventManager;
 import manager.LevelManager;
 import manager.LongTermApplicationManager;
 import manager.UnitManager;
+import mms2.leasing.session.EventManagerSessionLocal;
 
 /**
  *
@@ -44,8 +46,11 @@ public class PublicApplicationPortalServlet extends HttpServlet {
     LevelManagerSessionLocal levelManagerSessionLocal;
     @EJB
     LeasingSystemRequestManagerSessionLocal leasingSystemRequestManagerSessionLocal;
-    @EJB 
-    LongTermApplicationManagerSessionLocal longTermApplicationManagerSessionLocal; 
+    @EJB
+    LongTermApplicationManagerSessionLocal longTermApplicationManagerSessionLocal;
+    @EJB
+    EventManagerSessionLocal eventManagerSessionLocal;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -59,6 +64,8 @@ public class PublicApplicationPortalServlet extends HttpServlet {
             String applicantTel;
             String applicantEmail;
             String applicantBidRate;
+            ArrayList<String> availableEventUnitList;
+            String chooseUnitStatus;
 
             RequestDispatcher dispatcher;
             ServletContext servletContext = getServletContext();
@@ -67,7 +74,7 @@ public class PublicApplicationPortalServlet extends HttpServlet {
                 case "PublicApplicationPortalChooseMall":
                     ArrayList<String> mallNameList = doGetMallListWithOpenPublicUnit();
                     request.setAttribute("mallNameList", mallNameList);
-                    page="PublicApplicationPortalChooseMall";
+                    page = "PublicApplicationPortalChooseMall";
                     break;
                 case "EnterPublicPortal":
                     mallName = request.getParameter("mallName");
@@ -76,7 +83,44 @@ public class PublicApplicationPortalServlet extends HttpServlet {
                     request.getSession().setAttribute("numOfLevel", numOfLevel);
                     page = "PublicApplicationPortalMain";
                     break;
+
+/////////////////////////////////////////////////////////////////////////EVENT
                 case "ApplyEvent":
+                    request.getSession().removeAttribute("eventStart");
+                    request.getSession().removeAttribute("eventEnd");
+                    request.getSession().removeAttribute("availableEventUnitList");
+                    request.getSession().removeAttribute("applyUnitList");
+
+                    request.setAttribute("actionToTake", "ChooseDate");
+                    request.getSession().setAttribute("levelCode", "LV1");
+                    page = "PublicApplicationPortalEventApply";
+                    break;
+                case "DateChosen":
+                    request.getSession().setAttribute("eventStart", request.getParameter("eventStart"));
+                    request.getSession().setAttribute("eventEnd", request.getParameter("eventEnd"));
+                    availableEventUnitList = doGetAvailableEventUnit(request);
+                    request.getSession().setAttribute("availableEventUnitList", availableEventUnitList);
+                    request.setAttribute("actionToTake", "ReviewLocation");
+                    page = "PublicApplicationPortalEventApply";
+                    break;
+                case "ChangeFloorplanLevelChooseUnitApplyEvent":
+                    request.getSession().setAttribute("levelCode", request.getParameter("levelCode"));
+                    //availableEventUnitList aready in the session
+                    request.setAttribute("actionToTake", "ReviewLocation");
+                    page = "PublicApplicationPortalEventApply";
+                    break;
+                case "AddUnitToApplyEventUnitList":
+                    chooseUnitStatus = doAddUnitToApplyUnitList(request);
+                    request.setAttribute("actionToTake", "ReviewLocation");
+                    request.setAttribute("chooseUnitStatus", chooseUnitStatus);
+                    page = "PublicApplicationPortalEventApply";
+                    break;
+                case "FillApplicantInformationForEvent":
+                    page = "PublicApplicationPortalFillInformationEvent";
+                    break;
+                case "ConfirmEventApplicantInformation":
+                    doSaveApplicantInfoToSession("Event", request);
+                    page = "PublicApplicationPortalEventApplicantConfirm";
                     break;
 /////////////////////////////////////////////////////////////////////////LONG TERM
                 case "ApplyLongTerm":
@@ -89,7 +133,7 @@ public class PublicApplicationPortalServlet extends HttpServlet {
                     page = "PublicApplicationPortalLongTermApply";
                     break;
                 case "AddUnitToApplyUnitList":
-                    String chooseUnitStatus = doAddUnitToApplyUnitList(request);
+                    chooseUnitStatus = doAddUnitToApplyUnitList(request);
                     request.setAttribute("chooseUnitStatus", chooseUnitStatus);
                     page = "PublicApplicationPortalLongTermApply";
                     break;
@@ -97,7 +141,7 @@ public class PublicApplicationPortalServlet extends HttpServlet {
                     page = "PublicApplicationPortalFillInformationLongTerm";
                     break;
                 case "ConfirmLongTermApplicantInformation":
-                    doSaveApplicantInfoToSession(request);
+                    doSaveApplicantInfoToSession("LongTerm", request);
                     page = "PublicApplicationPortalLongTermApplicantConfirm";
                     break;
                 case "SubmitLongTermApplication":
@@ -118,16 +162,18 @@ public class PublicApplicationPortalServlet extends HttpServlet {
             }
 /////////////////////////////////////////////////////////////////////////LONG TERM
 /////////////////////////////////////////////////////////////////////////ESSENTIAL
-            if (page.equals("PublicApplicationPortalLongTermApply")) {
+            if (page.equals("PublicApplicationPortalLongTermApply")
+                    || page.equals("PublicApplicationPortalEventApply")) {
                 Vector unitColorVector = doGetAllUnitColorForCurrentMall(request);
                 request.getSession().setAttribute("unitColorVector", unitColorVector);
             }
 
-            if (page.equals("PublicApplicationPortalLongTermApply")) {
+            if (page.equals("PublicApplicationPortalLongTermApply")
+                    || page.equals("PublicApplicationPortalEventApply")) {
                 LevelEntity levelInstance = doGetLevel(request);
                 request.getSession().setAttribute("levelInstance", levelInstance);
             }
-            if(page.equals("PublicApplicationPortalFillInformationLongTerm")){
+            if (page.equals("PublicApplicationPortalFillInformationLongTerm")) {
                 doSetBusinessTypeListToAttribute(request);
             }
 /////////////////////////////////////////////////////////////////////////ESSENTIAL
@@ -137,22 +183,25 @@ public class PublicApplicationPortalServlet extends HttpServlet {
             ex.printStackTrace();
         }
     }
-    
-    public void doSetBusinessTypeListToAttribute(HttpServletRequest request){
-         UnitManager unitManager = new UnitManager(unitManagerSessionLocal);
-         String mallName = (String)request.getSession().getAttribute("mallName");
-         String locationCode = 
-                 ((ArrayList<String>)request.getSession().getAttribute("applyUnitList")).get(0);
-        ArrayList<String> businessTypeList = 
-                unitManager.getUnitBusinessTypeList(mallName, locationCode); 
+
+    ////////////////////////////////START LONG TERM///////////////////////////////////////
+    public void doSetBusinessTypeListToAttribute(HttpServletRequest request) {
+        UnitManager unitManager = new UnitManager(unitManagerSessionLocal);
+        String mallName = (String) request.getSession().getAttribute("mallName");
+        String locationCode
+                = ((ArrayList<String>) request.getSession().getAttribute("applyUnitList")).get(0);
+        ArrayList<String> businessTypeList
+                = unitManager.getUnitBusinessTypeList(mallName, locationCode);
         request.setAttribute("businessTypeList", businessTypeList);
     }
-    public void doSubmitLongTermApplication(HttpServletRequest request){
-        LongTermApplicationManager longTermManager= new LongTermApplicationManager(longTermApplicationManagerSessionLocal); 
+
+    public void doSubmitLongTermApplication(HttpServletRequest request) {
+        LongTermApplicationManager longTermManager = new LongTermApplicationManager(longTermApplicationManagerSessionLocal);
         longTermManager.createLongTermApplication(request);
         System.out.println("CONFIRMED");
-        
+
     }
+
     public String doAddUnitToApplyUnitList(HttpServletRequest request) {
         UnitManager unitManager = new UnitManager(unitManagerSessionLocal);
         return unitManager.AddUnitToApplyUnitList(request);
@@ -172,23 +221,49 @@ public class PublicApplicationPortalServlet extends HttpServlet {
         LevelManager levelManager = new LevelManager(levelManagerSessionLocal);
         return levelManager.getLevel(request);
     }
-    public void doSaveApplicantInfoToSession(HttpServletRequest request) {
-        String applicantName = request.getParameter("applicantName");
-        String applicantBusinessType = request.getParameter("applicantBusinessType");
-        System.out.println("Servlet doSaveApplicantInfoToSession "+applicantBusinessType);
-        String applicantDescription = request.getParameter("applicantDescription");
-        String applicantAddress = request.getParameter("applicantAddress");
-        String applicantTel = request.getParameter("applicantTel");
-        String applicantEmail = request.getParameter("applicantEmail");
-        String applicantBidRate = request.getParameter("applicantBidRate");
-        request.getSession().setAttribute("applicantName", applicantName);
-        request.getSession().setAttribute("applicantBusinessType", applicantBusinessType);
-        request.getSession().setAttribute("applicantDescription", applicantDescription);
-        request.getSession().setAttribute("applicantAddress", applicantAddress);
-        request.getSession().setAttribute("applicantTel", applicantTel);
-        request.getSession().setAttribute("applicantEmail", applicantEmail);
-        request.getSession().setAttribute("applicantBidRate", applicantBidRate);
+
+    public void doSaveApplicantInfoToSession(String type ,HttpServletRequest request) {
+        if (type.equals("LongTerm")) {
+            String applicantName = request.getParameter("applicantName");
+            String applicantBusinessType = request.getParameter("applicantBusinessType");
+            System.out.println("Servlet doSaveApplicantInfoToSession " + applicantBusinessType);
+            String applicantDescription = request.getParameter("applicantDescription");
+            String applicantAddress = request.getParameter("applicantAddress");
+            String applicantTel = request.getParameter("applicantTel");
+            String applicantEmail = request.getParameter("applicantEmail");
+            String applicantBidRate = request.getParameter("applicantBidRate");
+            request.getSession().setAttribute("applicantName", applicantName);
+            request.getSession().setAttribute("applicantBusinessType", applicantBusinessType);
+            request.getSession().setAttribute("applicantDescription", applicantDescription);
+            request.getSession().setAttribute("applicantAddress", applicantAddress);
+            request.getSession().setAttribute("applicantTel", applicantTel);
+            request.getSession().setAttribute("applicantEmail", applicantEmail);
+            request.getSession().setAttribute("applicantBidRate", applicantBidRate);
+        } else {
+            String applicantName = request.getParameter("applicantName");
+            String eventDescription = request.getParameter("eventDescription");
+            String applicantTel = request.getParameter("applicantTel");
+            String applicantEmail = request.getParameter("applicantEmail");
+            request.getSession().setAttribute("applicantName", applicantName);
+            request.getSession().setAttribute("eventDescription", eventDescription);
+            request.getSession().setAttribute("applicantTel", applicantTel);
+            request.getSession().setAttribute("applicantEmail", applicantEmail);
+        }
     }
+
+    public ArrayList<String> doGetMallListWithOpenPublicUnit() {
+        UnitManager unitManager = new UnitManager(unitManagerSessionLocal);
+        return unitManager.getMallListWithOpenPublicUnit();
+    }
+
+    ////////////////////////////////END LONG TERM///////////////////////////////////////
+    ////////////////////////////////START EVENT///////////////////////////////////////
+    public ArrayList<String> doGetAvailableEventUnit(HttpServletRequest request) {
+        EventManager eventManager = new EventManager(eventManagerSessionLocal);
+        return eventManager.getAvailableEventUnit(request);
+    }
+    ////////////////////////////////END EVENT///////////////////////////////////////
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -227,8 +302,5 @@ public class PublicApplicationPortalServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    public ArrayList<String> doGetMallListWithOpenPublicUnit(){
-        UnitManager unitManager = new UnitManager(unitManagerSessionLocal);
-        return unitManager.getMallListWithOpenPublicUnit();
-    }
+
 }

@@ -1,6 +1,6 @@
 <%-- 
-    Document   : PublicApplicationPortalLongTermApplicantConfirm
-    Created on : Sep 26, 2015, 8:43:19 PM
+    Document   : PublicApplicationPortalFillInformationEvent
+    Created on : Oct 11, 2015, 5:23:04 PM
     Author     : PhiLong
 --%>
 
@@ -29,6 +29,7 @@
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
         <!-- END CUSTOM STYLES -->	
+
     </head>
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
@@ -48,8 +49,6 @@
                     <!-- BEGIN TOP NAVIGATION MENU -->
                     <div class="top-menu">
                         <ul class="nav navbar-nav pull-right">
-                            <span class="separator"></span>
-                            </li>
                             <!-- BEGIN USER LOGIN DROPDOWN -->
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -80,10 +79,10 @@
                     <!-- END HEADER SEARCH BOX -->
                     <div class="hor-menu ">
                         <ul class="nav navbar-nav">
-                            <li class="active">
+                            <li class="">
                                 <a href="ApplyLongTerm">Long-term application</a>
                             </li>
-                            <li class="">
+                            <li class="active">
                                 <a href="ApplyEvent">Event application</a>
                             </li>
                         </ul>    
@@ -114,50 +113,33 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
-                    <%
-                        String applicantName = (String) request.getSession().getAttribute("applicantName");
-                        String applicantBusinessType = (String) request.getSession().getAttribute("applicantBusinessType");
-                        String applicantDescription = (String) request.getSession().getAttribute("applicantDescription");
-                        applicantDescription =  applicantDescription.replaceAll("\n","<br>");
-                        String applicantAddress = (String) request.getSession().getAttribute("applicantAddress");
-                        String applicantTel = (String) request.getSession().getAttribute("applicantTel");
-                        String applicantEmail = (String) request.getSession().getAttribute("applicantEmail");
-                        String applicantBidRate = (String) request.getSession().getAttribute("applicantBidRate");
-                    %>
-                    <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                        <tr>
-                            <th>Applicant name:</th>
-                            <td><%=applicantName%></td>
-                        </tr>
-                        <tr>
-                            <th>Applicant business type:</th>
-                            <td><%=applicantBusinessType%></td>
-                        </tr>
-                        <tr>
-                            <th>Applicant Description</th>
-                            <td><%=applicantDescription%></td>
-                        </tr>
-                        <tr>
-                            <th>Applicant address</th>
-                            <td><%=applicantAddress%></td>
-                        </tr>
-                        <tr>
-                            <th>Applicant email</th>
-                            <td><%=applicantEmail%></td>
-                        </tr>
-                        <tr>
-                            <th>Applicant telephone</th>
-                            <td><%=applicantTel%></td>
-                        </tr>
-                        <tr>
-                            <th>Bidding rate</th>
-                            <td><%=applicantBidRate%></td>
-                        </tr>
 
-                    </table>
-                    <form action="SubmitLongTermApplication">
-                        <button type="submit" class="btn btn-default" >CONFIRM</button>
-                    </form>
+
+                    <div class="container">
+                        <form action="ConfirmEventApplicantInformation" method="GET">
+                            <div class="form-group">
+                                <label for="applicantName">Event host :</label>
+                                <input type="text" required="required" class="form-control"
+                                       id="applicantName" name="applicantName" placeholder="Enter applicant name">
+                            </div>
+                            <div class="form-group">
+                                <label for="eventDescription">Event description :</label><br/>
+                                <textarea resize="none" name="eventDescription" rows="10" cols="180" placeholder="Enter applicant description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="applicantTel">Applicant tel:</label>
+                                <input type="text" required="required" class="form-control"
+                                       id="applicantTel" name="applicantTel" placeholder="Enter applicant tel">
+                            </div>
+                            <div class="form-group">
+                                <label for="applicantEmail">Applicant email :</label>
+                                <input type="email" required="required" class="form-control"
+                                       id="applicantEmail" name="applicantEmail" placeholder="Enter applicant email">
+                            </div>
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </form>
+                    </div>
+
 
                     <!-- END PAGE CONTENT INNER -->
                 </div>
@@ -209,9 +191,9 @@
         </script>
 
 
-
         <!-- END JAVASCRIPTS -->
 
     </body>
     <!-- END BODY -->
 </html>
+

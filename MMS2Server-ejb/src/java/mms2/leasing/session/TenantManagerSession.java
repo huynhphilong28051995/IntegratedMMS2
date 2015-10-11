@@ -115,8 +115,6 @@ public class TenantManagerSession implements TenantManagerSessionLocal {
             UnitEntity unit = (UnitEntity) (query.getResultList().get(0));
             unit.setOpenForPublicBidding(false);
             unit.setOpenForPublicBiddingPrototype(false);
-            unit.setOpenForInternalBidding(false);
-            unit.setOpenForInternalBiddingPrototype(false);
             unit.setHasPendingTenant(true);
             em.merge(unit);
             em.flush();
@@ -131,5 +129,34 @@ public class TenantManagerSession implements TenantManagerSessionLocal {
         newTenant.setTenantContract(contract);
         em.merge(newTenant);
         em.merge(contract);
+    }
+    
+    @Override
+    public ArrayList<Object[]> getExpiringTenant(String mallName){
+        Query query = em.createQuery("SELECT t FROM TenantEntity t "
+                + "WHERE t.mallName = :inMallName");
+        query.setParameter("inMallName", mallName);
+        ArrayList<Object[]> returnList = new ArrayList();
+        
+        for(Object o: query.getResultList()){
+            TenantEntity tenant = (TenantEntity) o;
+            Long contractEnd = tenant.getTenantContract().getEndTimestamp().getTime();
+            long currentDate= (new java.util.Date()).getTime();
+            int difference = (int) ((((contractEnd-currentDate)/1000)/86400)/30);
+            if(difference <= 6){
+                Object[] objArr = new Object[2];
+                objArr[0] = tenant;
+                objArr[1] = difference;
+                returnList.add(objArr);
+            }
+        }
+        return returnList; 
+    }
+    
+    @Override
+    public int sendContractRenewalEmail(long tenantId){
+        TenantEntity tenant  = em.find(TenantEntity.class, tenantId);
+        SendMail_LeaseRenewal mail = new SendMail_LeaseRenewal();
+        return mail.sendMail(tenant);
     }
 }

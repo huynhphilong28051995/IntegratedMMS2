@@ -1,18 +1,17 @@
 <%-- 
-    Document   : indexSpacePlan
-    Created on : Sep 9, 2015, 12:36:02 AM
+    Document   : LeasingOfficerViewExpiringTenant
+    Created on : Oct 10, 2015, 1:31:35 PM
     Author     : PhiLong
 --%>
 
+<%@page import="mms2.leasing.entity.TenantEntity"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <%String IP = (String)request.getSession().getAttribute("IP");%>
-    <!-- BEGIN HEAD -->
     <head>
         <meta charset="utf-8"/>
-        <title>Merlion Leasing System | Initialization</title>
+        <title>Merlion Leasing System | Zone Declare</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -32,11 +31,20 @@
         <link href="../assets/admin/interface/css/layout.css" rel="stylesheet" type="text/css">
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
-        <!-- END CUSTOM STYLES -->
+        <!-- END CUSTOM STYLES -->	
+
+        <!--PERSONAL STYLE-->
+         <!--<link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/bootstrap.css" type="text/css">-->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/main.css" type="text/css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!--PERSONAL STYLE-->
     </head>
-    <!-- END HEAD -->
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
+        <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -53,8 +61,6 @@
                     <!-- BEGIN TOP NAVIGATION MENU -->
                     <div class="top-menu">
                         <ul class="nav navbar-nav pull-right">
-                            <span class="separator"></span>
-                            </li>
                             <!-- BEGIN USER LOGIN DROPDOWN -->
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -94,9 +100,35 @@
                     <!-- END HEADER SEARCH BOX -->
                     <div class="hor-menu ">
                         <ul class="nav navbar-nav">
+                            <li class="">
+                                <a href="DeclareZone">Zone declaration</a>
+                            </li>
+                            <li class="">
+                                <a href="ChooseUnitForPublicBidding">Open public bidding</a>
+                            </li>
+
+                            <li class="">
+                                <a href="ViewAllPublicLongTermApplication">View public bidders</a>
+                            </li>
+                            <li class="menu-dropdown classic-menu-dropdown">
+                                <a class="active" data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
+                                    Tenant<i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-left">
+                                    <li class="">
+                                        <a href="ViewAllTenants">View all tenants</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="ViewExpiringTenant">View expiring tenants</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="">
+                                <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
+                            </li>
 
                         </ul>    
-                    </div>  
+                    </div>
                     <!-- END MEGA MENU -->
                 </div>
             </div>
@@ -110,7 +142,7 @@
                 <div class="container">
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">  
-                        <h1>Floor plan initialization </h1>
+                        <h1>Expiring tenants list</h1>
                     </div>
                     <!-- END PAGE TITLE -->
 
@@ -121,139 +153,64 @@
             <div class="page-content">
                 <div class="container">
                     <!-- BEGIN PAGE BREADCRUMB -->
-                    <ul class="page-breadcrumb breadcrumb">
-                    </ul>
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER --> 
-                    
-                    
-                    <%
-                        String mallName = (String) request.getSession().getAttribute("mallName");
-                        String actionToTake = (String) request.getSession().getAttribute("actionToTake");
-                    %>
-                    <h1><%=mallName%></h1>
-                    <%
-                        if (actionToTake.equals("UploadFloorplanBackground")) {
-                    %>
-                    <form action="SpacePlanUpload" method="post"
-                          enctype="multipart/form-data">
-                        <input type="file" name="file" size="50"/>
-                        <br />
-                        <input class="btn btn-default" type="submit" value="Upload File" />
-                    </form>
-                    <%
-                        }
-                    %>
+                    <h1>EXPIRING TENANT PAGE</h1>
 
-                    <%
-                        if (actionToTake.equals("DeclareNumOfLevel")) {
-                    %>
-                    <form action="DeclareNumOfLevel" method="GET">
-                        <div class="form-group">
-                            <label for="numOfLevel">Number of level :</label>
-                            <input type="number" min="1" step="1" required="required" class="form-control"
-                                   id="numOfLevel" name="numOfLevel" placeholder="numOfLevel">
-                        </div>
-
-                        <button type="submit" class="btn btn-default">Submit</button>
-                    </form>
-                    <%
-                        }
-                    %>
-
-                    <%
-                        if (actionToTake.equals("DeclareNumOfUnitPerLevel")) {
-                            int numOfLevel = (Integer) request.getSession().getAttribute("numOfLevel");
-                            ArrayList<String> levelCodeList = new ArrayList();
-                            for (int i = 1; i <= numOfLevel; i++) {
-                                levelCodeList.add("LV" + "" + i);
-                            }
-                    %>
-                    <form action="DeclareNumOfUnitPerLevel" method="GET">
-                        <%
-                            for (int i = 0; i < levelCodeList.size(); i++) {
-                                String levelCode = levelCodeList.get(i);
-                        %>
-                        <label for="">Number of unit on <%=levelCode%>:</label>
-                        <input type="number" min="0" step="1" required="required" class="form-control"
-                               id="numOfUnitOn<%=levelCode%>" name="numOfUnitOn<%=levelCode%>"
-                               placeholder="numOfUnitOn<%=levelCode%>">
-                        <br/>
-                        <%
-                            }
-                        %>
-                        <button type="submit" class="btn btn-default">Submit</button>
-                    </form>
-                    <form action="InitializeSpacePlan">
-                        <button type="submit"  class="btn btn-default">Back</button>
-                    </form>
-                    <%
-                        }
-                    %>
-
-                    <%
-                        if (actionToTake.equals("DeclareFloorplanBackground")) {
-                    %>
-                    <form action="DeclareFloorplanBackground" method="GET">
-                        <div class="form-group">
+                    <table id="expireTenantTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Contract start</th>
+                                <th>Contract end</th>
+                                <th>Expire in</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             <%
-                                int numOfLevel = (Integer) request.getSession().getAttribute("numOfLevel");
-                                ArrayList<String> levelCodeList = new ArrayList();
-                                for (int i = 1; i <= numOfLevel; i++) {
-                                    levelCodeList.add("LV" + "" + i);
-                                }
-                                for (int i = 0; i < levelCodeList.size(); i++) {
-                                    String levelCode = levelCodeList.get(i);
+                                ArrayList<Object[]> expiringList = (ArrayList<Object[]>) request.getAttribute("expiringTenantList");
+                                for (int i = 0; i < expiringList.size(); i++) {
+                                    TenantEntity tenant = (TenantEntity) ((expiringList.get(i))[0]);
+                                    int expireDuration = (Integer) ((expiringList.get(i))[1]);
+                                    long tenantId = tenant.getId();
+                                    String tenantName = tenant.getName();
+                                    String descriptionString = "";
+                                    String contractStart = tenant.getTenantContract().getStartTimestamp().toString();
+                                    String contractEnd = tenant.getTenantContract().getEndTimestamp().toString();
+                                    ArrayList<String> descriptionList = tenant.getDescription();
+                                    for (int j = 0; j < descriptionList.size(); j++) {
+                                        descriptionString = descriptionString + descriptionList.get(j);
+                                    }
+                                    descriptionString = descriptionString.replaceAll("\n", "<br>");
                             %>
-                            <label for="">Floor plan format of <%=levelCode%>:</label>
-                            <input required="required" class="form-control"
-                                   id="floorplanBackground<%=levelCode%>" name="floorplanBackground<%=levelCode%>"
-                                   placeholder="Floor plan for <%=levelCode%>">
-                            <br/>
+                            <tr>
+                                <td><%=tenantId%></td>
+                                <td><%=tenantName%></td>
+                                <td><%=descriptionString%></td>
+                                <td><%=contractStart%></td>
+                                <td><%=contractEnd%></td>
+                                <td><%=expireDuration%> month(s)</td>
+                                <td>
+                                    <a onclick="return confirm('Proceed send contract renewal email?')"
+                                       href="SendContractRenewalEmail?expireTenantId=<%=tenantId%>">
+                                        SEND PROMPT EMAIL</a>
+                                </td>
+                            </tr>
                             <%
                                 }
                             %>
-                        </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
-                    </form>
-                    <form action="DeclareNumOfLevel">
-                        <button type="submit"  class="btn btn-default">Back</button>
-                    </form>
-                    <%
-                        }
-                    %>
-
-
-                    <%
-                        if (actionToTake.equals("FinalConfirmation")) {
-                            int numOfLevel = (Integer) request.getSession().getAttribute("numOfLevel");
-                            ArrayList<ArrayList<String>> levelNameNumUnitBackgroundList
-                                    = (ArrayList<ArrayList<String>>) request.getSession().getAttribute("levelNameNumUnitBackgroundList");
-                    %>
-                    <h2>Please confirm following information</h2>
-                    <h4>Number of levels: <%=numOfLevel%></h4>
-                    <h4>Number of units per level: </h4>
-                    <%
-                        for (int i = 0; i < levelNameNumUnitBackgroundList.size(); i++) {
-                            ArrayList<String> levelNameNumUnitBackground = levelNameNumUnitBackgroundList.get(i);
-                            String statusString = ("On " + levelNameNumUnitBackground.get(0)
-                                    + " has " + levelNameNumUnitBackground.get(1)
-                                    + " store unit(s) and has background format " + levelNameNumUnitBackground.get(2));
-                    %>
-                    <h5><%=statusString%></h5>
-                    <%
-                        }
-                    %>
-                    <form action="FinalConfirmation" method="GET">
-                        <button type="submit" class="btn btn-default">Confirm</button>
-                    </form>
-                    <form action="DeclareAgain">
-                        <button type="submit"  class="btn btn-default">Declare again</button>
-                    </form>
-                    <%
-                        }
-                    %>
-
+                        </tbody>
+                    </table>
+                    <script>
+                        $(document).ready(function () {
+                            $('#expireTenantTable').DataTable({
+                                "order": [[3, "desc"]]
+                            });
+                        });
+                    </script>   
 
 
 
@@ -280,7 +237,6 @@
         <script src="../assets/global/plugins/respond.min.js"></script>
         <script src="../assets/global/plugins/excanvas.min.js"></script> 
         <![endif]-->
-        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -298,67 +254,36 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-            jQuery(document).ready(function () {
-                Custom.init(); // init custom core components
-                Layout.init(); // init current layout
-                UIIdleTimeout.init(); // init Idle Timeout
-                UIToastr.init(); // init Toastr Alert
-            });
-        </script>
-        <% String referrer = request.getHeader("referer");
-            String query = request.getQueryString();
-            String timestamp = null;
-            if (actionToTake.equals("DeclareNumOfLevel")) {
-        %>
-        <script language="javascript">
-            $(document).ready(function () {
-                toastr.info('Please initialize floor plan before entering system');
-            });
+                        jQuery(document).ready(function () {
+                            Custom.init(); // init custom core components
+                            Layout.init(); // init current layout
+                            UIIdleTimeout.init(); // init Idle Timeout
+                            UIToastr.init(); // init Toastr Alert
+                        });
         </script>
         <%
-            }
-        %>
-        <%
-             if (actionToTake.equals("UploadFloorplanBackground")) {
+            if (request.getAttribute("ContractRenewEmailStatus") != null) {
+                String contractRenewEmailStatus = (String) request.getAttribute("ContractRenewEmailStatus");
+                if (contractRenewEmailStatus.contains("Error")) {
         %>
         <script language="javascript">
-            $(document).ready(function () {
-                toastr.info('Please upload floor plan background files before initialization');
-            });
-        </script>
-        <%
-            }
-        %>
-
-        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
-                timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
-                if ("=continue".equals(query)) {
-        %>        
-        <script language="javascript">
-            var ts = '<%= timestamp%>';
             $(document).ready(function () {
                 // show when page load
-                toastr.info('Welcome back!');
-
+                toastr.error('<%= contractRenewEmailStatus%>');
             });
         </script>
-        <% } else {%>
+        <%} else {%>
         <script language="javascript">
-            var ts = '<%= timestamp%>';
             $(document).ready(function () {
                 // show when page load
-                toastr.success(ts, 'Login Successful!');
-
+                toastr.success('<%= contractRenewEmailStatus%>');
             });
         </script>
-        <%}
-            }%>
-
-
+        <%
+                }
+            }
+        %>
         <!-- END JAVASCRIPTS -->
-
     </body>
     <!-- END BODY -->
 </html>

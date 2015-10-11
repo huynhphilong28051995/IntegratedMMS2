@@ -143,11 +143,8 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
-<!--
-                    <a href="ApplyEvent">Apply for event space</a><br>
-                    <a href="ApplyLongTerm">Apply for long term space</a>
--->
-
+                        
+                    <h2>Please choose one of the two options above</h2>
 
                     <!-- END PAGE CONTENT INNER -->
                 </div>

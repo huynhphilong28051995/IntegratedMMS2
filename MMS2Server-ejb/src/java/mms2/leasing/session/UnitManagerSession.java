@@ -345,10 +345,6 @@ public class UnitManagerSession implements UnitManagerSessionLocal {
             return "Unsuccessful! This unit already opened for public bidding";
         if(unit.isOpenForPublicBiddingPrototype())
             return "Unsuccessful! This unit is being proposed for public bidding";
-        if(unit.isOpenForInternalBidding())
-            return "Unsuccessful! This unit already opened for internl bidding";
-        if(unit.isOpenForInternalBiddingPrototype())
-            return "Unsuccessful! This unit is being proposed for internal bidding";
         unit.setDeleteProposed(true);
         LevelEntity level = unit.getLevel();
         em.merge(unit);

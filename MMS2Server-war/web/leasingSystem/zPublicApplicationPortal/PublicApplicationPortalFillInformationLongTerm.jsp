@@ -88,35 +88,6 @@
                             <li class="">
                                 <a href="ApplyEvent">Event application</a>
                             </li>
-                            <li class="menu-dropdown classic-menu-dropdown">
-                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
-                                    #### <i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-left">
-                                    <li class="">
-                                        <a href="####">
-                                            #### </a>
-                                    </li>
-                                    <li class="">
-                                        <a href="####">
-                                            ####</a>
-                                    </li>
-                                    <li class="">
-                                        <a href="####">
-                                            #### </a>
-                                    </li>
-                                    <li class="">
-                                        <a href="####">
-                                            #### </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="">
-                                <a href="####">####</a>
-                            </li>
-                            <li class="">
-                                <a href="####">####</a>
-                            </li>
                         </ul>    
                     </div>
                     <!-- END MEGA MENU -->

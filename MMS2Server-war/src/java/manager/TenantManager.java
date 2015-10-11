@@ -51,4 +51,12 @@ public class TenantManager {
     public void createPendingTenantAndContractForApprovedLongTermApplication(Long applicationId){
         tenantManagerSessionLocal.createTenantAndContractForApprovedLongTermApplication(applicationId);
     }
+    public ArrayList<Object[]> getExpiringTenant(HttpServletRequest request){
+        String mallName = (String)request.getSession().getAttribute("mallName");
+        return tenantManagerSessionLocal.getExpiringTenant(mallName);
+    }
+    public int sendContractRenewalEmail(HttpServletRequest request){
+        long tenantId = Long.parseLong(request.getParameter("expireTenantId"));
+        return tenantManagerSessionLocal.sendContractRenewalEmail(tenantId);
+    }
 }

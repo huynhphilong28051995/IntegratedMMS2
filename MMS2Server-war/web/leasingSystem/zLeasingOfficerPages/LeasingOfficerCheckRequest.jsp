@@ -103,7 +103,7 @@
                             <li class="">
                                 <a href="DeclareZone">Zone declare</a>
                             </li>
-                            <li class="active">
+                            <li class="">
                                 <a href="ChooseUnitForPublicBidding">Open public bidding</a>
                             </li>
 

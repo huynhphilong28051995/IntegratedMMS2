@@ -14,16 +14,28 @@
                     <file>${file.reference.commons-io-2.4.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library dirs="200">
-                    <file>${file.reference.jcommon-1.0.23.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
                 <library dirs="100">
                     <file>${reference.MMS2Server-ejb.dist}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
+                    <file>${file.reference.javaee-api-7.0.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.javaee-web-api-7.0.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jcommon-1.0.23.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
                     <file>${file.reference.jfreechart-1.0.19.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.javax.mail-api-1.5.4.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>

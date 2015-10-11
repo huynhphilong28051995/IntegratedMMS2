@@ -44,11 +44,16 @@ public class LevelManagerSession implements LevelManagerSessionLocal {
 
     @Override
     public LevelEntity getLevel(String mallName, String levelCode) {
-        Query query = em.createQuery("SELECT lv FROM LevelEntity lv "
-                + "WHERE lv.mallName=:inMallName AND lv.levelCode=:inLevelCode");
-        query.setParameter("inMallName", mallName);
-        query.setParameter("inLevelCode", levelCode);
-        return (LevelEntity) query.getResultList().get(0);
+        try {
+            Query query = em.createQuery("SELECT lv FROM LevelEntity lv "
+                    + "WHERE lv.mallName=:inMallName AND lv.levelCode=:inLevelCode");
+            query.setParameter("inMallName", mallName);
+            query.setParameter("inLevelCode", levelCode);
+            return (LevelEntity) query.getResultList().get(0);
+        } catch (Exception ex) {
+            System.err.println("LevelManagerSession(): throw exception: floorplan not initialized");
+            return null;
+        }
     }
 
     //This method will save the position to Prototype Attribute
@@ -93,7 +98,7 @@ public class LevelManagerSession implements LevelManagerSessionLocal {
             level.setShow(true);
             level.setUnitPositionList(level.getUnitPositionListPrototype());
             ArrayList<UnitEntity> unitList = new ArrayList<UnitEntity>(level.getUnits());
-            for(int i=0; i<unitList.size(); i++){
+            for (int i = 0; i < unitList.size(); i++) {
                 UnitEntity unit = unitList.get(i);
                 unit.setShow(true);
                 em.merge(unit);
@@ -107,52 +112,54 @@ public class LevelManagerSession implements LevelManagerSessionLocal {
 
         for (Object o : query2.getResultList()) {
             UnitEntity unit = (UnitEntity) o;
-            LevelEntity level=unit.getLevel();
+            LevelEntity level = unit.getLevel();
             ArrayList<UnitEntity> unitList = new ArrayList<UnitEntity>(level.getUnits());
             unitList.remove(unit);
             level.setUnits(unitList);
             em.merge(level);
-            
+
             em.remove(unit);
             em.flush();
         }
         em.flush();
     }
-    
+
     @Override
-    public void implementPrototypePublicOpenBid(String mallName, Long leasingRequestId){
+    public void implementPrototypePublicOpenBid(String mallName, Long leasingRequestId) {
         LeasingSystemRequestEntity req = em.find(LeasingSystemRequestEntity.class, leasingRequestId);
         ArrayList<String> unitList = req.getListOfUnitOpenForBidding();
-        for(int i=0; i < unitList.size(); i++){
+        for (int i = 0; i < unitList.size(); i++) {
             Query query = em.createQuery("SELECT u FROM UnitEntity u "
-                + "WHERE u.mallName = :inMallName AND u.locationCode =:inLocationCode");
+                    + "WHERE u.mallName = :inMallName AND u.locationCode =:inLocationCode");
             query.setParameter("inMallName", mallName);
             query.setParameter("inLocationCode", unitList.get(i));
-            UnitEntity unit =(UnitEntity)query.getResultList().get(0);
+            UnitEntity unit = (UnitEntity) query.getResultList().get(0);
             unit.setOpenForPublicBidding(true);
-            LevelEntity level  = unit.getLevel();
+            LevelEntity level = unit.getLevel();
             em.merge(unit);
             em.merge(level);
         }
         em.flush();
     }
-     @Override
-    public void rejectPrototypePublicOpenBid(String mallName, Long leasingRequestId){
+
+    @Override
+    public void rejectPrototypePublicOpenBid(String mallName, Long leasingRequestId) {
         LeasingSystemRequestEntity req = em.find(LeasingSystemRequestEntity.class, leasingRequestId);
         ArrayList<String> unitList = req.getListOfUnitOpenForBidding();
-        for(int i=0; i < unitList.size(); i++){
+        for (int i = 0; i < unitList.size(); i++) {
             Query query = em.createQuery("SELECT u FROM UnitEntity u "
-                + "WHERE u.mallName = :inMallName AND u.locationCode =:inLocationCode");
+                    + "WHERE u.mallName = :inMallName AND u.locationCode =:inLocationCode");
             query.setParameter("inMallName", mallName);
             query.setParameter("inLocationCode", unitList.get(i));
-            UnitEntity unit =(UnitEntity)query.getResultList().get(0);
+            UnitEntity unit = (UnitEntity) query.getResultList().get(0);
             unit.setOpenForPublicBiddingPrototype(false);
-            LevelEntity level  = unit.getLevel();
+            LevelEntity level = unit.getLevel();
             em.merge(unit);
             em.merge(level);
         }
         em.flush();
     }
+
     @Override
     public void rejectPrototypeFloorPlan(String mallName) {
         Query query = em.createQuery("SELECT l FROM LevelEntity l "
@@ -192,13 +199,14 @@ public class LevelManagerSession implements LevelManagerSessionLocal {
             em.merge(level);
         }
     }
-    
+
     @Override
-    public boolean checkInitialization(String mallName){
+    public boolean checkInitialization(String mallName) {
         Query query = em.createQuery("SELECT l FROM LevelEntity l WHERE l.mallName= :inMallName");
         query.setParameter("inMallName", mallName);
-        if((query.getResultList()).size() == 0)
+        if ((query.getResultList()).size() == 0) {
             return false;
+        }
         return true;
     }
 }

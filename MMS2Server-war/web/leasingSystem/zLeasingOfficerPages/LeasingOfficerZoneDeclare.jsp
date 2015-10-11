@@ -123,13 +123,23 @@
                             <li class="">
                                 <a href="ViewAllPublicLongTermApplication">View public bidders</a>
                             </li>
-
-                            <li class="">
-                                <a href="ViewAllTenants">View tenants</a>
+                            <li class="menu-dropdown classic-menu-dropdown">
+                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
+                                    Tenant<i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-left">
+                                    <li class="">
+                                        <a href="ViewAllTenants">View all tenants</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="ViewExpiringTenant">View expiring tenants</a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="">
                                 <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
                             </li>
+
                         </ul>    
                     </div>
                     <!-- END MEGA MENU -->
@@ -305,7 +315,6 @@
                         pieDataset.setValue("Entertainment", percentET);
                         pieDataset.setValue("Event", percentEV);
                         pieDataset.setValue("Undefined", percentUndefined);
-                        System.out.println("Test2");
                         JFreeChart chart = ChartFactory.createPieChart(" Prototype Tenant Mix ",
                                 pieDataset, true, true, false);
                         //chart.setBackgroundPaint(new Color(222, 222, 255));
@@ -314,7 +323,7 @@
                         plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0} {2}"));
                         plot.setCircular(true);
                         plot.setSectionPaint("F&B", new Color(87, 210, 252));
-                        plot.setSectionPaint("Retail", new Color(226,141,142));
+                        plot.setSectionPaint("Retail", new Color(226, 141, 142));
                         plot.setSectionPaint("Entertainment", new Color(86, 182, 159));
                         plot.setSectionPaint("Event", new Color(252, 248, 152));
                         plot.setSectionPaint("Undefined", new Color(217, 221, 219));

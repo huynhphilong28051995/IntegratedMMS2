@@ -80,6 +80,7 @@ public class LeasingControllerServlet extends HttpServlet {
             String leasingRequestType;
             Long leasingRequestId;
             ArrayList<LeasingSystemRequestEntity> requestList;
+            boolean alreadyInitialized;
 
             switch (page) {
 //START-FUNCTION FOR LEASING MANAGER
@@ -87,11 +88,8 @@ public class LeasingControllerServlet extends HttpServlet {
                     page = "LeasingManagerViewAllRequests";
                     break;
                 case "ViewLeasingRequestDetail":
-                    System.out.println("TEST 0");
                     leasingRequestId = Long.parseLong(request.getParameter("leasingRequestId"));
-                    System.out.println("TEST 0.1");
                     leasingRequestType = determineLeasingRequestType(leasingRequestId, request);
-                    System.out.println("TEST 0.2 " + leasingRequestType);
                     if (leasingRequestType.equals("FloorplanModify")) {
                         request.getSession().setAttribute("levelCode", "LV1");
                         page = "LeasingManagerReviewFloorPlanPrototype";
@@ -175,7 +173,13 @@ public class LeasingControllerServlet extends HttpServlet {
                     request.getSession().removeAttribute("unitListToAddTenant");
                     request.getSession().removeAttribute("errorMessage");
                     request.getSession().setAttribute("levelCode", "LV1");
-                    page = "LeasingOfficerZoneDeclare";
+                    alreadyInitialized = doCheckInitialization(request);
+                    if (!alreadyInitialized) {
+                        request.setAttribute("errorMessage", "Floorplan has not been initialized and therefore cannot be accessed");
+                        page = "leasingSystemError";
+                    } else {
+                         page = "LeasingOfficerZoneDeclare";
+                    }
                     break;
                 case "DeclareZone":
                     request.getSession().setAttribute("levelCode", "LV1");
@@ -274,10 +278,21 @@ public class LeasingControllerServlet extends HttpServlet {
                     page = "LeasingOfficerCheckRequest";
                     break;
                 /////case of delete and (function)list request is on space planner side
+                case "ViewExpiringTenant":
+                    page = "LeasingOfficerViewExpiringTenant";
+                    break;
+                case "SendContractRenewalEmail":
+                    int success = doSendContractRenewalEmail(request);
+                    if(success == 0)
+                        request.setAttribute("ContractRenewEmailStatus", "Contract renewal email has been sent");
+                    else
+                        request.setAttribute("ContractRenewEmailStatus", "Error while sending email");              
+                    page = "LeasingOfficerViewExpiringTenant";
+                    break;
 //END-FUNCTION FOR LEASING OFFICER
 //START-FUNCTION FOR SPACE PLAN OFFICER
                 case "SpacePlanMain":
-                    boolean alreadyInitialized = doCheckInitialization(request);
+                    alreadyInitialized = doCheckInitialization(request);
                     if (!alreadyInitialized) {
                         page = "SpacePlanDeclare";
                     } else {
@@ -398,6 +413,10 @@ public class LeasingControllerServlet extends HttpServlet {
 //END-FUNCTION FOR SPACE PLAN OFFICER
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////START ESSENTIALS ZONE///////////////////////////////////////////////////////////
+            if(page.equals("LeasingOfficerViewExpiringTenant")){
+                ArrayList<Object[]> expiringTenantList = doGetExpiringTenant(request);
+                    request.setAttribute("expiringTenantList", expiringTenantList);
+            }
             if (page.equals("LeasingOfficerChooseUnitForTenant")
                     || page.equals("LeasingOfficerChooseUnitForPublicBidding")) {
                 numOfLevel = doGetNumOfLevel((String) request.getSession().getAttribute("mallName"));
@@ -768,7 +787,14 @@ public class LeasingControllerServlet extends HttpServlet {
                 = new LeasingRequestManager(leasingSystemRequestManagerSessionLocal);
         leasingRequestManager.addPublicApplicationApprovalRequest(request);
     }
-
+    public ArrayList<Object[]> doGetExpiringTenant(HttpServletRequest request){
+        TenantManager tenantManager = new TenantManager(tenantManagerSessionLocal);
+        return tenantManager.getExpiringTenant(request);
+    }
+    public int doSendContractRenewalEmail(HttpServletRequest request){
+         TenantManager tenantManager = new TenantManager(tenantManagerSessionLocal);
+        return tenantManager.sendContractRenewalEmail(request);
+    }
 ///////////////////////////////////END FOR LEASING OFFICER///////////////////////////////////////////////
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

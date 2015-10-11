@@ -34,6 +34,8 @@ public class TenantEntity implements Serializable {
     private String address;
     private String tel;
     private String email;
+    private String password;
+    
     
     private String status="Pending";
     private ArrayList<String> pendingUnitList= new ArrayList<>();
@@ -245,6 +247,20 @@ public class TenantEntity implements Serializable {
      */
     public void setPendingUnitList(ArrayList<String> pendingUnitList) {
         this.pendingUnitList = pendingUnitList;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

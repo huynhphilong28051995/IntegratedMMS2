@@ -355,6 +355,42 @@
                             <br/><br/><br/><button class="btn btn-default" type="submit">Add unit(s)</button>
                         </form>
                     </div>
+ ////////////////////////////////////
+                    <div class="SelectUnitToAddTenantForm" >
+                        <form action="AddUnitToListToAddTenant">
+                            <div class="form-group">
+                                <label>From</label>
+                                <select required="required" name="firstLocationCode" class="test">
+                                    <%
+                                        for (int i = 0; i < listOfEventUnits.size(); i++) {
+                                            String locationCode = listOfEventUnits.get(i).getLocationCode();
+
+                                    %>
+                                    <option value="<%=locationCode%>"><%=locationCode%></option>
+                                    <%
+                                        }
+                                    %>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>To</label>
+                                <select required="required" name="lastLocationCode" >
+                                    <%
+                                        for (int i = 0; i < listOfEventUnits.size(); i++) {
+                                            String locationCode = listOfEventUnits.get(i).getLocationCode();
+
+                                    %>
+                                    <option value="<%=locationCode%>"> <%=locationCode%></option>
+                                    <%
+                                        }
+                                    %>
+                                </select>
+                            </div>
+                            <br/><br/>
+                            <br/><br/><br/><button class="btn btn-default" type="submit">Add unit(s)</button>
+                        </form>
+                    </div>            
+                                
                     <form action="RequestOpenUnitForPublicBidding">
                         <button class="btn btn-default" id="proceed"  type="submit">Proceed</button>
                     </form>
@@ -409,7 +445,6 @@
                         String locationCodeList = "Chosen unit(s): ";
                         if (request.getAttribute("chooseUnitStatus") != null) {
                             chooseUnitStatus = (String) request.getAttribute("chooseUnitStatus");
-                            System.out.println("TESTING 2 " + chooseUnitStatus);
                             ArrayList<String> unitListToAddTenant = (ArrayList<String>) request.getSession().getAttribute("unitListToAddTenant");
                         }
                         if (request.getSession().getAttribute("unitListToAddTenant") != null) {
