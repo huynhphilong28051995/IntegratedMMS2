@@ -33,7 +33,7 @@ public class TenantContractEntity implements Serializable {
     private Timestamp endTimestamp;
     private String status="Active";
     private double deposit;
-    double rate;
+    private double rate;
     private ArrayList<String> contractDescription = new ArrayList<>();
     @OneToOne(mappedBy="tenantContract")
     private TenantEntity tenant;

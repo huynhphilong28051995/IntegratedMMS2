@@ -6,6 +6,7 @@
 package mms2.leasing.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,6 +33,13 @@ public class LeasingSystemRequestEntity implements Serializable {
     private ArrayList<String> applyUnitList;
     private ArrayList<String> description=  new ArrayList();
     private ArrayList<String> listOfUnitOpenForBidding  =new ArrayList();
+    private Timestamp renewStartDate;
+    private Timestamp renewEndDate;
+    private ArrayList<String> renewDescription = new ArrayList();
+    private double renewRate;
+    private double renewDeposit;
+    
+    
     public Long getId() {
         return id;
     }
@@ -217,6 +225,76 @@ public class LeasingSystemRequestEntity implements Serializable {
      */
     public void setApplicationId(Long aplicationId) {
         this.applicationId = aplicationId;
+    }
+
+    /**
+     * @return the renewStartDate
+     */
+    public Timestamp getRenewStartDate() {
+        return renewStartDate;
+    }
+
+    /**
+     * @param renewStartDate the renewStartDate to set
+     */
+    public void setRenewStartDate(Timestamp renewStartDate) {
+        this.renewStartDate = renewStartDate;
+    }
+
+    /**
+     * @return the renewEndDate
+     */
+    public Timestamp getRenewEndDate() {
+        return renewEndDate;
+    }
+
+    /**
+     * @param renewEndDate the renewEndDate to set
+     */
+    public void setRenewEndDate(Timestamp renewEndDate) {
+        this.renewEndDate = renewEndDate;
+    }
+
+    /**
+     * @return the renewDescription
+     */
+    public ArrayList<String> getRenewDescription() {
+        return renewDescription;
+    }
+
+    /**
+     * @param renewDescription the renewDescription to set
+     */
+    public void setRenewDescription(ArrayList<String> renewDescription) {
+        this.renewDescription = renewDescription;
+    }
+
+    /**
+     * @return the renewRate
+     */
+    public double getRenewRate() {
+        return renewRate;
+    }
+
+    /**
+     * @param renewRate the renewRate to set
+     */
+    public void setRenewRate(double renewRate) {
+        this.renewRate = renewRate;
+    }
+
+    /**
+     * @return the renewDeposit
+     */
+    public double getRenewDeposit() {
+        return renewDeposit;
+    }
+
+    /**
+     * @param renewDeposit the renewDeposit to set
+     */
+    public void setRenewDeposit(double renewDeposit) {
+        this.renewDeposit = renewDeposit;
     }
     
 }

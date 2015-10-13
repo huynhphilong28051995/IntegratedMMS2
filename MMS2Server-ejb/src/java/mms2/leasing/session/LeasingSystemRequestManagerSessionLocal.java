@@ -5,6 +5,7 @@
  */
 package mms2.leasing.session;
 
+import java.sql.Timestamp;
 import mms2.leasing.entity.LeasingSystemRequestEntity;
 import java.util.ArrayList;
 import javax.ejb.Local;
@@ -35,5 +36,7 @@ public interface LeasingSystemRequestManagerSessionLocal {
     public void deleteAllCollideRequestAndApplication(Long requestId, Long applicationId);
 
     public ArrayList<LeasingSystemRequestEntity> getRequestsByUserName(String userName);
+
+    public String createRenewRequest(long tenantId, Timestamp newStart, Timestamp newEnd, double newRate, double newDeposit, String newDescrip, String descriptionString, String mallName, String staffUserName);
     
 }

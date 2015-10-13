@@ -5,6 +5,7 @@
  */
 package mms2.leasing.session;
 
+import java.sql.Timestamp;
 import mms2.leasing.entity.LeasingSystemRequestEntity;
 import mms2.leasing.entity.LongTermApplicationEntity;
 import java.util.ArrayList;
@@ -205,7 +206,7 @@ public class LeasingSystemRequestManagerSession implements LeasingSystemRequestM
                         Query queryTemp = em.createQuery("SELECT re FROM LeasingSystemRequestEntity re "
                                 + "WHERE re.applicationId =:inApplicationId");
                         queryTemp.setParameter("inApplicationId", tempApplicationId);
-                        LeasingSystemRequestEntity tempRequest = (LeasingSystemRequestEntity)queryTemp.getResultList().get(0);
+                        LeasingSystemRequestEntity tempRequest = (LeasingSystemRequestEntity) queryTemp.getResultList().get(0);
                         em.remove(tempRequest);
                         em.remove(tempApplication);
                         em.flush();
@@ -215,6 +216,57 @@ public class LeasingSystemRequestManagerSession implements LeasingSystemRequestM
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String createRenewRequest(long tenantId, Timestamp newStart, Timestamp newEnd,
+            double newRate, double newDeposit, String newDescrip, String descriptionString,
+            String mallName, String staffUserName) {
+        ArrayList<String> newDescripList = new ArrayList<String>();
+        try {
+            while (newDescrip.length() > 0) {
+                int length = newDescrip.length();
+                if (length > 255) {
+                    String tempString = newDescrip.substring(0, 255);
+                    newDescripList.add(tempString);
+                    newDescrip = newDescrip.substring(255, length);
+                } else {
+                    newDescripList.add(newDescrip);
+                    newDescrip = "";
+                }
+            }
+            ArrayList<String> descriptionStringList = new ArrayList<String>();
+            while (descriptionString.length() > 0) {
+                int length = descriptionString.length();
+                if (length > 255) {
+                    String tempString = descriptionString.substring(0, 255);
+                    descriptionStringList.add(tempString);
+                    descriptionString = descriptionString.substring(255, length);
+                } else {
+                    descriptionStringList.add(descriptionString);
+                    descriptionString = "";
+                }
+            }
+            LeasingSystemRequestEntity leaseRequest = new LeasingSystemRequestEntity();
+            leaseRequest.setType("ContractRenewRequest");
+            leaseRequest.setApplicationId(tenantId);
+            leaseRequest.setRenewRate(newRate);
+            leaseRequest.setRenewDeposit(newDeposit);
+            leaseRequest.setRenewStartDate(newStart);
+            leaseRequest.setRenewEndDate(newEnd);
+            leaseRequest.setRenewDescription(newDescripList);
+            leaseRequest.setDescription(descriptionStringList);
+            leaseRequest.setMallName(mallName);
+            leaseRequest.setSenderUserName(staffUserName);
+            leaseRequest.setSender("LeasingOfficer");
+            leaseRequest.setReceiver("LeasingManager");
+            em.persist(leaseRequest);
+            return "Successful ! Contrac renewal request has been sent";
+        } catch (Exception e) {
+            System.err.println("LeasingManagerSession_createRenewRequest throw exception");
+            e.printStackTrace();
+            return "Unsuccessful ! Error occur while accessing database";
         }
     }
 }

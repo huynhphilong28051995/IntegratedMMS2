@@ -34,4 +34,12 @@ public interface TenantManagerSessionLocal {
 
     public int sendContractRenewalEmail(long tenantId);
 
+    public ArrayList<TenantEntity> getAllPendingTenant(String mallName);
+
+    public String officializePendingTenant(long tenantId);
+
+    public String deleteExpireTenant(long tenantId);
+
+    public void acceptContractRenewRequest(long leasingRequestId);
+
 }
