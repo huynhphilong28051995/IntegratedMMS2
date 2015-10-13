@@ -62,8 +62,6 @@
                     <!-- BEGIN TOP NAVIGATION MENU -->
                     <div class="top-menu">
                         <ul class="nav navbar-nav pull-right">
-                            <span class="separator"></span>
-                            </li>
                             <!-- BEGIN USER LOGIN DROPDOWN -->
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -155,10 +153,9 @@
                         ArrayList<String> tenantDescriptionList = tenant.getDescription();
                         String tenantDescriptionString = "";
                         for (int i = 0; i < tenantDescriptionList.size(); i++) {
-                            tenantDescriptionString = tenantDescriptionString + "" + tenantDescriptionList.get(i);
+                            tenantDescriptionString = tenantDescriptionString + tenantDescriptionList.get(i);
                         }
                         tenantDescriptionString  = tenantDescriptionString.replaceAll("\n","<br>");
-                        String mallName = tenant.getMallName();
                         String tenantAddress = tenant.getAddress();
                         String tenantEmail = tenant.getEmail();
                         String tenantTel = tenant.getTel();

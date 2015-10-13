@@ -119,20 +119,35 @@
                             <li class="">
                                 <a href="ChooseUnitForPublicBidding">Open public bidding</a>
                             </li>
-
-                            <li class="">
-                                <a href="ViewAllPublicLongTermApplication">View public bidders</a>
-                            </li>
                             <li class="menu-dropdown classic-menu-dropdown">
                                 <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
                                     Tenant<i class="fa fa-angle-down"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-left">
                                     <li class="">
-                                        <a href="ViewAllTenants">View all tenants</a>
+                                        <a href="ViewAllTenants">View current tenants</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="ViewAllPublicLongTermApplication">View application</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="ViewPendingTenant">View pending tenants</a>
                                     </li>
                                     <li class="">
                                         <a href="ViewExpiringTenant">View expiring tenants</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="menu-dropdown classic-menu-dropdown">
+                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
+                                    Event<i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-left">
+                                    <li class="">
+                                        <a href="ViewAllEvent">View all event</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="ViewEventApplication">View application</a>
                                     </li>
                                 </ul>
                             </li>

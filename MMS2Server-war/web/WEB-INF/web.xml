@@ -122,6 +122,30 @@
         <servlet-name>PublicApplicationPortalEventApplicantConfirm</servlet-name>
         <jsp-file>/leasingSystem/zPublicApplicationPortal/PublicApplicationPortalEventApplicantConfirm.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>LeasingOfficerViewAllEventApplication</servlet-name>
+        <jsp-file>/leasingSystem/zLeasingOfficerPages/LeasingOfficerViewAllEventApplication.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>LeasingOfficerViewPendingTenant</servlet-name>
+        <jsp-file>/leasingSystem/zLeasingOfficerPages/LeasingOfficerViewPendingTenant.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>LeasingOfficerPrepareEventContract</servlet-name>
+        <jsp-file>/leasingSystem/zLeasingOfficerPages/LeasingOfficerPrepareEventContract.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>LeasingOfficerViewAllEvent</servlet-name>
+        <jsp-file>/leasingSystem/zLeasingOfficerPages/LeasingOfficerViewAllEvent.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>LeasingOfficerRenewContract</servlet-name>
+        <jsp-file>/leasingSystem/zLeasingOfficerPages/LeasingOfficerRenewContract.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>LeasingManagerReviewContractRenewRequest</servlet-name>
+        <jsp-file>/leasingSystem/zLeasingManagerPages/LeasingManagerReviewContractRenewRequest.jsp</jsp-file>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
@@ -511,6 +535,30 @@
     <servlet-mapping>
         <servlet-name>PublicApplicationPortalEventApplicantConfirm</servlet-name>
         <url-pattern>/PublicApplicationPortalEventApplicantConfirm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LeasingOfficerViewAllEventApplication</servlet-name>
+        <url-pattern>/LeasingOfficerViewAllEventApplication</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LeasingOfficerViewPendingTenant</servlet-name>
+        <url-pattern>/LeasingOfficerViewPendingTenant</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LeasingOfficerPrepareEventContract</servlet-name>
+        <url-pattern>/LeasingOfficerPrepareEventContract</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LeasingOfficerViewAllEvent</servlet-name>
+        <url-pattern>/LeasingOfficerViewAllEvent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LeasingOfficerRenewContract</servlet-name>
+        <url-pattern>/LeasingOfficerRenewContract</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LeasingManagerReviewContractRenewRequest</servlet-name>
+        <url-pattern>/LeasingManagerReviewContractRenewRequest</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

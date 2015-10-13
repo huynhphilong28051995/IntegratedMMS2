@@ -364,7 +364,6 @@
                                     <%
                                         for (int i = 0; i < listOfEventUnits.size(); i++) {
                                             String locationCode = listOfEventUnits.get(i).getLocationCode();
-
                                     %>
                                     <option value="<%=locationCode%>"><%=locationCode%></option>
                                     <%

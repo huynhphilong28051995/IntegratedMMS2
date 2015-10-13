@@ -101,7 +101,7 @@
                 <div class="container">
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">  
-                        <h1>Leasing Public Portal Main </h1>
+                        <h1>Confirmation</h1>
                     </div>
                     <!-- END PAGE TITLE -->
 
@@ -207,11 +207,7 @@
                 UIToastr.init(); // init Toastr Alert
             });
         </script>
-
-
-
         <!-- END JAVASCRIPTS -->
-
     </body>
     <!-- END BODY -->
 </html>

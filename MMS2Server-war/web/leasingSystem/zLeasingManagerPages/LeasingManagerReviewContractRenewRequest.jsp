@@ -1,17 +1,20 @@
 <%-- 
-    Document   : LeasingOfficerViewExpiringTenant
-    Created on : Oct 10, 2015, 1:31:35 PM
+    Document   : LeasingManagerReviewContractRenewRequest
+    Created on : Oct 14, 2015, 12:43:49 AM
     Author     : PhiLong
 --%>
 
+<%@page import="mms2.leasing.entity.LeasingSystemRequestEntity"%>
+<%@page import="mms2.leasing.entity.UnitEntity"%>
 <%@page import="mms2.leasing.entity.TenantEntity"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="mms2.leasing.entity.EventEntity"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>Merlion Leasing System | Zone Declare</title>
+        <title>Merlion Leasing System | Renew Contract</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -34,12 +37,12 @@
         <!-- END CUSTOM STYLES -->	
 
         <!--PERSONAL STYLE-->
-         <!--<link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/bootstrap.css" type="text/css">-->
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" type="text/css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/main.css" type="text/css">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/jquery-ui.theme.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/jquery-ui.css">
+        <script src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+        <script src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+
         <!--PERSONAL STYLE-->
     </head>
     <!-- BEGIN BODY -->
@@ -101,7 +104,7 @@
                     <div class="hor-menu ">
                         <ul class="nav navbar-nav">
                             <li class="">
-                                <a href="DeclareZone">Zone declaration</a>
+                                <a href="DeclareZone">Event Contract</a>
                             </li>
                             <li class="">
                                 <a href="ChooseUnitForPublicBidding">Open public bidding</a>
@@ -110,23 +113,12 @@
                             <li class="">
                                 <a href="ViewAllPublicLongTermApplication">View public bidders</a>
                             </li>
-                            <li class="menu-dropdown classic-menu-dropdown">
-                                <a class="active" data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
-                                    Tenant<i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-left">
-                                    <li class="">
-                                        <a href="ViewAllTenants">View all tenants</a>
-                                    </li>
-                                    <li class="">
-                                        <a href="ViewExpiringTenant">View expiring tenants</a>
-                                    </li>
-                                </ul>
+                            <li class="active">
+                                <a href="ViewAllTenants">View tenants</a>
                             </li>
                             <li class="">
                                 <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
                             </li>
-
                         </ul>    
                     </div>
                     <!-- END MEGA MENU -->
@@ -142,10 +134,9 @@
                 <div class="container">
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">  
-                        <h1>Expiring tenants list</h1>
+                        <h1>Contract renewal</h1>
                     </div>
                     <!-- END PAGE TITLE -->
-
                 </div>
             </div>
             <!-- END PAGE HEAD -->
@@ -155,79 +146,91 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER --> 
-                    <h1>EXPIRING TENANT PAGE</h1>
 
-                    <table id="expireTenantTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Contract start</th>
-                                <th>Contract end</th>
-                                <th>Expire in</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                                ArrayList<Object[]> expiringList = (ArrayList<Object[]>) request.getAttribute("expiringTenantList");
-                                for (int i = 0; i < expiringList.size(); i++) {
-                                    TenantEntity tenant = (TenantEntity) ((expiringList.get(i))[0]);
-                                    int expireDuration = (Integer) ((expiringList.get(i))[1]);
-                                    long tenantId = tenant.getId();
-                                    String tenantName = tenant.getName();
-                                    String descriptionString = "";
-                                    String contractStart = tenant.getTenantContract().getStartTimestamp().toString();
-                                    String contractEnd = tenant.getTenantContract().getEndTimestamp().toString();
-                                    ArrayList<String> descriptionList = tenant.getDescription();
-                                    for (int j = 0; j < descriptionList.size(); j++) {
-                                        descriptionString = descriptionString + descriptionList.get(j);
-                                    }
-                                    descriptionString = descriptionString.replaceAll("\n", "<br>");
-                                    long expireDate = tenant.getTenantContract().getEndTimestamp().getTime();
-                                    long currentDate = (new java.util.Date()).getTime();
-                            %>
-                            <tr>
-                                <td><%=tenantId%></td>
-                                <td><%=tenantName%></td>
-                                <td><%=descriptionString%></td>
-                                <td><%=contractStart%></td>
-                                <td><%=contractEnd%></td>
-                                <td><%=expireDuration%> month(s)</td>
-                                <td>
-                                    <a onclick="return confirm('Proceed send contract renewal email?')"
-                                       href="SendContractRenewalEmail?expireTenantId=<%=tenantId%>">
-                                        SEND PROMPT EMAIL</a><br>
-                                    <a onclick="return confirm('Proceed with contract renewal?')"
-                                       href="RenewContract?tenantId=<%=tenantId%>">
-                                        PROPOSE CONTRACT RENEWAL</a>
-                                    <%
-                                        if (expireDate <= currentDate) {
-                                    %>
-                                    <br><a onclick="return confirm('Proceed delete this record?')"
-                                           href="DeleteExpireTenant?expireTenantId=<%=tenantId%>">
-                                        DELETE</a>
-                                        <%
-                                            }
-                                        %>
-                                </td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </tbody>
+
+                    <%
+                        TenantEntity tenant = (TenantEntity) request.getAttribute("renewTenant");
+                        String name = tenant.getName();
+                        String type = tenant.getBusinessType();
+                        ArrayList<String> descripList = tenant.getDescription();
+                        String descripString = "";
+                        for (int i = 0; i < descripList.size(); i++) {
+                            descripString = descripString + descripList.get(i);
+                        }
+                        descripString = descripString.replaceAll("\n", "<br>");
+                        ArrayList<UnitEntity> unitList = new ArrayList<UnitEntity>(tenant.getUnits());
+                        String unitString = "";
+                        for (int i = 0; i < unitList.size(); i++) {
+                            unitString = unitString + unitList.get(i).getLocationCode() + "<br>";
+                        }
+                        String oldStart = tenant.getTenantContract().getStartTimestamp().toString();
+                        String oldEnd = tenant.getTenantContract().getEndTimestamp().toString();
+
+                        LeasingSystemRequestEntity leaseRequest
+                                = (LeasingSystemRequestEntity) request.getAttribute("leasingRequestInstance");
+                        String newStart = leaseRequest.getRenewStartDate().toString();
+                        String newEnd = leaseRequest.getRenewEndDate().toString();
+                        double newRate = leaseRequest.getRenewRate();
+                        double newDeposit = leaseRequest.getRenewDeposit();
+                        ArrayList<String> newDescripList = leaseRequest.getRenewDescription();
+                        String newDescripString = "";
+                        for (int i = 0; i < newDescripList.size(); i++) {
+                            newDescripString = newDescripString + newDescripList.get(i);
+                        }
+                        newDescripString = newDescripString.replaceAll("\n", "<br>");
+                    %>
+
+                    <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <tr>
+                            <th>Name:</th>
+                            <td><%=name%></td>
+                        </tr>
+                        <tr>
+                            <th>Type</th>
+                            <td><%=type%></td>
+                        </tr>
+                        <tr>
+                            <th>Description:</th>
+                            <td><%=descripString%></td>
+                        </tr>
+                        <tr>
+                            <th>Units</th>
+                            <td><%=unitString%></td>
+                        </tr>
+                        <tr>
+                            <th>Old contract start</th>
+                            <td><%=oldStart%></td>
+                        </tr>
+                        <tr>
+                            <th>Old contract end</th>
+                            <td><%=oldEnd%></td>
+                        </tr>
+                        <tr>
+                            <th>New contract start</th>
+                            <td><%=newStart%></td>
+                        </tr>
+                        <tr>
+                            <th>New contract end</th>
+                            <td><%=newEnd%></td>
+                        </tr>
+                        <tr>
+                            <th>New contract rate</th>
+                            <td><%=newRate%></td>
+                        </tr>
+                        <tr>
+                            <th>New contract deposit</th>
+                            <td><%=newDeposit%></td>
+                        </tr>
+                        <tr>
+                            <th>New contract description</th>
+                            <td><%=newDescripString%></td>
+                        </tr>
+
                     </table>
-                    <script>
-                        $(document).ready(function () {
-                            $('#expireTenantTable').DataTable({
-                                "order": [[3, "desc"]]
-                            });
-                        });
-                    </script>   
 
-
-
+                    <form action="BackToViewAllLeasingRequests">
+                        <button type="submit" class="btn btn-default">BACK</button>
+                    </form>
                     <!-- END PAGE CONTENT INNER -->
                 </div>
             </div>
@@ -251,6 +254,7 @@
         <script src="../assets/global/plugins/respond.min.js"></script>
         <script src="../assets/global/plugins/excanvas.min.js"></script> 
         <![endif]-->
+        <!--        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
         <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -268,82 +272,15 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-                        jQuery(document).ready(function () {
-                            Custom.init(); // init custom core components
-                            Layout.init(); // init current layout
-                            UIIdleTimeout.init(); // init Idle Timeout
-                            UIToastr.init(); // init Toastr Alert
-                        });
-        </script>
-        <%
-            if (request.getAttribute("ContractRenewEmailStatus") != null) {
-                String contractRenewEmailStatus = (String) request.getAttribute("ContractRenewEmailStatus");
-                if (contractRenewEmailStatus.contains("Error")) {
-        %>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.error('<%= contractRenewEmailStatus%>');
+            jQuery(document).ready(function () {
+                Custom.init(); // init custom core components
+                Layout.init(); // init current layout
+                UIIdleTimeout.init(); // init Idle Timeout
+                UIToastr.init(); // init Toastr Alert
             });
         </script>
-        <%} else {%>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.success('<%= contractRenewEmailStatus%>');
-            });
-        </script>
-        <%
-                }
-            }
-        %>
-
-        <%
-            if (request.getAttribute("deleteTenantStatus") != null) {
-                String deleteTenantStatus = (String) request.getAttribute("deleteTenantStatus");
-                if (deleteTenantStatus.contains("Unsuccessful")) {
-        %>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.error('<%= deleteTenantStatus%>');
-            });
-        </script>
-        <%} else {%>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.success('<%= deleteTenantStatus%>');
-            });
-        </script>
-        <%
-                }
-            }
-        %>
-        
-         <%
-            if (request.getAttribute("renewProposeStatus") != null) {
-                String renewProposeStatus = (String) request.getAttribute("renewProposeStatus");
-                if (renewProposeStatus.contains("Unsuccessful")) {
-        %>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.error('<%= renewProposeStatus%>');
-            });
-        </script>
-        <%} else {%>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.success('<%= renewProposeStatus%>');
-            });
-        </script>
-        <%
-                }
-            }
-        %>
         <!-- END JAVASCRIPTS -->
+
     </body>
     <!-- END BODY -->
 </html>

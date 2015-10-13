@@ -1,17 +1,18 @@
 <%-- 
-    Document   : LeasingOfficerViewExpiringTenant
-    Created on : Oct 10, 2015, 1:31:35 PM
+    Document   : LeasingOfficerViewAllEvent
+    Created on : Oct 13, 2015, 9:17:46 PM
     Author     : PhiLong
 --%>
 
-<%@page import="mms2.leasing.entity.TenantEntity"%>
+<%@page import="mms2.leasing.entity.EventEntity"%>
+<%@page import="mms2.leasing.entity.LeasingSystemRequestEntity"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>Merlion Leasing System | Zone Declare</title>
+        <title>Merlion Leasing System | Event Listing</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -60,12 +61,12 @@
                     <!-- END RESPONSIVE MENU TOGGLER -->
                     <!-- BEGIN TOP NAVIGATION MENU -->
                     <div class="top-menu">
-                        <ul class="nav navbar-nav pull-right">
+                        <ul class="nav navbar-nav pull-right">                         
                             <!-- BEGIN USER LOGIN DROPDOWN -->
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 
-                                    <span class="username username-hide-mobile">Welcome, <%=(String) request.getSession().getAttribute("staffFirstName")%></span>
+                                    <span class="username username-hide-mobile">Welcome, <%= (String) request.getSession().getAttribute("staffFirstName")%></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
@@ -101,7 +102,7 @@
                     <div class="hor-menu ">
                         <ul class="nav navbar-nav">
                             <li class="">
-                                <a href="DeclareZone">Zone declaration</a>
+                                <a href="DeclareZone">Zone declare</a>
                             </li>
                             <li class="">
                                 <a href="ChooseUnitForPublicBidding">Open public bidding</a>
@@ -110,23 +111,13 @@
                             <li class="">
                                 <a href="ViewAllPublicLongTermApplication">View public bidders</a>
                             </li>
-                            <li class="menu-dropdown classic-menu-dropdown">
-                                <a class="active" data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
-                                    Tenant<i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-left">
-                                    <li class="">
-                                        <a href="ViewAllTenants">View all tenants</a>
-                                    </li>
-                                    <li class="">
-                                        <a href="ViewExpiringTenant">View expiring tenants</a>
-                                    </li>
-                                </ul>
-                            </li>
+
                             <li class="">
+                                <a href="ViewAllTenants">View tenants</a>
+                            </li>
+                            <li class="active">
                                 <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
                             </li>
-
                         </ul>    
                     </div>
                     <!-- END MEGA MENU -->
@@ -142,7 +133,7 @@
                 <div class="container">
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">  
-                        <h1>Expiring tenants list</h1>
+                        <h1>Event Listing </h1>
                     </div>
                     <!-- END PAGE TITLE -->
 
@@ -155,78 +146,82 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER --> 
-                    <h1>EXPIRING TENANT PAGE</h1>
 
-                    <table id="expireTenantTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Contract start</th>
-                                <th>Contract end</th>
-                                <th>Expire in</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                                ArrayList<Object[]> expiringList = (ArrayList<Object[]>) request.getAttribute("expiringTenantList");
-                                for (int i = 0; i < expiringList.size(); i++) {
-                                    TenantEntity tenant = (TenantEntity) ((expiringList.get(i))[0]);
-                                    int expireDuration = (Integer) ((expiringList.get(i))[1]);
-                                    long tenantId = tenant.getId();
-                                    String tenantName = tenant.getName();
-                                    String descriptionString = "";
-                                    String contractStart = tenant.getTenantContract().getStartTimestamp().toString();
-                                    String contractEnd = tenant.getTenantContract().getEndTimestamp().toString();
-                                    ArrayList<String> descriptionList = tenant.getDescription();
-                                    for (int j = 0; j < descriptionList.size(); j++) {
-                                        descriptionString = descriptionString + descriptionList.get(j);
-                                    }
-                                    descriptionString = descriptionString.replaceAll("\n", "<br>");
-                                    long expireDate = tenant.getTenantContract().getEndTimestamp().getTime();
-                                    long currentDate = (new java.util.Date()).getTime();
-                            %>
-                            <tr>
-                                <td><%=tenantId%></td>
-                                <td><%=tenantName%></td>
-                                <td><%=descriptionString%></td>
-                                <td><%=contractStart%></td>
-                                <td><%=contractEnd%></td>
-                                <td><%=expireDuration%> month(s)</td>
-                                <td>
-                                    <a onclick="return confirm('Proceed send contract renewal email?')"
-                                       href="SendContractRenewalEmail?expireTenantId=<%=tenantId%>">
-                                        SEND PROMPT EMAIL</a><br>
-                                    <a onclick="return confirm('Proceed with contract renewal?')"
-                                       href="RenewContract?tenantId=<%=tenantId%>">
-                                        PROPOSE CONTRACT RENEWAL</a>
-                                    <%
-                                        if (expireDate <= currentDate) {
-                                    %>
-                                    <br><a onclick="return confirm('Proceed delete this record?')"
-                                           href="DeleteExpireTenant?expireTenantId=<%=tenantId%>">
-                                        DELETE</a>
+
+                    <form>
+                        <table id="leasingRequestTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Event host</th>
+                                    <th>Tel</th>
+                                    <th>Email</th>
+                                    <th>Description</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Units</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    ArrayList<EventEntity> eventList = (ArrayList<EventEntity>) request.getAttribute("allEventList");
+                                    for (int i = 0; i < eventList.size(); i++) {
+                                        EventEntity event = eventList.get(i);
+                                        String eventId = String.valueOf(event.getId());
+                                        String hostName = event.getHostName();
+                                        String tel = event.getTel();
+                                        String email = event.getEmail();
+                                        ArrayList<String> descriptionList = event.getDescription();
+                                        String descriptionString = "";
+                                        for (int j = 0; j < descriptionList.size(); j++) {
+                                            descriptionString = descriptionString + descriptionList.get(j);
+                                        }
+                                        descriptionString = descriptionString.replaceAll("\n", "<br>");
+                                        String eventStart = event.getStartDate().toString();
+                                        String eventEnd = event.getEndDate().toString();
+                                        ArrayList<String> unitList = event.getUnitList();
+                                        String unitString = "";
+                                        for (int j = 0; j < unitList.size(); j++) {
+                                            unitString = unitString + unitList.get(j) + "<br>";
+                                        }
+                                %>
+                                <tr>
+                                    <td><%=eventId%></td>
+                                    <td><%=hostName%></td>
+                                    <td><%=tel%></td>
+                                    <td><%=email%></td>
+                                    <td><%=descriptionString%></td>
+                                    <td><%=eventStart%></td>
+                                    <td><%=eventEnd%></td>
+                                    <td><%=unitString%></td>
+                                    <td>
                                         <%
-                                            }
+                                        long currentDate = (new java.util.Date()).getTime();
+                                        long eventEndLong = event.getEndDate().getTime();
+                                            if (eventEndLong < currentDate) {
                                         %>
-                                </td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </tbody>
-                    </table>
+                                        <a onclick="return confirm('Proceed deleting this record?')"
+                                           href="DeleteEvent?eventId=<%=eventId%>">
+                                            DELETE</a>
+                                            <%
+                                                }
+                                            %>
+                                    </td>
+                                </tr>
+                                <%
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                    </form>
                     <script>
                         $(document).ready(function () {
-                            $('#expireTenantTable').DataTable({
+                            $('#leasingRequestTable').DataTable({
                                 "order": [[3, "desc"]]
                             });
                         });
                     </script>   
-
-
 
                     <!-- END PAGE CONTENT INNER -->
                 </div>
@@ -234,7 +229,6 @@
             <!-- END PAGE CONTENT -->
         </div>
         <!-- END PAGE CONTAINER -->
-
         <!-- BEGIN FOOTER -->
         <div class="page-footer">
             <div class="container">
@@ -251,6 +245,7 @@
         <script src="../assets/global/plugins/respond.min.js"></script>
         <script src="../assets/global/plugins/excanvas.min.js"></script> 
         <![endif]-->
+        <!--        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
         <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -276,44 +271,38 @@
                         });
         </script>
         <%
-            if (request.getAttribute("ContractRenewEmailStatus") != null) {
-                String contractRenewEmailStatus = (String) request.getAttribute("ContractRenewEmailStatus");
-                if (contractRenewEmailStatus.contains("Error")) {
+            String deleteRequestStatus = null;
+            if (request.getAttribute("deleteRequestStatus") != null) {
+                deleteRequestStatus = (String) request.getAttribute("deleteRequestStatus");
         %>
         <script language="javascript">
             $(document).ready(function () {
                 // show when page load
-                toastr.error('<%= contractRenewEmailStatus%>');
-            });
-        </script>
-        <%} else {%>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.success('<%= contractRenewEmailStatus%>');
+                toastr.success('<%=deleteRequestStatus%>');
             });
         </script>
         <%
-                }
             }
         %>
 
         <%
-            if (request.getAttribute("deleteTenantStatus") != null) {
-                String deleteTenantStatus = (String) request.getAttribute("deleteTenantStatus");
-                if (deleteTenantStatus.contains("Unsuccessful")) {
+            if (request.getAttribute("deleteEventStatus") != null) {
+                String deleteEventStatus = (String) request.getAttribute("deleteEventStatus");
+                if (deleteEventStatus.contains("Unsuccessful")) {
         %>
         <script language="javascript">
             $(document).ready(function () {
                 // show when page load
-                toastr.error('<%= deleteTenantStatus%>');
+                toastr.error('<%=deleteEventStatus%>');
             });
         </script>
-        <%} else {%>
+        <%
+        } else {
+        %>
         <script language="javascript">
             $(document).ready(function () {
                 // show when page load
-                toastr.success('<%= deleteTenantStatus%>');
+                toastr.success('<%=deleteEventStatus%>');
             });
         </script>
         <%
@@ -321,28 +310,7 @@
             }
         %>
         
-         <%
-            if (request.getAttribute("renewProposeStatus") != null) {
-                String renewProposeStatus = (String) request.getAttribute("renewProposeStatus");
-                if (renewProposeStatus.contains("Unsuccessful")) {
-        %>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.error('<%= renewProposeStatus%>');
-            });
-        </script>
-        <%} else {%>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.success('<%= renewProposeStatus%>');
-            });
-        </script>
-        <%
-                }
-            }
-        %>
+        
         <!-- END JAVASCRIPTS -->
     </body>
     <!-- END BODY -->

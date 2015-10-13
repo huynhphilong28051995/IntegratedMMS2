@@ -59,4 +59,16 @@ public class TenantManager {
         long tenantId = Long.parseLong(request.getParameter("expireTenantId"));
         return tenantManagerSessionLocal.sendContractRenewalEmail(tenantId);
     }
+    public ArrayList<TenantEntity> getAllPendingTenant(HttpServletRequest request){
+        String mallName  = (String) request.getSession().getAttribute("mallName");
+        return tenantManagerSessionLocal.getAllPendingTenant(mallName);
+    }
+    public String officializePendingTenant(HttpServletRequest request){
+        long tenantId = Long.parseLong(request.getParameter("tenantId"));
+        return tenantManagerSessionLocal.officializePendingTenant(tenantId);
+    }
+    public String deleteExpireTenant(HttpServletRequest request){
+        long tenantId =  Long.parseLong(request.getParameter("expireTenantId"));
+        return tenantManagerSessionLocal.deleteExpireTenant(tenantId);
+    }
 }

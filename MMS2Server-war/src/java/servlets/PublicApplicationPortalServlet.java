@@ -122,14 +122,15 @@ public class PublicApplicationPortalServlet extends HttpServlet {
                     doSaveApplicantInfoToSession("Event", request);
                     page = "PublicApplicationPortalEventApplicantConfirm";
                     break;
+                case "SubmitEventApplication":
+                    doSubmitEventApplication(request);
+                    page = "PublicApplicationPortalEndPage";
+                    break;
 /////////////////////////////////////////////////////////////////////////LONG TERM
                 case "ApplyLongTerm":
                     request.getSession().removeAttribute("applyUnitList");
                     request.getSession().removeAttribute("errorMessage");
                     request.getSession().setAttribute("levelCode", "LV1");
-                    System.out.println((String) request.getSession().getAttribute("mallName")
-                            + "              "
-                            + (String) request.getSession().getAttribute("levelCode"));
                     page = "PublicApplicationPortalLongTermApply";
                     break;
                 case "AddUnitToApplyUnitList":
@@ -199,7 +200,10 @@ public class PublicApplicationPortalServlet extends HttpServlet {
         LongTermApplicationManager longTermManager = new LongTermApplicationManager(longTermApplicationManagerSessionLocal);
         longTermManager.createLongTermApplication(request);
         System.out.println("CONFIRMED");
-
+    }
+    public void doSubmitEventApplication(HttpServletRequest request){
+        EventManager eventManager = new EventManager(eventManagerSessionLocal);
+        eventManager.submitEventApplication(request);
     }
 
     public String doAddUnitToApplyUnitList(HttpServletRequest request) {

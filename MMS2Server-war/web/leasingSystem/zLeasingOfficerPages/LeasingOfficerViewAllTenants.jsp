@@ -3,6 +3,7 @@
     Created on : Sep 19, 2015, 7:06:31 PM
     Author     : PhiLong
 --%>
+<%@page import="mms2.leasing.entity.UnitEntity"%>
 <%@page import="mms2.leasing.entity.TenantEntity"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -43,7 +44,7 @@
     </head>
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
-         <%String IP = (String) request.getSession().getAttribute("IP");%>
+        <%String IP = (String) request.getSession().getAttribute("IP");%>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -146,7 +147,7 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
-                    
+
 
                     <form action="ViewTenantDetail">
                         <table id="tenantTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
@@ -167,11 +168,11 @@
                                         String tenantId = String.valueOf(tenant.getId());
                                         String tenantName = tenant.getName();
                                         String tenantBusinessType = tenant.getBusinessType();
-                                        String contractId = "";
-                                        if (tenant.getTenantContract() != null) {
-                                            contractId = String.valueOf(tenant.getTenantContract().getId());
-                                        } else {
-                                            contractId = "N.A.";
+                                        ArrayList<UnitEntity> unitList = new ArrayList<UnitEntity>(tenant.getUnits());
+                                        String unitString="";
+                                        for(int j=0; j<unitList.size(); j++){
+                                            String locationCode = unitList.get(j).getLocationCode();
+                                            unitString = unitString+locationCode+"<br>";
                                         }
 
                                 %>
@@ -180,7 +181,7 @@
                                     <td><%=tenantId%></td>
                                     <td><%=tenantName%></td>
                                     <td><%=tenantBusinessType%></td>
-                                    <td><%=contractId%></td>
+                                    <td><%=unitString%></td>
                                 </tr>
                                 <%
                                     }
@@ -260,20 +261,20 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-            jQuery(document).ready(function () {
-                Custom.init(); // init custom core components
-                Layout.init(); // init current layout
-                UIIdleTimeout.init(); // init Idle Timeout
-                UIToastr.init(); // init Toastr Alert
-            });
+                        jQuery(document).ready(function () {
+                            Custom.init(); // init custom core components
+                            Layout.init(); // init current layout
+                            UIIdleTimeout.init(); // init Idle Timeout
+                            UIToastr.init(); // init Toastr Alert
+                        });
         </script>
         <% String referrer = request.getHeader("referer");
             String query = request.getQueryString();
             String timestamp = null;
         %>
-        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
+        <% if (referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/login")
+                    || referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/logout")
+                    || referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/adminHome")) {
                 timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
                 if ("=continue".equals(query)) {
         %>        

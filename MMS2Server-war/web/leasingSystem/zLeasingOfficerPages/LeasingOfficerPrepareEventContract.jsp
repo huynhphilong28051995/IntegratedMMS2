@@ -1,17 +1,17 @@
 <%-- 
-    Document   : LeasingOfficerViewExpiringTenant
-    Created on : Oct 10, 2015, 1:31:35 PM
+    Document   : LeasingOfficerPrepareEventContract
+    Created on : Oct 13, 2015, 7:52:12 PM
     Author     : PhiLong
 --%>
 
-<%@page import="mms2.leasing.entity.TenantEntity"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="mms2.leasing.entity.EventEntity"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>Merlion Leasing System | Zone Declare</title>
+        <title>Merlion Leasing System | Event Contract</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -101,7 +101,7 @@
                     <div class="hor-menu ">
                         <ul class="nav navbar-nav">
                             <li class="">
-                                <a href="DeclareZone">Zone declaration</a>
+                                <a href="DeclareZone">Event Contract</a>
                             </li>
                             <li class="">
                                 <a href="ChooseUnitForPublicBidding">Open public bidding</a>
@@ -110,23 +110,12 @@
                             <li class="">
                                 <a href="ViewAllPublicLongTermApplication">View public bidders</a>
                             </li>
-                            <li class="menu-dropdown classic-menu-dropdown">
-                                <a class="active" data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
-                                    Tenant<i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-left">
-                                    <li class="">
-                                        <a href="ViewAllTenants">View all tenants</a>
-                                    </li>
-                                    <li class="">
-                                        <a href="ViewExpiringTenant">View expiring tenants</a>
-                                    </li>
-                                </ul>
+                            <li class="active">
+                                <a href="ViewAllTenants">View tenants</a>
                             </li>
                             <li class="">
                                 <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
                             </li>
-
                         </ul>    
                     </div>
                     <!-- END MEGA MENU -->
@@ -142,7 +131,7 @@
                 <div class="container">
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">  
-                        <h1>Expiring tenants list</h1>
+                        <h1>Tenants Listing </h1>
                     </div>
                     <!-- END PAGE TITLE -->
 
@@ -155,79 +144,66 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER --> 
-                    <h1>EXPIRING TENANT PAGE</h1>
 
-                    <table id="expireTenantTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                        <thead>
+
+                    <%
+                        EventEntity event = (EventEntity) request.getAttribute("event");
+                        long eventId = event.getId();
+                        request.getSession().setAttribute("acceptEventId", eventId);
+                        String name = event.getHostName();
+                        String tel = event.getTel();
+                        String email = event.getEmail();
+                        ArrayList<String> descripList = event.getDescription();
+                        String descripString = "";
+                        for (int i = 0; i < descripList.size(); i++) {
+                            descripString = descripString + descripList.get(i);
+                        }
+                        descripString = descripString.replaceAll("\n", "<br>");
+                        ArrayList<String> unitList = event.getUnitList();
+                        String unitString = "";
+                        for (int i = 0; i < unitList.size(); i++) {
+                            unitString = unitString + unitList.get(i) + "<br>";
+                        }
+                        String eventStart = event.getStartDate().toString();
+                        String eventEnd = event.getEndDate().toString();
+                    %>
+                    <form action="PersistEventApplicationAcceptance">
+                        <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
+                                <th>Host name:</th>
+                                <td><%=name%></td>
+                            </tr>
+                            <tr>
+                                <th>Tel</th>
+                                <td><%=tel%></td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td><%=email%></td>
+                            </tr>
+                            <tr>
                                 <th>Description</th>
-                                <th>Contract start</th>
-                                <th>Contract end</th>
-                                <th>Expire in</th>
-                                <th></th>
+                                <td><%=descripString%></td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                                ArrayList<Object[]> expiringList = (ArrayList<Object[]>) request.getAttribute("expiringTenantList");
-                                for (int i = 0; i < expiringList.size(); i++) {
-                                    TenantEntity tenant = (TenantEntity) ((expiringList.get(i))[0]);
-                                    int expireDuration = (Integer) ((expiringList.get(i))[1]);
-                                    long tenantId = tenant.getId();
-                                    String tenantName = tenant.getName();
-                                    String descriptionString = "";
-                                    String contractStart = tenant.getTenantContract().getStartTimestamp().toString();
-                                    String contractEnd = tenant.getTenantContract().getEndTimestamp().toString();
-                                    ArrayList<String> descriptionList = tenant.getDescription();
-                                    for (int j = 0; j < descriptionList.size(); j++) {
-                                        descriptionString = descriptionString + descriptionList.get(j);
-                                    }
-                                    descriptionString = descriptionString.replaceAll("\n", "<br>");
-                                    long expireDate = tenant.getTenantContract().getEndTimestamp().getTime();
-                                    long currentDate = (new java.util.Date()).getTime();
-                            %>
                             <tr>
-                                <td><%=tenantId%></td>
-                                <td><%=tenantName%></td>
-                                <td><%=descriptionString%></td>
-                                <td><%=contractStart%></td>
-                                <td><%=contractEnd%></td>
-                                <td><%=expireDuration%> month(s)</td>
-                                <td>
-                                    <a onclick="return confirm('Proceed send contract renewal email?')"
-                                       href="SendContractRenewalEmail?expireTenantId=<%=tenantId%>">
-                                        SEND PROMPT EMAIL</a><br>
-                                    <a onclick="return confirm('Proceed with contract renewal?')"
-                                       href="RenewContract?tenantId=<%=tenantId%>">
-                                        PROPOSE CONTRACT RENEWAL</a>
-                                    <%
-                                        if (expireDate <= currentDate) {
-                                    %>
-                                    <br><a onclick="return confirm('Proceed delete this record?')"
-                                           href="DeleteExpireTenant?expireTenantId=<%=tenantId%>">
-                                        DELETE</a>
-                                        <%
-                                            }
-                                        %>
-                                </td>
+                                <th>Units</th>
+                                <td><%=unitString%></td>
                             </tr>
-                            <%
-                                }
-                            %>
-                        </tbody>
-                    </table>
-                    <script>
-                        $(document).ready(function () {
-                            $('#expireTenantTable').DataTable({
-                                "order": [[3, "desc"]]
-                            });
-                        });
-                    </script>   
-
-
-
+                            <tr>
+                                <th>Start date</th>
+                                <td><%=eventStart%></td>
+                            </tr>
+                            <tr>
+                                <th>End date</th>
+                                <td><%=eventEnd%></td>
+                            </tr>
+                            <tr>
+                                <th>Contract amount</th>
+                                <td><input type="number" name="contractAmount"></td>
+                            </tr>
+                        </table>
+                        <button class="btn-default" onclick="return confirm('Proceed with this action?')">Proceed</button>
+                    </form>
                     <!-- END PAGE CONTENT INNER -->
                 </div>
             </div>
@@ -251,6 +227,7 @@
         <script src="../assets/global/plugins/respond.min.js"></script>
         <script src="../assets/global/plugins/excanvas.min.js"></script> 
         <![endif]-->
+        <!--        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
         <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -268,82 +245,16 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-                        jQuery(document).ready(function () {
-                            Custom.init(); // init custom core components
-                            Layout.init(); // init current layout
-                            UIIdleTimeout.init(); // init Idle Timeout
-                            UIToastr.init(); // init Toastr Alert
-                        });
+                            jQuery(document).ready(function () {
+                                Custom.init(); // init custom core components
+                                Layout.init(); // init current layout
+                                UIIdleTimeout.init(); // init Idle Timeout
+                                UIToastr.init(); // init Toastr Alert
+                            });
         </script>
-        <%
-            if (request.getAttribute("ContractRenewEmailStatus") != null) {
-                String contractRenewEmailStatus = (String) request.getAttribute("ContractRenewEmailStatus");
-                if (contractRenewEmailStatus.contains("Error")) {
-        %>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.error('<%= contractRenewEmailStatus%>');
-            });
-        </script>
-        <%} else {%>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.success('<%= contractRenewEmailStatus%>');
-            });
-        </script>
-        <%
-                }
-            }
-        %>
-
-        <%
-            if (request.getAttribute("deleteTenantStatus") != null) {
-                String deleteTenantStatus = (String) request.getAttribute("deleteTenantStatus");
-                if (deleteTenantStatus.contains("Unsuccessful")) {
-        %>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.error('<%= deleteTenantStatus%>');
-            });
-        </script>
-        <%} else {%>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.success('<%= deleteTenantStatus%>');
-            });
-        </script>
-        <%
-                }
-            }
-        %>
-        
-         <%
-            if (request.getAttribute("renewProposeStatus") != null) {
-                String renewProposeStatus = (String) request.getAttribute("renewProposeStatus");
-                if (renewProposeStatus.contains("Unsuccessful")) {
-        %>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.error('<%= renewProposeStatus%>');
-            });
-        </script>
-        <%} else {%>
-        <script language="javascript">
-            $(document).ready(function () {
-                // show when page load
-                toastr.success('<%= renewProposeStatus%>');
-            });
-        </script>
-        <%
-                }
-            }
-        %>
+ 
         <!-- END JAVASCRIPTS -->
+
     </body>
     <!-- END BODY -->
 </html>

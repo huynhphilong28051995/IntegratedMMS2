@@ -5,11 +5,13 @@
  */
 package manager;
 
+import java.sql.Timestamp;
 import mms2.leasing.entity.LeasingSystemRequestEntity;
 import mms2.leasing.session.LeasingSystemRequestManagerSessionLocal;
 import java.util.ArrayList;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
+import mms2.leasing.entity.TenantEntity;
 
 /**
  *
@@ -87,5 +89,20 @@ public class LeasingRequestManager {
     public void deleteLeasingRequestById(HttpServletRequest request){
         Long leasingRequestId = Long.parseLong(request.getParameter("leasingRequestId"));
         leasingSystemRequestManagerSessionLocal.deleteLeasingRequestById(leasingRequestId);
+    }
+    public String proposeRenew(HttpServletRequest request){
+        TenantEntity tenant = (TenantEntity)request.getSession().getAttribute("renewTenant");
+        long tenantId = tenant.getId();
+        Timestamp newStart  =Timestamp.valueOf(request.getParameter("newStart")+" 00:00:00");
+        Timestamp newEnd = Timestamp.valueOf(request.getParameter("newEnd")+" 00:00:00");
+        double newRate = Double.parseDouble(request.getParameter("newRate"));
+        double newDeposit  = Double.parseDouble(request.getParameter("newDeposit"));
+        String newDescription = request.getParameter("newDescription");
+        String requestDescription  = request.getParameter("requestDescription");
+         String mallName = (String) request.getSession().getAttribute("mallName");
+        String staffUserName = (String) request.getSession().getAttribute("staffUserName");
+        return leasingSystemRequestManagerSessionLocal.createRenewRequest(tenantId,
+                newStart, newEnd, newRate,newDeposit, newDescription, requestDescription, mallName, 
+                staffUserName);
     }
 }
