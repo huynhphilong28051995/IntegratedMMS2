@@ -15,11 +15,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.ejb.Stateless;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import mms2.leasing.entity.LeasingSystemRequestEntity;
 
 /**
@@ -27,7 +28,7 @@ import mms2.leasing.entity.LeasingSystemRequestEntity;
  * @author PhiLong
  */
 @Stateless
-public class TenantManagerSession implements TenantManagerSessionLocal {
+public class TenantManagerSession implements TenantManagerSessionLocal{
 
     @PersistenceContext
     private EntityManager em;
@@ -35,9 +36,10 @@ public class TenantManagerSession implements TenantManagerSessionLocal {
     public TenantManagerSession() {
     }
 
+    @WebMethod
     @Override
-    public TenantEntity createTenant(String mallName, String name, String businessType, String descriptionString,
-            String address, String email, String tel) {
+    public TenantEntity createTenant(String mallName, String name, String businessType,String descriptionString,
+            String address, String email,String tel) {
         ArrayList<String> descriptionStringList = new ArrayList<String>();
         while (descriptionString.length() > 0) {
             int length = descriptionString.length();
