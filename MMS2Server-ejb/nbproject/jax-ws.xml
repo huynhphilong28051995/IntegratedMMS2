@@ -7,8 +7,8 @@
     <service name="ItemSessionWS">
       <implementation-class>mms2.pos.session.ItemSessionWS</implementation-class>
     </service>
-    <service name="SaleSessionES">
-      <implementation-class>mms2.pos.session.SaleSessionES</implementation-class>
+    <service name="SaleSessionWS">
+      <implementation-class>mms2.pos.session.SaleSessionWS</implementation-class>
     </service>
   </services>
   <clients/>

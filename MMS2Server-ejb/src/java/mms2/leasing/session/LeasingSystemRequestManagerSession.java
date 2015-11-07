@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import mms2.leasing.entity.LeasingSystemRequestEntity;
 import mms2.leasing.entity.LongTermApplicationEntity;
 import java.util.ArrayList;
+import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -207,10 +208,16 @@ public class LeasingSystemRequestManagerSession implements LeasingSystemRequestM
                                 + "WHERE re.applicationId =:inApplicationId");
                         queryTemp.setParameter("inApplicationId", tempApplicationId);
                         LeasingSystemRequestEntity tempRequest = (LeasingSystemRequestEntity) queryTemp.getResultList().get(0);
-                        em.remove(tempRequest);
-                        em.remove(tempApplication);
-                        em.flush();
-                        break;
+                        if (!Objects.equals(tempRequest.getId(), requestId)) {
+                            em.remove(tempRequest);
+                            em.remove(tempApplication);
+                            em.flush();
+                            break;
+                        } else {
+                            em.remove(tempApplication);
+                            em.flush();
+                            break;
+                        }
                     }
                 }
             }

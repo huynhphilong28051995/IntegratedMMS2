@@ -57,14 +57,19 @@ public class CorporateAdministrationBean implements CorporateAdministrationBeanL
                 String password  = employee.getPassword();
                 String timestamp = employee.getTimestamp();
                 String position = employee.getPositions().getPositionTitle();
-                String employeeLevel = employee.getLevelTypes().getLevelName();
+                String levelName = employee.getLevelTypes().getLevelName();
+                String levelTypeChar = employee.getLevelTypes().getLevelTypeChar();
+                String employeeDept = employee.getDepartments().getDepartmentName();
                 list.add(firstName);
                 list.add(employeeID);
                 list.add(email);
                 list.add(password);
                 list.add(timestamp);
                 list.add(position);
-                list.add(employeeLevel);
+                list.add(levelName);
+                //C for Corporate, L for Local, M for Mall
+                list.add(levelTypeChar); 
+                list.add(employeeDept);
                 
             } catch (Exception ex) {
                   return list;
