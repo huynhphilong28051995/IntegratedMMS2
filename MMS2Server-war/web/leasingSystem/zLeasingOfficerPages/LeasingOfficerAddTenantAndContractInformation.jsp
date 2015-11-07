@@ -64,7 +64,7 @@
                 </div>
                 <div class="form-group">
                     <label for="tenantDescription">Tenant description :</label><br/>
-                    <textarea resize="none" name="tenantDescription" rows="10" cols="180" placeholder="Enter tenant description"></textarea>
+                    <textarea  name="tenantDescription" rows="10" cols="180" placeholder="Enter tenant description"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="tenantAddress">Tenant address :</label>

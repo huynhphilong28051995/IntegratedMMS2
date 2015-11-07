@@ -86,10 +86,13 @@ public class LeasingControllerServlet extends HttpServlet {
             Long leasingRequestId;
             ArrayList<LeasingSystemRequestEntity> requestList;
             boolean alreadyInitialized;
-
+            TenantEntity tenant;
+            ArrayList<TenantEntity> allTenantList;
+            
             switch (page) {
 //START-FUNCTION FOR LEASING MANAGER
                 case "ViewAllRequests":
+                    System.err.println("IT GOES HERE");
                     page = "LeasingManagerViewAllRequests";
                     break;
                 case "ViewLeasingRequestDetail":
@@ -186,6 +189,29 @@ public class LeasingControllerServlet extends HttpServlet {
                         page = "LeasingManagerViewAllRequests";
                     }
                     break;
+                case "ViewTenantMixLM":
+                    request.getSession().setAttribute("levelCode", "LV1");
+                    request.getSession().removeAttribute("unitListToAddTenant");
+                    request.getSession().removeAttribute("errorMessage");
+                    page = "LeasingManagerViewTenantMix";
+                    break;
+                case "ChangeLevelTenantMixLM":
+                    levelCode = request.getParameter("levelCode");
+                    request.getSession().setAttribute("levelCode", levelCode);
+                    request.getSession().removeAttribute("errorMessage");
+                    page = "LeasingManagerViewTenantMix";
+                    break;
+                case "ViewCurrentTenantLM":
+                    allTenantList = doGetAllTenants(request);
+                    request.getSession().setAttribute("allTenantList", allTenantList);
+                    page = "LeasingManagerViewCurrentTenants";
+                    break;
+                case "ViewTenantDetailLM":
+                    tenant = doGetTenantById(request);
+                    request.setAttribute("detailedTenant", tenant);
+                    page = "LeasingOfficerViewTenantDetail";
+                    break;
+                    
 //END-FUNCTION FOR LEASING MANAGER
 //START-FUNCTION FOR LEASING OFFICER
                 case "LeasingOfficerMain":
@@ -250,12 +276,12 @@ public class LeasingControllerServlet extends HttpServlet {
                     break;
 
                 case "ViewAllTenants":
-                    ArrayList<TenantEntity> allTenantList = doGetAllTenants(request);
+                    allTenantList = doGetAllTenants(request);
                     request.getSession().setAttribute("allTenantList", allTenantList);
                     page = "LeasingOfficerViewAllTenants";
                     break;
                 case "ViewTenantDetail":
-                    TenantEntity tenant = doGetTenantById(request);
+                     tenant = doGetTenantById(request);
                     request.setAttribute("detailedTenant", tenant);
                     page = "LeasingOfficerViewTenantDetail";
                     break;
@@ -498,7 +524,8 @@ public class LeasingControllerServlet extends HttpServlet {
                 request.setAttribute("expiringTenantList", expiringTenantList);
             }
             if (page.equals("LeasingOfficerChooseUnitForTenant")
-                    || page.equals("LeasingOfficerChooseUnitForPublicBidding")) {
+                    || page.equals("LeasingOfficerChooseUnitForPublicBidding")
+                    || page.equals("LeasingManagerViewTenantMix")) {
                 numOfLevel = doGetNumOfLevel((String) request.getSession().getAttribute("mallName"));
                 request.getSession().setAttribute("numOfLevel", numOfLevel);
                 Vector unitColorVector = doGetAllUnitColorForCurrentMall(request);
@@ -517,19 +544,13 @@ public class LeasingControllerServlet extends HttpServlet {
                     || page.equals("LeasingManagerReviewFloorPlanPrototype")
                     || page.equals("LeasingManagerReviewCategoryPrototype")
                     || page.equals("LeasingOfficerChooseUnitForPublicBidding")
-                    || page.equals("LeasingManagerReviewOpenPublicBidPrototype")) {
+                    || page.equals("LeasingManagerReviewOpenPublicBidPrototype")
+                    || page.equals("LeasingManagerViewTenantMix")) {
                 numOfLevel = doGetNumOfLevel((String) request.getSession().getAttribute("mallName"));
                 request.getSession().setAttribute("numOfLevel", numOfLevel);
                 LevelEntity levelInstance = doGetLevel(request);
                 request.getSession().setAttribute("levelInstance", levelInstance);
             }
-//            if (page.equals("LeasingOfficerAddTenantAndContractInformation")) {
-//                mallName = (String) request.getSession().getAttribute("mallName");
-//                String locationCode = ((ArrayList<String>) request.getSession().getAttribute("unitListToAddTenant")).get(0);
-//
-//                ArrayList<String> businessTypeList = doGetUnitBusinessTypeList(mallName, locationCode);
-//                request.getSession().setAttribute("businessTypeList", businessTypeList);
-//            }
             if (page.equals("LeasingManagerViewAllRequests")) {
                 numOfLevel = doGetNumOfLevel((String) request.getSession().getAttribute("mallName"));
                 request.getSession().setAttribute("numOfLevel", numOfLevel);

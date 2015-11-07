@@ -59,8 +59,6 @@
                     <!-- BEGIN TOP NAVIGATION MENU -->
                     <div class="top-menu">
                         <ul class="nav navbar-nav pull-right">
-                            <span class="separator"></span>
-                            </li>
                             <!-- BEGIN USER LOGIN DROPDOWN -->
                             <li class="dropdown dropdown-user dropdown-dark">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -106,13 +104,37 @@
                             <li class="">
                                 <a href="ChooseUnitForPublicBidding">Open public bidding</a>
                             </li>
-
-                            <li class="">
-                                <a href="ViewAllPublicLongTermApplication">View public bidders</a>
+<li class="menu-dropdown classic-menu-dropdown">
+                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
+                                    Tenant<i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-left">
+                                    <li class="">
+                                        <a href="ViewAllTenants">View current tenants</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="ViewAllPublicLongTermApplication">View application</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="ViewPendingTenant">View pending tenants</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="ViewExpiringTenant">View expiring tenants</a>
+                                    </li>
+                                </ul>
                             </li>
-
-                            <li class="">
-                                <a href="ViewAllTenants">View tenants</a>
+                            <li class="menu-dropdown classic-menu-dropdown">
+                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
+                                    Event<i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-left">
+                                    <li class="">
+                                        <a href="ViewAllEvent">View all event</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="ViewEventApplication">View application</a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="">
                                 <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
@@ -162,7 +184,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="tenantDescription">Contract description :</label><br/>
-                                <textarea resize="none" name="contractDescription" rows="10" cols="180" placeholder="Enter tenant description"></textarea>
+                                <textarea name="contractDescription" rows="10" cols="180" placeholder="Enter tenant description"></textarea>
                             </div>
                             <button type="submit" class="btn btn-default">Submit</button>
                         </form>

@@ -44,7 +44,10 @@
     </head>
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
-        <%String IP = (String) request.getSession().getAttribute("IP");%>
+        <%
+            String IP = (String) request.getSession().getAttribute("IP");
+            System.err.println("TEST IP " + IP);
+        %>
         <!-- BEGIN HEADER -->
         <div class="page-header">
             <!-- BEGIN HEADER TOP -->
@@ -105,34 +108,11 @@
                             <li class="active">
                                 <a href="ViewAllRequests">View requests</a>
                             </li>
-                            <li class="menu-dropdown classic-menu-dropdown">
-                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
-                                    #### <i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-left">
-                                    <li class="">
-                                        <a href="####">
-                                            #### </a>
-                                    </li>
-                                    <li class="">
-                                        <a href="####">
-                                            ####</a>
-                                    </li>
-                                    <li class="">
-                                        <a href="####">
-                                            #### </a>
-                                    </li>
-                                    <li class="">
-                                        <a href="####">
-                                            #### </a>
-                                    </li>
-                                </ul>
+                            <li class="">
+                                <a href="ViewTenantMixLM">Tenant mix</a>
                             </li>
                             <li class="">
-                                <a href="####">####</a>
-                            </li>
-                            <li class="">
-                                <a href="####">####</a>
+                                <a href="ViewCurrentTenantLM">Current tenant</a>
                             </li>
                         </ul>    
                     </div>
@@ -162,8 +142,8 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER --> 
-                    
-                    
+
+
                     <form action="ViewLeasingRequestDetail">
                         <table id="leasingRequestTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                             <thead>
@@ -179,21 +159,23 @@
                             </thead>
                             <tbody>
                                 <%
-                                    ArrayList<LeasingSystemRequestEntity> allLeasingRequestList
-                                            = (ArrayList<LeasingSystemRequestEntity>) request.getSession().getAttribute("leasingRequestList");
-                                    for (int i = 0; i < allLeasingRequestList.size(); i++) {
-                                        LeasingSystemRequestEntity leasingRequest = allLeasingRequestList.get(i);
-                                        Long requestID = leasingRequest.getId();
-                                        String sender = leasingRequest.getSender();
-                                        String senderUserName = leasingRequest.getSenderUserName();
-                                        String requestType = leasingRequest.getType();
-                                        ArrayList<String> requestDescriptionList = leasingRequest.getDescription();
-                                        String requestDescriptionString = "";
-                                        for (int j = 0; j < requestDescriptionList.size(); j++) {
-                                            requestDescriptionString = requestDescriptionString + ""
-                                                    + requestDescriptionList.get(j);
-                                        }
-                                        requestDescriptionString = requestDescriptionString.replaceAll("\n","<br>");
+                                    try {
+                                        ArrayList<LeasingSystemRequestEntity> allLeasingRequestList
+                                                = (ArrayList<LeasingSystemRequestEntity>) request.getSession().getAttribute("leasingRequestList");
+                                        for (int i = 0; i < allLeasingRequestList.size(); i++) {
+                                            LeasingSystemRequestEntity leasingRequest = allLeasingRequestList.get(i);
+                                            Long requestID = leasingRequest.getId();
+                                            String sender = leasingRequest.getSender();
+                                            String senderUserName = leasingRequest.getSenderUserName();
+                                            String requestType = leasingRequest.getType();
+                                            ArrayList<String> requestDescriptionList = leasingRequest.getDescription();
+                                            String requestDescriptionString = "";
+                                            for (int j = 0; j < requestDescriptionList.size(); j++) {
+                                                requestDescriptionString = requestDescriptionString + ""
+                                                        + requestDescriptionList.get(j);
+                                            }
+                                            requestDescriptionString = requestDescriptionString.replaceAll("\n", "<br>");
+                                            System.err.println("REACH 1");
                                 %>
                                 <tr>
                                     <td><input type="checkbox" class="radio" name="leasingRequestId" value="<%=requestID%>"></td>
@@ -204,14 +186,17 @@
                                     <td><%=requestDescriptionString%></td>
                                     <td>
                                         <a onclick="return confirm('Proceed accepting this request?')"
-                                            href="AcceptLeasingRequest?leasingRequestId=<%=requestID%>">
+                                           href="AcceptLeasingRequest?leasingRequestId=<%=requestID%>">
                                             ACCEPT</a>   
                                         <a onclick="return confirm('Proceed rejecting this request?')"
-                                            href="RejectLeasingRequest?leasingRequestId=<%=requestID%>">
+                                           href="RejectLeasingRequest?leasingRequestId=<%=requestID%>">
                                             REJECT</a>
                                     </td>
                                 </tr>
                                 <%
+                                        }
+                                    } catch (Exception e) {
+                                        System.err.println("BINGO");
                                     }
                                 %>
                             </tbody>
@@ -283,43 +268,44 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-            jQuery(document).ready(function () {
-                Custom.init(); // init custom core components
-                Layout.init(); // init current layout
-                UIIdleTimeout.init(); // init Idle Timeout
-                UIToastr.init(); // init Toastr Alert
-            });
+                        jQuery(document).ready(function () {
+                            Custom.init(); // init custom core components
+                            Layout.init(); // init current layout
+                            UIIdleTimeout.init(); // init Idle Timeout
+                            UIToastr.init(); // init Toastr Alert
+                        });
         </script>
         <% String referrer = request.getHeader("referer");
             String query = request.getQueryString();
             String timestamp = null;
+            System.out.println("Query: " + query);
         %>
-        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
-                timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
-                if ("=continue".equals(query)) {
+        <% if (referrer == null
+                    || !referrer.contains("http://" + IP + ":8080/MMS2Server-war/administration")) {
+                timestamp = "Your last login was on: " + session.getAttribute("timestamp").toString();
+                if ("continue".equals(query)) {
         %>        
         <script language="javascript">
-            var ts = '<%= timestamp%>';
-            $(document).ready(function () {
-                // show when page load
-                toastr.info('Welcome back!');
-
-            });
+var ts = '<%= timestamp%>';
+$(document).ready(function() {
+	// show when page load
+	toastr.info('Welcome back!');
+        
+});
         </script>
         <% } else {%>
         <script language="javascript">
-            var ts = '<%= timestamp%>';
-            $(document).ready(function () {
-                // show when page load
-                toastr.success(ts, 'Login Successful!');
-
-            });
+var ts = '<%= timestamp%>';
+$(document).ready(function() {
+	// show when page load
+	toastr.success(ts , 'Login Successful!');
+        
+});
         </script>
         <%}
-            }%>
+    }%>
         <!-- END JAVASCRIPTS -->
+
     </body>
     <!-- END BODY -->
 </html>

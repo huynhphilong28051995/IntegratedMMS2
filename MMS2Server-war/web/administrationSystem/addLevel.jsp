@@ -73,7 +73,7 @@
                               <i class="icon-user"></i> User Settings </a>
                            </li>
                            <li>
-                              <a href="logout">
+                              <a href="../employee/logout">
                               <i class="icon-key"></i> Log Out </a>
                            </li>
                         </ul>

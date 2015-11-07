@@ -569,13 +569,12 @@
         <% String referrer = request.getHeader("referer");
             String query = request.getQueryString();
             String timestamp = null;
+            System.out.println("Query: " + query);
         %>
-        <% if (referrer.matches(
-                    "http://" + IP + ":8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://" + IP + ":8080/MMS2Server-war/administration/adminHome")) {
-                timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
-                if ("=continue".equals(query)) {
+        <% if (referrer == null
+                    || !referrer.contains("http://" + IP + ":8080/MMS2Server-war/administration")) {
+                timestamp = "Your last login was on: " + session.getAttribute("timestamp").toString();
+                if ("continue".equals(query)) {
         %>        
         <script language="javascript">
             var ts = '<%= timestamp%>';
@@ -595,8 +594,7 @@
             });
         </script>
         <%}
-            }
-        %>
+            } %>
         <%
             if (request.getAttribute(
                     "sendRequestStatus") != null) {

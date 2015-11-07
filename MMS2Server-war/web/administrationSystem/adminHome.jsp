@@ -61,7 +61,7 @@
 								<i class="icon-user"></i> User Settings </a>
 							</li>
 							<li>
-								<a href="logout">
+								<a href="../employee/logout">
 								<i class="icon-key"></i> Log Out </a>
 							</li>
 						</ul>
@@ -224,7 +224,7 @@
 			<div class="row">
 				<div class="col-md-12">
                                     <div class="note note-info note-bordered">
-				<p>Page content goes here.</p>
+				<p>System uptime: 99.7%. The next system maintenance is scheduled on 27 November 2016 (00:00 Hours)</p>
 			</div>
 			<div class="row">
 				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 margin-bottom-10">
@@ -274,9 +274,119 @@
 						</div>
 					</div>
 					</a>
-				</div>
+				</div>                    
 			</div>
-
+<!-- Begin Notification Tracker -->
+<!-- BEGIN TRACKER-->
+					<div class="portlet light">
+						<div class="portlet-title tabbable-line">
+							<div class="caption caption-md">
+								<i class="icon-globe theme-font hide"></i>
+								<span class="caption-subject theme-font bold uppercase">Notification Tracker</span>
+							</div>
+							<ul class="nav nav-tabs">
+								<li class="active">
+									<a href="#tab_1_1" data-toggle="tab">
+									System </a>
+								</li>
+								<li>
+									<a href="#tab_1_2" data-toggle="tab">
+									Activities </a>
+								</li>
+							</ul>
+						</div>
+						<div class="portlet-body">
+							<!--BEGIN TABS-->
+							<div class="tab-content">
+								<div class="tab-pane active" id="tab_1_1">
+									<div class="scroller" style="height: 337px;" data-always-visible="1" data-rail-visible1="0" data-handle-color="#D7DCE2">
+										<ul class="feeds">
+											<li>
+												<div class="col1">
+													<div class="cont">
+														<div class="cont-col1">
+															<div class="label label-sm label-success">
+																<i class="fa fa-bell-o"></i>
+															</div>
+														</div>
+														<div class="cont-col2">
+															<div class="desc">
+																 You have 4 pending tasks. <span class="label label-sm label-info">
+																Take action <i class="fa fa-share"></i>
+																</span>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col2">
+													<div class="date">
+														 Just now
+													</div>
+												</div>
+											</li>
+											<li>
+												<a href="javascript:;">
+												<div class="col1">
+													<div class="cont">
+														<div class="cont-col1">
+															<div class="label label-sm label-success">
+																<i class="fa fa-bell-o"></i>
+															</div>
+														</div>
+														<div class="cont-col2">
+															<div class="desc">
+																 New version v1.4 just lunched!
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col2">
+													<div class="date">
+														 20 mins
+													</div>
+												</div>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="tab-pane" id="tab_1_2">
+									<div class="scroller" style="height: 337px;" data-always-visible="1" data-rail-visible1="0" data-handle-color="#D7DCE2">
+										<ul class="feeds">
+											<li>
+												<a href="javascript:;">
+												<div class="col1">
+													<div class="cont">
+														<div class="cont-col1">
+															<div class="label label-sm label-success">
+																<i class="fa fa-bell-o"></i>
+															</div>
+														</div>
+														<div class="cont-col2">
+															<div class="desc">
+																 New user registered
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col2">
+													<div class="date">
+														 Just now
+													</div>
+												</div>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!--END TABS-->
+						</div>
+					</div>
+					<!-- END TRACKER-->
+                                                
+                                                
+                                                
 				</div>
 			</div>
 			<!-- END PAGE CONTENT INNER -->
@@ -330,12 +440,12 @@
 <% String referrer = request.getHeader("referer");
    String query = request.getQueryString();
    String timestamp = null;
+   System.out.println("Query: "+query);
 %>
-<% if(referrer.matches("http://localhost:8080/MMS2Server-war/administration/login") || 
-        referrer.matches("http://localhost:8080/MMS2Server-war/administration/logout") || 
-        referrer.matches("http://localhost:8080/MMS2Server-war/administration/adminHome")) { 
-         timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
-         if ("=continue".equals(query)) {
+<% if(referrer == null ||
+        !referrer.contains("http://localhost:8080/MMS2Server-war/administration")) { 
+         timestamp = "Your last login was on: " + session.getAttribute("timestamp").toString();
+         if ("continue".equals(query)) {
 %>        
 <script language="javascript">
 var ts = '<%= timestamp %>';

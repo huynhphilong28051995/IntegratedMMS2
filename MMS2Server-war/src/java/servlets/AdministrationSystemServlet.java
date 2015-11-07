@@ -29,7 +29,9 @@ public class AdministrationSystemServlet extends HttpServlet {
 
     @EJB
     private CorporateAdministrationBeanLocal cabl;
+    @EJB
     private SmsSessionBeanLocal ssbl;
+    @EJB
     private SendMailLocal sml;
     private String firstName;
     private String lastName;
@@ -74,10 +76,11 @@ public class AdministrationSystemServlet extends HttpServlet {
             page = page.substring(1);
             String query = request.getQueryString();
             //System.out.println(query);
+
             if ("adminHome".equals(page)) {
                 if (session.getAttribute("Session") != null) {
                     System.out.println("Entering Page: " + page);
-                    //For Counting Purposes on adminHome
+                    //Get dashboard summary count on adminHome
                     int totalLevelSize = levelListInfo().size();
                     request.setAttribute("totalLevelSize", totalLevelSize);
                     int totalDepartmentSize = DepartmentListInfo().size();
@@ -85,69 +88,24 @@ public class AdministrationSystemServlet extends HttpServlet {
                     int totalEmployeeSize = EmployeeListInfo().size();
                     request.setAttribute("totalEmployeeSize", totalEmployeeSize);
 
-                    //BEGIN LEASING SYSTEM REROUTE WHEN USER RELOGIN
-                    String staffPosition = (String)request.getSession().getAttribute("staffPosition");
-                    if (staffPosition.equals("Leasing Officer")
-                            || staffPosition.equals("Leasing Manager")
-                            || staffPosition.equals("Space Plan Officer")) {
-                         page = "leasingSystemReroute";
+                    if (session.getAttribute("timestamp") == null) {
+                        request.setAttribute("data","dummy value");
+                        System.out.println("Timestamp is NULL");
+                        //First Time user login - redirect change password
+                        page = "changePassword";
+                        dispatcher = servletContext.getNamedDispatcher(page);
+                        dispatcher.forward(request, response);
+                    } else {
+                        //Update New Timestsamp Here
+                        cabl.updateNewTimestamp(session.getAttribute("SessionEmail").toString());
                     }
-                    //END LEASING SYSTEM REROUTE WHEN USER RELOGIN
 
                 } //User is not logged in
                 else {
-                    data1 = validateEmployeeIDEmailPassword(request);
-                    System.out.println("Session: " + session.getAttribute("Session"));
 
-                    if (data1 == null) {
-                        //Login Unsuccessful
-                        page = "login";
-                        System.out.println("Entering Page: " + page);
-                    } else {
-
-                        //Login Successful
-                        page = "adminHome";
-                        System.out.println("Entering Page: " + page);
-                        //For Counting Purposes on adminHome
-                        int totalLevelSize = levelListInfo().size();
-                        request.setAttribute("totalLevelSize", totalLevelSize);
-                        int totalDepartmentSize = DepartmentListInfo().size();
-                        request.setAttribute("totalDepartmentSize", totalDepartmentSize);
-                        int totalEmployeeSize = EmployeeListInfo().size();
-                        request.setAttribute("totalEmployeeSize", totalEmployeeSize);
-                        System.out.println("TIMESTAMP IS" + data1.get(4));
-                        if (data1.get(4) == null) {
-                            //First Time user login - redirect change password
-                            page = "changePassword";
-                        } else {
-                            //Session 5: Temporary Timestamp for User Upon Login
-                            session.setAttribute("Session5", data1.get(4));
-                            //Update New Timestsamp Here
-                            cabl.updateNewTimestamp(session.getAttribute("SessionEmail").toString());
-
-                            //BEGIN LEASING SYSTEM REROUTE
-                            if (data1.get(5).equals("Leasing Officer")
-                                    || data1.get(5).equals("Leasing Manager")
-                                    || data1.get(5).equals("Space Plan Officer")) {
-                                String mallName = data1.get(6);
-                                String staffPosition = data1.get(5);
-                                String staffUserName = data1.get(2);
-                                String staffFirstName = data1.get(0);
-                                request.getSession().setAttribute("mallName", mallName);
-                                request.getSession().setAttribute("staffPosition", staffPosition);
-                                request.getSession().setAttribute("staffUserName", staffUserName);
-                                request.getSession().setAttribute("staffFirstName", staffFirstName);
-                                page = "leasingSystemReroute";
-                            }
-                            //END LEASING SYSTEM REROUTE  
-                        }
-                    }
                 }
-                request.setAttribute("data", data1);
-                System.out.println("Timestamp is " + session.getAttribute("Session5"));
 
-            } else if ("login".equals(page)) {
-                System.out.println("Entering Page: " + page);
+                System.out.println("New Timestamp is " + session.getAttribute("timestamp").toString());
 
             } else if ("changePassword".equals(page)) {
                 System.out.println("Entering Page: " + page);
@@ -430,8 +388,6 @@ public class AdministrationSystemServlet extends HttpServlet {
                     session.removeAttribute("TempDepartmentName");
                     session.removeAttribute("TempPositionName");
                 }
-            } else if ("forgot".equals(page)) {
-
             } else if ("sendSms".equals(page)) {
 
             } else if ("postSms".equals(page)) {
@@ -439,21 +395,6 @@ public class AdministrationSystemServlet extends HttpServlet {
                 System.out.println("Done 1.");
             } else if ("addMembership".equals(page)) {
 
-            } else if ("logout".equals(page)) {
-                if (session == null) {
-                    System.err.println("SESSION IS NULL");
-                } else {
-                    System.err.println("SESSION IS NOT NULL");
-                }
-
-                try {
-                    session.invalidate();
-                } catch (Exception ex) {
-
-                }
-
-                page = "login";
-                System.out.println("Entering Page: " + page);
             } else {
                 page = "error";
                 System.out.println("Entering Page: " + page);
@@ -529,48 +470,6 @@ public class AdministrationSystemServlet extends HttpServlet {
 
         return check;
 
-    }
-
-    //Validate Employee Credentials
-    private List<String> validateEmployeeIDEmailPassword(HttpServletRequest request) {
-        HttpSession session = request.getSession(true);
-        String email = request.getParameter("email");
-        session.setAttribute("SessionEmail", email);
-        String password = request.getParameter("password");
-        System.out.println(email);
-        System.out.println(password);
-
-        List<String> list = new ArrayList();
-        try {
-            list = cabl.findEmployeeByIDEmailPassword(email, password);
-            System.out.println("Initiating Employee Search...");
-            if (!list.isEmpty()) {
-                System.out.println("Employee Data Found.");
-                //Declare Name as Session Attribute
-                session.setAttribute("Session2", list.get(0));
-                //Employee ID
-                session.setAttribute("Session", list.get(1));
-                //Employee Email
-                session.setAttribute("staffUserName", list.get(2));
-                session.setAttribute("Session4", list.get(3));
-
-                firstName = list.get(0);
-                employeeID = list.get(1);
-
-                session.setAttribute("staffPosition", list.get(5));
-                session.setAttribute("mallName", list.get(6));
-
-            }
-
-            if (list.isEmpty()) {
-                System.out.println("Employee cannot be found.");
-                return null;
-            }
-        } catch (Exception ex) {
-
-        }
-
-        return list;
     }
 
     private void createLevelType(HttpServletRequest request) {

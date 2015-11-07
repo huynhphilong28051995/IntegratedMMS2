@@ -102,20 +102,13 @@
                     <div class="hor-menu ">
                         <ul class="nav navbar-nav">
                             <li class="">
-                                <a href="DeclareZone">Zone declaration</a>
+                                <a href="ViewAllRequests">View requests</a>
                             </li>
                             <li class="">
-                                <a href="ChooseUnitForPublicBidding">Open public bidding</a>
-                            </li>
-
-                            <li class="">
-                                <a href="ViewAllPublicLongTermApplication">View public bidders</a>
+                                <a href="ViewTenantMixLM">Tenant mix</a>
                             </li>
                             <li class="active">
-                                <a href="ViewAllTenants">View tenants</a>
-                            </li>
-                            <li class="">
-                                <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
+                                <a href="ViewCurrentTenantLM">Current tenant</a>
                             </li>
                         </ul>    
                     </div>

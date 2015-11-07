@@ -166,7 +166,7 @@
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER --> 
-                    
+
 
                     <%
                         int zIndex = 1;
@@ -190,12 +190,20 @@
                             UnitEntity unit = (UnitEntity) allUnitList.get(i);
                             if (!unit.isDeleteProposed()) {
                                 unitList.add(unit);
-                            }else{
-                                String type  = unit.getLocationCode().substring(3,5);
-                                if(type.equals("ST")) cannotDeleteMoreStore = true;
-                                if(type.equals("PC")) cannotDeleteMorePushCart = true;
-                                if(type.equals("KS")) cannotDeleteMoreKiosk = true;
-                                if(type.equals("EV")) cannotDeleteMoreEvent = true;
+                            } else {
+                                String type = unit.getLocationCode().substring(3, 5);
+                                if (type.equals("ST")) {
+                                    cannotDeleteMoreStore = true;
+                                }
+                                if (type.equals("PC")) {
+                                    cannotDeleteMorePushCart = true;
+                                }
+                                if (type.equals("KS")) {
+                                    cannotDeleteMoreKiosk = true;
+                                }
+                                if (type.equals("EV")) {
+                                    cannotDeleteMoreEvent = true;
+                                }
                             }
                         }
                         ArrayList<UnitEntity> listOfStoreUnits = new ArrayList();
@@ -218,51 +226,55 @@
                             }
                         }
                         ArrayList<UnitEntity> unitListDelete = new ArrayList();
-                        int max=0;
-                        int position=0;
-                        if((listOfStoreUnits.size()!=0)&&(!cannotDeleteMoreStore)){
-                        for (int i = 0; i < listOfStoreUnits.size(); i++) {
-                            int value = Integer.parseInt(listOfStoreUnits.get(i).getLocationCode().substring(5, 6));
-                            if(value>max){
-                                max=value;
-                                position=i;
+                        int max = 0;
+                        int position = 0;
+                        if ((listOfStoreUnits.size() != 0) && (!cannotDeleteMoreStore)) {
+                            for (int i = 0; i < listOfStoreUnits.size(); i++) {
+                                int value = Integer.parseInt(listOfStoreUnits.get(i).getLocationCode().substring(5, 6));
+                                if (value > max) {
+                                    max = value;
+                                    position = i;
+                                }
                             }
+                            unitListDelete.add(listOfStoreUnits.get(position));
                         }
-                        unitListDelete.add(listOfStoreUnits.get(position));}
-                        max=0;
-                        position=0;
-                        if((listOfPushCartUnits.size()!=0)&&(!cannotDeleteMorePushCart)){
-                        for (int i = 0; i < listOfPushCartUnits.size(); i++) {
-                            int value = Integer.parseInt(listOfPushCartUnits.get(i).getLocationCode().substring(5, 6));
-                            if(value>max){
-                                max=value;
-                                position=i;
+                        max = 0;
+                        position = 0;
+                        if ((listOfPushCartUnits.size() != 0) && (!cannotDeleteMorePushCart)) {
+                            for (int i = 0; i < listOfPushCartUnits.size(); i++) {
+                                int value = Integer.parseInt(listOfPushCartUnits.get(i).getLocationCode().substring(5, 6));
+                                if (value > max) {
+                                    max = value;
+                                    position = i;
+                                }
                             }
+                            unitListDelete.add(listOfPushCartUnits.get(position));
                         }
-                        unitListDelete.add(listOfPushCartUnits.get(position));}
-                        max=0;
-                        position=0;
-                        if((listOfKioskUnits.size()!=0)&&(!cannotDeleteMoreKiosk)){
-                        for (int i = 0; i < listOfKioskUnits.size(); i++) {
-                            int value = Integer.parseInt(listOfKioskUnits.get(i).getLocationCode().substring(5, 6));
-                            if(value>max){
-                                max=value;
-                                position=i;
+                        max = 0;
+                        position = 0;
+                        if ((listOfKioskUnits.size() != 0) && (!cannotDeleteMoreKiosk)) {
+                            for (int i = 0; i < listOfKioskUnits.size(); i++) {
+                                int value = Integer.parseInt(listOfKioskUnits.get(i).getLocationCode().substring(5, 6));
+                                if (value > max) {
+                                    max = value;
+                                    position = i;
+                                }
                             }
+                            unitListDelete.add(listOfKioskUnits.get(position));
                         }
-                        unitListDelete.add(listOfKioskUnits.get(position));}
-                        max=0;
-                        position=0;
-                        if((listOfEventUnits.size()!=0) && (!cannotDeleteMoreEvent)){
-                        for (int i = 0; i < listOfEventUnits.size(); i++) {
-                            int value = Integer.parseInt(listOfEventUnits.get(i).getLocationCode().substring(5, 6));
-                            if(value>max){
-                                max=value;
-                                position=i;
+                        max = 0;
+                        position = 0;
+                        if ((listOfEventUnits.size() != 0) && (!cannotDeleteMoreEvent)) {
+                            for (int i = 0; i < listOfEventUnits.size(); i++) {
+                                int value = Integer.parseInt(listOfEventUnits.get(i).getLocationCode().substring(5, 6));
+                                if (value > max) {
+                                    max = value;
+                                    position = i;
+                                }
                             }
+                            unitListDelete.add(listOfEventUnits.get(position));
                         }
-                        unitListDelete.add(listOfEventUnits.get(position));}
-                        
+
                     %>
 
                     <image id="floorplanBackground" src="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/floorplanBackground/<%=floorplanBackground%>.png"/>
@@ -276,13 +288,13 @@
                             <button class="DragResizeButton" style="height:100%; width:100%;"><%=locationCode%></button>
                         </div>
                         <script>
-            $("#<%=locationCode%>").draggable({
-                stop: function (event, ui) {
-                    positions[this.id] = ui.position;
-                    localStorage.positions = JSON.stringify(positions);
-                    document.getElementById("positionString").disabled = false;
-                }
-            });
+                            $("#<%=locationCode%>").draggable({
+                                stop: function (event, ui) {
+                                    positions[this.id] = ui.position;
+                                    localStorage.positions = JSON.stringify(positions);
+                                    document.getElementById("positionString").disabled = false;
+                                }
+                            });
                         </script>
                         <%
                                 zIndex = zIndex + 1;
@@ -297,13 +309,13 @@
                             <button class="DragResizeButton" style="height:100%; width:100%;"><%=locationCode%></button>
                         </div>
                         <script>
-            $("#<%=locationCode%>").draggable({
-                stop: function (event, ui) {
-                    positions[this.id] = ui.position;
-                    localStorage.positions = JSON.stringify(positions);
-                    document.getElementById("positionString").disabled = false;
-                }
-            });
+                            $("#<%=locationCode%>").draggable({
+                                stop: function (event, ui) {
+                                    positions[this.id] = ui.position;
+                                    localStorage.positions = JSON.stringify(positions);
+                                    document.getElementById("positionString").disabled = false;
+                                }
+                            });
                         </script>
                         <%
                                 zIndex = zIndex + 1;
@@ -318,13 +330,13 @@
                             <button class="DragResizeButton" style="height:100%; width:100%;"><%=locationCode%></button>
                         </div>
                         <script>
-            $("#<%=locationCode%>").draggable({
-                stop: function (event, ui) {
-                    positions[this.id] = ui.position;
-                    localStorage.positions = JSON.stringify(positions);
-                    document.getElementById("positionString").disabled = false;
-                }
-            });
+                            $("#<%=locationCode%>").draggable({
+                                stop: function (event, ui) {
+                                    positions[this.id] = ui.position;
+                                    localStorage.positions = JSON.stringify(positions);
+                                    document.getElementById("positionString").disabled = false;
+                                }
+                            });
                         </script>
                         <%
                                 zIndex = zIndex + 1;
@@ -338,13 +350,13 @@
                             <button class="DragResizeButton" style="height:100%; width:100%;"><%=locationCode%></button>
                         </div>
                         <script>
-            $("#<%=locationCode%>").draggable({
-                stop: function (event, ui) {
-                    positions[this.id] = ui.position;
-                    localStorage.positions = JSON.stringify(positions);
-                    document.getElementById("positionString").disabled = false;
-                }
-            });
+                            $("#<%=locationCode%>").draggable({
+                                stop: function (event, ui) {
+                                    positions[this.id] = ui.position;
+                                    localStorage.positions = JSON.stringify(positions);
+                                    document.getElementById("positionString").disabled = false;
+                                }
+                            });
                         </script>
                         <%
                                 zIndex = zIndex + 1;
@@ -352,12 +364,12 @@
                         %>
                     </div>
                     <script>
-        var positions = <%=positionString%>;
-        $.each(positions, function (id, pos) {
-            $("#" + id).css(pos);
-        });
+                        var positions = <%=positionString%>;
+                        $.each(positions, function (id, pos) {
+                            $("#" + id).css(pos);
+                        });
                     </script>
-                    
+
                     <!--CHANGE FLOOR-->
                     <div class="changeFloor">
                         <form action="ChangeFloorplanLevelSpacePlanning" method="GET">
@@ -384,7 +396,7 @@
                                     onclick="doSave()" disabled class="btn btn-default">SAVE</button>
                         </form>
                     </div>
-                    
+
                     <!--DELETE UNIT-->
                     <div id="UnitProposeDeleteForm">
                         <form action="ProposeDeleteSingleUnit">
@@ -392,7 +404,6 @@
                                 <label>Unit to delete</label>
                                 <select required="required" name="locationCode" >
                                     <%
-                                        
                                         for (int i = 0; i < unitListDelete.size(); i++) {
                                             String locationCode = ((UnitEntity) unitListDelete.get(i)).getLocationCode();
                                     %>
@@ -402,8 +413,8 @@
                                     %>
                                 </select>
                             </div>
-                                <button type="submit" onclick="return confirm('Proceed deleting unit(s)?')"
-                                        class="btn btn-default">Delete</button>
+                            <button type="submit" onclick="return confirm('Proceed deleting unit(s)?')"
+                                    class="btn btn-default">Delete</button>
                         </form>
                     </div>
                     <!--DELETE UNIT-->
@@ -457,22 +468,22 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-        jQuery(document).ready(function () {
-            Custom.init(); // init custom core components
-            Layout.init(); // init current layout
-            UIIdleTimeout.init(); // init Idle Timeout
-            UIToastr.init(); // init Toastr Alert
-        });
+                        jQuery(document).ready(function () {
+                            Custom.init(); // init custom core components
+                            Layout.init(); // init current layout
+                            UIIdleTimeout.init(); // init Idle Timeout
+                            UIToastr.init(); // init Toastr Alert
+                        });
         </script>
         <% String referrer = request.getHeader("referer");
             String query = request.getQueryString();
             String timestamp = null;
+            System.out.println("Query: " + query);
         %>
-        <% if (referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/login")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/logout")
-                    || referrer.matches("http://"+IP+":8080/MMS2Server-war/administration/adminHome")) {
-                timestamp = "Your last login was on: " + session.getAttribute("Session5").toString();
-                if ("=continue".equals(query)) {
+        <% if (referrer == null
+                    || !referrer.contains("http://" + IP + ":8080/MMS2Server-war/administration")) {
+                timestamp = "Your last login was on: " + session.getAttribute("timestamp").toString();
+                if ("continue".equals(query)) {
         %>        
         <script language="javascript">
             var ts = '<%= timestamp%>';
@@ -492,7 +503,7 @@
             });
         </script>
         <%}
-            }%>
+            } %>
 
         <%
             if (request.getAttribute("unitDeleteStatus") != null) {
@@ -502,7 +513,7 @@
         <script language="javascript">
             $(document).ready(function () {
                 // show when page load
-                 toastr.success('<%=unitDeleteStatus%>');
+                toastr.success('<%=unitDeleteStatus%>');
             });
         </script>
         <%
@@ -511,28 +522,28 @@
         <script language="javascript">
             $(document).ready(function () {
                 // show when page load
-               toastr.error('<%=unitDeleteStatus%>');
+                toastr.error('<%=unitDeleteStatus%>');
             });
         </script>
         <%
                 }
             }
         %>
-        
-        
+
+
         <%
             if (request.getAttribute("sendRequestStatus") != null) {
-                String sendRequestStatus = (String)request.getAttribute("sendRequestStatus");
-                
+                String sendRequestStatus = (String) request.getAttribute("sendRequestStatus");
+
         %>
         <script language="javascript">
             $(document).ready(function () {
                 // show when page load
-                 toastr.success('<%=sendRequestStatus%>');
+                toastr.success('<%=sendRequestStatus%>');
             });
         </script>
         <%
-                
+
             }
         %>
 
