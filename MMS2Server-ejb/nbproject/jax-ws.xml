@@ -10,6 +10,9 @@
     <service name="SaleSessionWS">
       <implementation-class>mms2.pos.session.SaleSessionWS</implementation-class>
     </service>
+    <service name="CustomerSessionWS">
+      <implementation-class>mms2.customer.session.CustomerSessionWS</implementation-class>
+    </service>
   </services>
   <clients/>
 </jax-ws>
