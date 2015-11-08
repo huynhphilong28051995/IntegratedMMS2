@@ -132,8 +132,8 @@
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
                     
-                    <table border="3">
-                        <tr align="left">
+                    <table cellspacing="0" width="100%" border="3">
+                        <tr>
                             <th>Id</th>
                             <th>Name</th>
                             <th>Category</th>

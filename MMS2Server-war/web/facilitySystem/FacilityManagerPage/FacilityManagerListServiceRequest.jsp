@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Merlion Facility Management System | List Facility</title>
+        <title>Merlion Facility Management System | List Service Request</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -132,7 +132,7 @@
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
         
-        <table border="3">
+        <table cellspacing="0" width="100%" border="3">
             <tr>
                 <th>Id</th>
                 <th>Type</th>

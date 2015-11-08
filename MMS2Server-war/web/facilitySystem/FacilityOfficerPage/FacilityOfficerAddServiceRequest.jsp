@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Merlion Facility Management System | ADD Service Request</title>
+        <title>Merlion Facility Management System | Add Service Request</title>
         <script src="${pageContext.request.contextPath}/javascript/mainScript.js"></script>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
