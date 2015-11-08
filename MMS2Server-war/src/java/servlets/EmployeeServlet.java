@@ -118,6 +118,24 @@ public class EmployeeServlet extends HttpServlet {
                                     }
                                    
                                 }
+                                
+                                if (session.getAttribute("staffDept").toString().toLowerCase().contains("facilities")) {
+                                    String mallName = data1.get(6);
+                                    String staffPosition = data1.get(5);
+                                    String staffUserName = data1.get(2);
+                                    String staffFirstName = data1.get(0);
+                                    request.getSession().setAttribute("mallName", mallName);
+                                    request.getSession().setAttribute("staffPosition", staffPosition);
+                                    request.getSession().setAttribute("staffUserName", staffUserName);
+                                    request.getSession().setAttribute("staffFirstName", staffFirstName);
+
+                                    System.err.println("LeasingSystemReroute : " + staffPosition + " " + mallName + " " + staffFirstName);
+
+                                    
+                                        message = "../FMSControlServlet/directLogin?userRole="+staffPosition+"&mallName="+mallName;
+                                     
+                                   
+                                }
                             }
                         }
 

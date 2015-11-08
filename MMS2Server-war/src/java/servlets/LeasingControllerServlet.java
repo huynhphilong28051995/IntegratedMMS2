@@ -5,7 +5,6 @@
  */
 package servlets;
 
-import static com.sun.org.apache.bcel.internal.generic.InstructionConstants.bla;
 import java.awt.Color;
 import java.io.File;
 import mms2.leasing.entity.LeasingSystemRequestEntity;

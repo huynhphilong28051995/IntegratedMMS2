@@ -3,7 +3,7 @@
     Created on : Oct 20, 2015, 12:03:20 PM
     Author     : linjiao_Zoe
 --%>
-<%@page import="Entity.FeedbackEntity"%>
+<%@page import="mms.facility.entity.FeedbackEntity"%>
 <%@page import="java.util.StringTokenizer"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

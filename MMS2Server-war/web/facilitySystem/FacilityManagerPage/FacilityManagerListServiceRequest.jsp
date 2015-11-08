@@ -3,14 +3,14 @@
     Created on : Oct 3, 2015, 11:18:22 AM
     Author     : linjiao_Zoe
 --%>
-<%@page import="Entity.ServiceEntity"%>
+<%@page import="mms.facility.entity.ServiceEntity"%>
 <%@page import="java.util.StringTokenizer"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Merlion Facility Management System | List Facility</title>
+        <title>Merlion Facility Management System | List Service Request</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -132,7 +132,7 @@
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
         
-        <table border="3">
+        <table cellspacing="0" width="100%" border="3">
             <tr>
                 <th>Id</th>
                 <th>Type</th>
