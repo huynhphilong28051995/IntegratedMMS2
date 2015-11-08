@@ -4,7 +4,7 @@
     Author     : linjiao_Zoe
 --%>
 
-<%@page import="Entity.FeedbackEntity"%>
+<%@page import="mms.facility.entity.FeedbackEntity"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

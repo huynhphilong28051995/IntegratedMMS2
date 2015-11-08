@@ -3,8 +3,8 @@
     Created on : Oct 13, 2015, 11:36:15 AM
     Author     : linjiao_Zoe
 --%>
-<%@page import="Entity.OutsourcingEntity"%>
-<%@page import="Entity.FacilityEntity"%>
+<%@page import="mms.facility.entity.OutsourcingEntity"%>
+<%@page import="mms.facility.entity.FacilityEntity"%>
 <%@page import="java.util.StringTokenizer"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

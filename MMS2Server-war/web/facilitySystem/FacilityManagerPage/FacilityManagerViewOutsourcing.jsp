@@ -4,7 +4,7 @@
     Author     : linjiao_Zoe
 --%>
 
-<%@page import="Entity.OutsourcingEntity"%>
+<%@page import="mms.facility.entity.OutsourcingEntity"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

@@ -3,7 +3,7 @@
     Created on : Oct 2, 2015, 7:06:10 PM
     Author     : linjiao_Zoe
 --%>
-<%@page import="Entity.AssetEntity"%>
+<%@page import="mms.facility.entity.AssetEntity"%>
 <%@page import="java.util.StringTokenizer"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

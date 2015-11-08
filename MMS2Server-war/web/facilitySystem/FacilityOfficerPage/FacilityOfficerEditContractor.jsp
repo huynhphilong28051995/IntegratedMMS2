@@ -4,7 +4,7 @@
     Author     : linjiao_Zoe
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="Entity.ContractorEntity"%>
+<%@page import="mms.facility.entity.ContractorEntity"%>
 <%@page import="java.util.StringTokenizer"%>
 <%@page import="java.util.ArrayList"%>
 <!DOCTYPE html>
