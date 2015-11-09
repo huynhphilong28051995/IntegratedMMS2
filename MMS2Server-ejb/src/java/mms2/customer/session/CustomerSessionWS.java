@@ -27,7 +27,7 @@ public class CustomerSessionWS {
     public boolean createCustomer(@WebParam(name="email")String email,@WebParam(name="password") String password,
             @WebParam(name="firstName")String firstName,
             @WebParam(name="lastName")String lastName,@WebParam(name="address") String address, 
-            @WebParam(name="telephone")String telephone){
+            @WebParam(name="telephone")String telephone, @WebParam(name="country") String country){
       try{
           CustomerEntity customer= new CustomerEntity();
           customer.setEmail(email);
@@ -37,6 +37,7 @@ public class CustomerSessionWS {
           customer.setAddress(address);
           customer.setTelephone(telephone);
           customer.setPoints(0);
+          customer.setCountry(country);
           em.persist(customer);
           return true;
       }catch(Exception ex){
