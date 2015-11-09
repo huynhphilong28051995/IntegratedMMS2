@@ -25,8 +25,8 @@ public class ServiceManager {
     public ServiceEntity createNewServiceRequest(HttpServletRequest request) {
         String serviceType = request.getParameter("serviceType");
         String serviceRequestStatus = request.getParameter("serviceRequestStatus");
-        String serviceRequestDateString = request.getParameter("serviceRequestDate") + " 00:00:00";
-        Timestamp serviceRequestDate = Timestamp.valueOf(serviceRequestDateString);
+        //String serviceRequestDateString = request.getParameter("serviceRequestDate") + " 00:00:00";
+        Timestamp serviceRequestDate = new Timestamp(System.currentTimeMillis());
         String serviceRequestDetail = request.getParameter("serviceRequestDetail");
         String servicingDateString = request.getParameter("servicingDate") + " 00:00:00";
         Timestamp servicingDate = Timestamp.valueOf(servicingDateString);
