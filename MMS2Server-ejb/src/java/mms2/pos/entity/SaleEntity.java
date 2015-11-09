@@ -6,7 +6,9 @@
 package mms2.pos.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,12 +26,50 @@ public class SaleEntity implements Serializable {
     private Long id;
     private String mallName;
     private Long tenantId;
+    private String tenantName;
+    private String businessType;
+    private Timestamp date;
     private String customerEmail;
     private double price;
     private ArrayList<Long> itemIdList = new ArrayList<>() ;
+    private int pointsEarned;
 
     public SaleEntity() {
     }
+
+    public int getPointsEarned() {
+        return pointsEarned;
+    }
+
+    public void setPointsEarned(int pointsEarned) {
+        this.pointsEarned = pointsEarned;
+    }
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
+    
+
+    public String getTenantName() {
+        return tenantName;
+    }
+
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
+    }
+
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public void setDate(Timestamp date) {
+        this.date = date;
+    }
+
     
     public Long getId() {
         return id;
@@ -133,5 +173,4 @@ public class SaleEntity implements Serializable {
     public void setItemIdList(ArrayList<Long> itemIdList) {
         this.itemIdList = itemIdList;
     }
-    
-}
+}  
