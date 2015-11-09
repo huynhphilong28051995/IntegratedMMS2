@@ -26,15 +26,17 @@ public class CustomerEntity implements Serializable {
     private String password;
     private String firstName;
     private String lastName;
-    private String memberType;
+    private String memberType = "silver";
     private int points;
     private String address;
     private String telephone;
+    private String country;
 
     public CustomerEntity() {
     }
 
-    public CustomerEntity(String email, String password, String firstName, String lastName, String memberType, int points, String address, String telephone) {
+    public CustomerEntity(String email, String password, String firstName, String lastName, 
+            String memberType, int points, String address, String telephone, String country) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -43,6 +45,7 @@ public class CustomerEntity implements Serializable {
         this.points = points;
         this.address = address;
         this.telephone = telephone;
+        this.country = country;
     }
 
     public Long getId() {
@@ -73,6 +76,14 @@ public class CustomerEntity implements Serializable {
         return firstName;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+    
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
