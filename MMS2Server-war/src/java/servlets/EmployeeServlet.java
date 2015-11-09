@@ -116,7 +116,6 @@ public class EmployeeServlet extends HttpServlet {
                                         message = "../LeasingControllerServlet/SpacePlanMain";
                                         //mainPage = "SpacePlanMain";
                                     }
-                                   
                                 }
                                 
                                 if (session.getAttribute("staffDept").toString().toLowerCase().contains("facilities")) {
