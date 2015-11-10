@@ -158,6 +158,10 @@
         <servlet-name>changePassword</servlet-name>
         <jsp-file>/administrationSystem/changePassword.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>LeasingOfficerViewAllRentRequest</servlet-name>
+        <jsp-file>/leasingSystem/zLeasingOfficerPages/LeasingOfficerViewAllRentRequest.jsp</jsp-file>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
@@ -584,9 +588,6 @@
         <servlet-name>changePassword</servlet-name>
         <url-pattern>/changePassword</url-pattern>
     </servlet-mapping>
-    
-    
-    
     <!--  //////////////////////////////////////////////////////FMS//////////////////////////////////////-->
     <servlet>
         <servlet-name>FMSControlServlet</servlet-name>
@@ -788,19 +789,11 @@
         <servlet-name>FacilityManagerViewOutsourcing</servlet-name>
         <url-pattern>/FacilityManagerViewOutsourcing</url-pattern>
     </servlet-mapping>
-    <!--  //////////////////////////////////////////////////////FMS//////////////////////////////////////-->    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    <!--  //////////////////////////////////////////////////////FMS//////////////////////////////////////-->
+    <servlet-mapping>
+        <servlet-name>LeasingOfficerViewAllRentRequest</servlet-name>
+        <url-pattern>/LeasingOfficerViewAllRentRequest</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -815,5 +808,5 @@
     </context-param>
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
-    </welcome-file-list> 
+    </welcome-file-list>
 </web-app>

@@ -34,6 +34,8 @@ import manager.LevelManager;
 import manager.LongTermApplicationManager;
 import manager.UnitManager;
 import manager.TenantManager;
+import mms.tenant.entity.RentRenewalRequestEntity;
+import mms.tenant.session.TenantManagerBeanLocal;
 import mms2.leasing.entity.EventEntity;
 import mms2.leasing.session.EventManagerSessionLocal;
 import org.jfree.chart.ChartFactory;
@@ -66,6 +68,8 @@ public class LeasingControllerServlet extends HttpServlet {
     LongTermApplicationManagerSessionLocal longTermApplicationManagerSessionLocal;
     @EJB
     EventManagerSessionLocal eventManagerSessionLocal;
+    @EJB
+    TenantManagerBeanLocal tenantManagerBeanLocal;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -87,7 +91,7 @@ public class LeasingControllerServlet extends HttpServlet {
             boolean alreadyInitialized;
             TenantEntity tenant;
             ArrayList<TenantEntity> allTenantList;
-            
+
             switch (page) {
 //START-FUNCTION FOR LEASING MANAGER
                 case "ViewAllRequests":
@@ -118,12 +122,12 @@ public class LeasingControllerServlet extends HttpServlet {
                         request.setAttribute("longTermApplication", longTermApplication);
                         page = "LeasingManagerReviewLongTermApplicationApproval";
                     }
-                    if(leasingRequestType.equals("ContractRenewRequest")){
+                    if (leasingRequestType.equals("ContractRenewRequest")) {
                         LeasingSystemRequestEntity leasingRequestInstance
                                 = doGetLeasingRequestById(leasingRequestId);
                         request.setAttribute("leasingRequestInstance", leasingRequestInstance);
-                        TenantEntity tempRenewTenant = 
-                                tenantManagerSessionLocal.getTenantById(leasingRequestInstance.getApplicationId());
+                        TenantEntity tempRenewTenant
+                                = tenantManagerSessionLocal.getTenantById(leasingRequestInstance.getApplicationId());
                         request.setAttribute("renewTenant", tempRenewTenant);
                         page = "LeasingManagerReviewContractRenewRequest";
                     }
@@ -210,7 +214,7 @@ public class LeasingControllerServlet extends HttpServlet {
                     request.setAttribute("detailedTenant", tenant);
                     page = "LeasingOfficerViewTenantDetail";
                     break;
-                    
+
 //END-FUNCTION FOR LEASING MANAGER
 //START-FUNCTION FOR LEASING OFFICER
                 case "LeasingOfficerMain":
@@ -280,7 +284,7 @@ public class LeasingControllerServlet extends HttpServlet {
                     page = "LeasingOfficerViewAllTenants";
                     break;
                 case "ViewTenantDetail":
-                     tenant = doGetTenantById(request);
+                    tenant = doGetTenantById(request);
                     request.setAttribute("detailedTenant", tenant);
                     page = "LeasingOfficerViewTenantDetail";
                     break;
@@ -321,7 +325,7 @@ public class LeasingControllerServlet extends HttpServlet {
                     request.setAttribute("requestList", requestList);
                     page = "LeasingOfficerCheckRequest";
                     break;
-                
+
                 /////case of delete and (function)list request is on space planner side
                 case "ViewExpiringTenant":
                     page = "LeasingOfficerViewExpiringTenant";
@@ -336,17 +340,17 @@ public class LeasingControllerServlet extends HttpServlet {
                     page = "LeasingOfficerViewExpiringTenant";
                     break;
                 case "RenewContract":
-                    TenantEntity renewTenant = 
-                            tenantManagerSessionLocal.getTenantById(Long.parseLong(request.getParameter("tenantId")));
+                    TenantEntity renewTenant
+                            = tenantManagerSessionLocal.getTenantById(Long.parseLong(request.getParameter("tenantId")));
                     request.getSession().setAttribute("renewTenant", renewTenant);
-                    page="LeasingOfficerRenewContract";
+                    page = "LeasingOfficerRenewContract";
                     break;
                 case "ProposeContractRenew":
                     String renewProposeStatus = doProposeRenew(request);
                     request.setAttribute("renewProposeStatus", renewProposeStatus);
                     page = "LeasingOfficerViewExpiringTenant";
                     break;
-                    
+
                 case "ViewEventApplication":
                     page = "LeasingOfficerViewAllEventApplication";
                     break;
@@ -360,13 +364,13 @@ public class LeasingControllerServlet extends HttpServlet {
                     request.setAttribute("acceptEventStatus", acceptEventStatus);
                     page = "LeasingOfficerViewAllEventApplication";
                     break;
-                case "ViewAllEvent":  
-                    page="LeasingOfficerViewAllEvent";
+                case "ViewAllEvent":
+                    page = "LeasingOfficerViewAllEvent";
                     break;
                 case "DeleteEvent":
                     String deleteEventStatus = doDeleteEventWithId(request);
                     request.setAttribute("deleteEventStatus", deleteEventStatus);
-                    page="LeasingOfficerViewAllEvent";
+                    page = "LeasingOfficerViewAllEvent";
                     break;
                 case "ViewPendingTenant":
                     //pendingList in ESSENTIAL ZONE
@@ -381,6 +385,20 @@ public class LeasingControllerServlet extends HttpServlet {
                     String deleteTenantStatus = doDeleteExpireTenant(request);
                     request.setAttribute("deleteTenantStatus", deleteTenantStatus);
                     page = "LeasingOfficerViewExpiringTenant";
+                    break;
+                case "ViewTenantRequest":
+                    getRentReqList(request);
+                    page = "LeasingOfficerViewAllRentRequest";
+                    break;
+                case "AcceptRentRequest":
+                    changeRentReqStatus(request,"Accepted");
+                    getRentReqList(request);
+                    page = "LeasingOfficerViewAllRentRequest";
+                    break;
+                case "RejectRentRequest":
+                    changeRentReqStatus(request,"Rejected");
+                    getRentReqList(request);
+                    page = "LeasingOfficerViewAllRentRequest";
                     break;
 //END-FUNCTION FOR LEASING OFFICER
 //START-FUNCTION FOR SPACE PLAN OFFICER
@@ -506,9 +524,9 @@ public class LeasingControllerServlet extends HttpServlet {
 //END-FUNCTION FOR SPACE PLAN OFFICER
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////START ESSENTIALS ZONE///////////////////////////////////////////////////////////
-            if(page.equals("LeasingOfficerViewAllEvent")){
-                ArrayList<EventEntity> allEventList  = doGetAllEvent(request);
-                    request.setAttribute("allEventList", allEventList);
+            if (page.equals("LeasingOfficerViewAllEvent")) {
+                ArrayList<EventEntity> allEventList = doGetAllEvent(request);
+                request.setAttribute("allEventList", allEventList);
             }
             if (page.equals("LeasingOfficerViewAllEventApplication")) {
                 ArrayList<EventEntity> eventApplicationList = doGetAllEventApplication(request);
@@ -671,7 +689,8 @@ public class LeasingControllerServlet extends HttpServlet {
         tenantManager.createPendingTenantAndContractForApprovedLongTermApplication(applicationId);
         leasingRequestManager.deleteAllCollideRequestAndApplication(leasingRequestId, applicationId);
     }
-    public void doAcceptContractRenewRequest(HttpServletRequest request){
+
+    public void doAcceptContractRenewRequest(HttpServletRequest request) {
         Long leasingRequestId = Long.parseLong(request.getParameter("leasingRequestId"));
         tenantManagerSessionLocal.acceptContractRenewRequest(leasingRequestId);
     }
@@ -932,17 +951,30 @@ public class LeasingControllerServlet extends HttpServlet {
         EventManager eventManager = new EventManager(eventManagerSessionLocal);
         return eventManager.getEventById(request);
     }
-    public ArrayList<EventEntity> doGetAllEvent(HttpServletRequest request){
+
+    public ArrayList<EventEntity> doGetAllEvent(HttpServletRequest request) {
         EventManager eventManager = new EventManager(eventManagerSessionLocal);
         return eventManager.getAllEvent(request);
     }
-    public String doDeleteEventWithId(HttpServletRequest request){
+
+    public String doDeleteEventWithId(HttpServletRequest request) {
         EventManager eventManager = new EventManager(eventManagerSessionLocal);
         return eventManager.deleteEventWithId(request);
     }
-    public String doProposeRenew(HttpServletRequest request){
+
+    public String doProposeRenew(HttpServletRequest request) {
         LeasingRequestManager requestManager = new LeasingRequestManager(leasingSystemRequestManagerSessionLocal);
         return requestManager.proposeRenew(request);
+    }
+
+    public void getRentReqList(HttpServletRequest request) {
+        String mallName = (String) request.getSession().getAttribute("mallName");
+        ArrayList<RentRenewalRequestEntity> rentReqList = tenantManagerBeanLocal.getRentReqList(mallName);
+        request.setAttribute("rentReqList", rentReqList);
+    }
+    public void changeRentReqStatus(HttpServletRequest request,String status){
+        Long id = Long.parseLong(request.getParameter("rentReqId"));
+        tenantManagerBeanLocal.changeRentReqStatus(id, status);
     }
 ///////////////////////////////////END FOR LEASING OFFICER///////////////////////////////////////////////
 

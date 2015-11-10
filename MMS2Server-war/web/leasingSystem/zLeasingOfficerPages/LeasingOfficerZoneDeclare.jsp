@@ -86,7 +86,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/employee/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -151,8 +151,18 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="">
-                                <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
+                            <li class="menu-dropdown classic-menu-dropdown">
+                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
+                                    Request<i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-left">
+                                    <li class="">
+                                        <a href="ViewTenantRequest">Tenant Request</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="CheckLeasingOfficerRequestStatus">My Request</a>
+                                    </li>
+                                </ul>
                             </li>
 
                         </ul>    

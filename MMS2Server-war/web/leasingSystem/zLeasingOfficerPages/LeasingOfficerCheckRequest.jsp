@@ -73,7 +73,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/employee/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -106,7 +106,7 @@
                             <li class="">
                                 <a href="ChooseUnitForPublicBidding">Open public bidding</a>
                             </li>
-<li class="menu-dropdown classic-menu-dropdown">
+                            <li class="menu-dropdown classic-menu-dropdown">
                                 <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
                                     Tenant<i class="fa fa-angle-down"></i>
                                 </a>
@@ -138,9 +138,20 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="active">
-                                <a href="CheckLeasingOfficerRequestStatus">Request Status</a>
+                            <li class="menu-dropdown classic-menu-dropdown">
+                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
+                                    Request<i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-left">
+                                    <li class="">
+                                        <a href="ViewTenantRequest">Tenant Request</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="CheckLeasingOfficerRequestStatus">My Request</a>
+                                    </li>
+                                </ul>
                             </li>
+
                         </ul>    
                     </div>
                     <!-- END MEGA MENU -->
@@ -200,7 +211,7 @@
                                                     + requestDescriptionList.get(j);
                                         }
                                         requestDescriptionString = requestDescriptionString.replaceAll("\n", "<br>");
-                                        
+
                                         String requestStatus = leasingRequest.getStatus();
                                         String applicationID = "N.A.";
                                         String applyUnitList = "N.A.";
@@ -211,15 +222,15 @@
                                             ArrayList<String> tempList = leasingRequest.getListOfUnitOpenForBidding();
                                             String tempString = "";
                                             for (int j = 0; j < tempList.size(); j++) {
-                                                tempString = tempString + tempList.get(j)+ "<br>";
-                                               }
+                                                tempString = tempString + tempList.get(j) + "<br>";
+                                            }
                                             publicOpenUnitList = tempString;
                                         } else {
                                             applicationID = String.valueOf(leasingRequest.getApplicationId());
                                             ArrayList<String> tempList = leasingRequest.getApplyUnitList();
                                             String tempString = "";
                                             for (int j = 0; j < tempList.size(); j++) {
-                                                tempString = tempString+ tempList.get(j)+"<br>";
+                                                tempString = tempString + tempList.get(j) + "<br>";
                                             }
                                             applyUnitList = tempString;
                                         }
@@ -234,7 +245,7 @@
                                     <td><%=requestStatus%></td>
                                     <td>
                                         <a onclick="return confirm('Proceed deleting this request?')"
-                                            href="DeleteLeasingOfficerRequest?leasingRequestId=<%=requestID%>">
+                                           href="DeleteLeasingOfficerRequest?leasingRequestId=<%=requestID%>">
                                             DELETE</a>   
                                     </td>
                                 </tr>

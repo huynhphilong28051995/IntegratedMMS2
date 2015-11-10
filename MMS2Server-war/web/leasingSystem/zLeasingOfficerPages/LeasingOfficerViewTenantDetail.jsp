@@ -74,7 +74,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/employee/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -102,14 +102,57 @@
                     <div class="hor-menu ">
                         <ul class="nav navbar-nav">
                             <li class="">
-                                <a href="ViewAllRequests">View requests</a>
+                                <a href="DeclareZone">Zone declaration</a>
                             </li>
                             <li class="">
-                                <a href="ViewTenantMixLM">Tenant mix</a>
+                                <a href="ChooseUnitForPublicBidding">Open public bidding</a>
                             </li>
-                            <li class="active">
-                                <a href="ViewCurrentTenantLM">Current tenant</a>
+                            <li class="menu-dropdown classic-menu-dropdown">
+                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
+                                    Tenant<i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-left">
+                                    <li class="">
+                                        <a href="ViewAllTenants">View current tenants</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="ViewAllPublicLongTermApplication">View application</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="ViewPendingTenant">View pending tenants</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="ViewExpiringTenant">View expiring tenants</a>
+                                    </li>
+                                </ul>
                             </li>
+                            <li class="menu-dropdown classic-menu-dropdown">
+                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
+                                    Event<i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-left">
+                                    <li class="">
+                                        <a href="ViewAllEvent">View all event</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="ViewEventApplication">View application</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="menu-dropdown classic-menu-dropdown">
+                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;">
+                                    Request<i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-left">
+                                    <li class="">
+                                        <a href="ViewTenantRequest">Tenant Request</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="CheckLeasingOfficerRequestStatus">My Request</a>
+                                    </li>
+                                </ul>
+                            </li>
+
                         </ul>    
                     </div>
                     <!-- END MEGA MENU -->

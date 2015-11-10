@@ -133,7 +133,7 @@ public class EmployeeServlet extends HttpServlet {
                                     
                                         message = "../FMSControlServlet/directLogin?userRole="+staffPosition+"&mallName="+mallName;
                                      
-                                   
+ 
                                 }
                             }
                         }

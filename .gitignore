@@ -16,3 +16,9 @@ hs_err_pid*
 /MMS2Server-war/build/
 /dist/
 /MMS2Server-ejb/build/
+/TenantSystemMMS2-war/build/
+/TenantSystemMMS2-war/nbproject/private/
+/TenantSystemMMS2-war/dist/
+/CustomerSystemMMS2-war/build/
+/CustomerSystemMMS2-war/nbproject/private/
+/CustomerSystemMMS2-war/dist/

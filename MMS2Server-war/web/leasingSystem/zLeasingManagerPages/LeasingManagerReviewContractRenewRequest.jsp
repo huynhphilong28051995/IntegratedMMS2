@@ -75,7 +75,7 @@
                                             <i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href="http://<%=IP%>:8080/MMS2Server-war/administration/logout">
+                                        <a href="http://<%=IP%>:8080/MMS2Server-war/employee/logout">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
