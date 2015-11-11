@@ -181,15 +181,15 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Name</th>
-                                <th> Category </th>
-                                <th> Quantity </th>
-                                <th> Cost </th>
-                                <th> Location </th>
-                                <th> PurchaseDate </th>
-                                <th> ExpiryDate </th>                               
-                                <th> Status </th>
-                                <th> Options </th>
-                                <th> Asset </th>                               
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Cost</th>
+                                <th>Location</th>
+                                <th>PurchaseDate</th>
+                                <th>ExpiryDate</th>                               
+                                <th>Status</th>
+                                <th>Options</th>
+                                <th>Asset</th>                               
                             </tr>
                         </thead>
                         <tbody>

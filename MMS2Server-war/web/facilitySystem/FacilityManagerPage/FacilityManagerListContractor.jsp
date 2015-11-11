@@ -3,6 +3,7 @@
     Created on : Oct 13, 2015, 11:37:08 AM
     Author     : linjiao_Zoe
 --%>
+<%@page import="mms.facility.entity.FacilityEntity"%>
 <%@page import="mms.facility.entity.ContractorEntity"%>
 <%@page import="java.util.StringTokenizer"%>
 <%@page import="java.util.ArrayList"%>
@@ -151,7 +152,8 @@
                         <thead>
                             <tr align="left">
                                 <th>Id</th>
-                                <th>Name</th>                               
+                                <th>Name</th> 
+                                <th>Facilities</th>
                                 <th>Services Type</th>
                                 <th>Contract Start Date</th>
                                 <th>Contract End Date</th>
@@ -173,10 +175,16 @@
                                     String contact = contractor.getContractorTel();
                                     String email = contractor.getContractorEmail();
                                     String status = contractor.getContractorStatus();
+                                    ArrayList<FacilityEntity> facilityList = new ArrayList<FacilityEntity>(contractor.getFacility());
+                                    String facilityString = "";
+                                    for(int i=0; i<facilityList.size(); i++){
+                                        facilityString  = facilityString+(facilityList.get(i)).getFacilityName()+"<br>";
+                                    }
                             %>
                             <tr>
                                 <td><%=Id%></td>
                                 <td><%=name%></td>
+                                <td><%=facilityString%></td>
                                 <td><%=service%></td>            
                                 <td><%=start%></td> 
                                 <td><%=end%></td> 

@@ -33,8 +33,9 @@ public class ServiceManager {
         Timestamp servicingEndDate = Timestamp.valueOf(servicingEndDateString);
         double serviceFee = Double.parseDouble(request.getParameter("serviceFee"));
         String mallName = (String) request.getSession().getAttribute("mallName");
+        Long facilityId = Long.parseLong(request.getParameter("facilityId"));
         return serviceManagerSessionLocal.addService(serviceType, serviceRequestDetail,
-            servicingStartDate, servicingEndDate, serviceFee, mallName);
+            servicingStartDate, servicingEndDate, serviceFee, mallName, facilityId);
     }
 
     public ServiceEntity getServiceRequest(HttpServletRequest request) {

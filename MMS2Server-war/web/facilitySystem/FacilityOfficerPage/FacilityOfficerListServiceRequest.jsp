@@ -179,7 +179,7 @@
                         <thead>
                             <tr>
                                 <th>Id</th>
-                                
+                                <th>Facilities</th>
                                 <th>Type</th>
                                 <th>Request Date</th>
                                 <th>Detail</th>                           
@@ -196,7 +196,7 @@
                                 for (Object o : services) {
                                     ServiceEntity service = (ServiceEntity) o;
                                     Long Id = service.getServiceId();
-                                    
+                                    String facilityIdName = service.getFacilityIdName();
                                     String type = service.getServiceType();
                                     String date = service.getServiceRequestDate().toString().substring(0, 10);
                                     String detail = service.getServiceRequestDetail();
@@ -207,7 +207,7 @@
                             %>
                             <tr>
                                 <td><%=Id%></td>
-                                
+                                <td><%=facilityIdName%></td>
                                 <td><%=type%></td>                                    
                                 <td><%=date%></td>           
                                 <td><%=detail%></td>            
