@@ -1,9 +1,11 @@
- <%-- 
-    Document   : FacilityOfficerAddFacility
-    Created on : Sep 22, 2015, 6:33:46 PM
-    Author     : linjiao_Zoe
+<%-- 
+   Document   : FacilityOfficerAddFacility
+   Created on : Sep 22, 2015, 6:33:46 PM
+   Author     : linjiao_Zoe
 --%>
 
+<%@page import="mms.facility.entity.ContractorEntity"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -28,6 +30,7 @@
         <link href="../assets/admin/interface/css/layout.css" rel="stylesheet" type="text/css">
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="../assets/global/plugins/select2/select2.css"/>
         <!-- END CUSTOM STYLES -->
         <!-- BEGIN PERSONAL STYLES -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/facilitySystem/jquery-ui-1.11.4.custom/jquery-ui.theme.css">
@@ -36,11 +39,12 @@
         <script src="${pageContext.request.contextPath}/facilitySystem/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
         <!-- END PERSONAL STYLES -->
     </head>
+
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
-        <!-- BEGIN HEADER -->
+        <!-- BEGIN Page HEADER -->
         <div class="page-header">
-            <!-- BEGIN HEADER TOP -->
+            <!-- BEGIN Page HEADER TOP -->
             <div class="page-header-top">
                 <div class="container">
                     <!-- BEGIN LOGO -->
@@ -64,17 +68,18 @@
                                         <a href="extra_profile"><i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href=""><i class="icon-key"></i> Log Out </a>
+                                        <a href="../employee/logout"><i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
                             </li>
-                            <!-- END USER LOGIN DROPDOWN -->
+                            <!-- END USER LOGIN DROP DOWN -->
                         </ul>
                     </div>
                     <!-- END TOP NAVIGATION MENU -->
                 </div>
             </div>
-            <!-- END HEADER TOP -->
+            <!-- END Page HEADER TOP -->
+
             <!-- BEGIN HEADER MENU -->
             <div class="page-header-menu">
                 <div class="container">
@@ -145,7 +150,8 @@
             </div>
             <!-- END HEADER MENU -->
         </div>
-        <!-- END HEADER -->
+        <!-- END Page HEADER -->
+
         <!-- BEGIN PAGE CONTAINER -->
         <div class="page-container">
             <!-- BEGIN PAGE HEAD -->
@@ -153,95 +159,179 @@
                 <div class="container">
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">  
-                        <h1>Add New Facility</h1>
+                        <h1>Add Facility</h1>
                     </div>
                     <!-- END PAGE TITLE -->
                 </div>
             </div>
             <!-- END PAGE HEAD -->
+
             <!-- BEGIN PAGE CONTENT -->
             <div class="page-content">
                 <div class="container">
-                    <!-- BEGIN PAGE BREADCRUMB -->
-                    <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
 
-                    <form action="saveFacility" method="GET">
-                        <table>
-                            <tr>
-                                <td>Name:</td>
-                                <td><input type="text" name="facilityName" required="required"/></td>
-                            </tr>
-                            <tr>
-                                <td>Category:</td>
-                                <td>
-                                    <select name="facilityCategory" required="required">
-                                        <option value="">Please select a category</option>
-                                        <option value="Central Air Condition">Central Air Condition</option>
-                                        <option value="Drainage System">Drainage System</option>
-                                        <option value="Exhaust System">Exhaust System</option>
-                                        <option value="Escalator">Escalator</option>
-                                        <option value="Fire Alarm">Fire Alarm</option>
-                                        <option value="Information Counter">Information Counter</option>
-                                        <option value="Lift">Lift</option>
-                                        <option value="Toilet">Toilet</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Quantity:</td>
-                                <td><input type="number" name="facilityQuantity" min="1" max="200" required="required"/></td>
-                            </tr>
-                            <tr>
-                                <td>Condition:</td>
-                                <td><select name="facilityCondition" required="required">
-                                        <option value="">Please select a condition</option>
-                                        <option value="Good">Good</option>                           
-                                        <option value="Under Maintenance">Under Maintenance</option>
-                                        <option value="Bad">Bad</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Location:</td>
-                                <td><input type="text" name="facilityLocation" required="required"/></td>
-                            </tr>
-                            <tr>
-                                <td>Purchase Date:</td>
-                                <td><input type="text" id="datepickerPurchaseDate" name="facilityPurchaseDate" required="required"/>
-                                    <script>
-                                        $(function () {
-                                            $("#datepickerPurchaseDate").datepicker({dateFormat: 'yy-mm-dd'});
-                                        });
-                                    </script>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Expiry Date:</td>
-                                <td><input type="text" id="datepickerExpiryDate" name="facilityExpiryDate" required="required"/>
-                                    <script>
-                                        $(function () {
-                                            $("#datepickerExpiryDate").datepicker({dateFormat: 'yy-mm-dd'});
-                                        });
-                                    </script>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Cost:</td>
-                                <td><input type="number" step="any" name="facilityCost" required="required"/></td>
-                            </tr>
-                        </table>
-                        <br/>
-                        <input type="submit" value="Submit"/>&nbsp;&nbsp;
-                        <input type="reset" value="Reset"/>    
-                    </form>
-                    <!-- END PAGE CONTENT INNER -->
-                </div>
-            </div>
-            <!-- END PAGE CONTENT -->
-        </div>
-        <!-- END PAGE CONTAINER -->
+                    <!-- BEGIN TABLE PORTLET-->
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-cogs font-white-sharp"></i>
+                                <span class="caption-subject font-white-sharp ">Add New Facility</span>
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                                <a href="javascript:;" class="remove">
+                                </a>
+                            </div>
+                        </div>
 
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <form action="saveFacility" method="GET" class="form-horizontal form-bordered form-row-stripped">
+                                <div class="form-group">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Name<span class="required">* </span> </label>
+                                            <div class="col-md-4">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="facilityName" placeholder="Specify new facility name"  required="required" style="width: 300px;" class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Category<span class="required">* </span>  </label>
+                                            <div class="col-md-4">
+                                                <select name="facilityCategory" id="country_list" required="required" class="form-control select2me">
+                                                    <option value=""></option>                          
+                                                    <option value="Central Air Condition">Central Air Condition</option>
+                                                    <option value="Drainage System">Drainage System</option>
+                                                    <option value="Exhaust System">Exhaust System</option>
+                                                    <option value="Escalator">Escalator</option>
+                                                    <option value="Fire Alarm">Fire Alarm</option>
+                                                    <option value="Information Counter">Information Counter</option>
+                                                    <option value="Lift">Lift</option>
+                                                    <option value="Toilet">Toilet</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Quantity<span class="required">* </span> </label>
+                                            <div class="col-md-4">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="number" name="facilityQuantity" required="required" min="1" max="200" placeholder="Specify new facility quantity" style="width: 250px;" class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Cost<span class="required">* </span> </label>
+                                            <div class="col-md-4">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="number" name="facilityCost" required="required" min="0" max="2000000" placeholder="Specify new facility cost" style="width: 230px;" class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>   
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Contractor<span class="required">* </span>  </label>
+                                            <div class="col-md-4">
+                                                <select name="contractorId" id="country_list" required="required" class="form-control select2me">
+                                                    <option value=""></option>
+                                                    <%
+                                                        ArrayList contractors = (ArrayList) request.getAttribute("data");
+                                                        for (Object o : contractors) {
+                                                            ContractorEntity contractor = (ContractorEntity) o;
+                                                            Long Id = contractor.getContractorId();
+                                                            String name = contractor.getContractorName();
+                                                            String service = contractor.getServiceType();
+                                                            String contact = contractor.getContractorTel();
+                                                    %>
+                                                    <option value="<%=Id%>"><%=name%> | <%=service%> | <%=contact%></option>
+                                                    <%
+                                                        }
+                                                    %>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Location<span class="required">* </span> </label>
+                                            <div class="col-md-4">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="facilityLocation" required="required" placeholder="Specify new facility location" style="width: 230px;" class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>     
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Purchase Date<span class="required">* </span> </label>
+                                            <div class="col-md-4">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" id="datepickerPurchaseDate" required="required" name="facilityPurchaseDate" style="width: 130px;" class="form-control"/>
+                                                    <script>
+                                                        $(function () {
+                                                            $("#datepickerPurchaseDate").datepicker({dateFormat: 'yy-mm-dd'});
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Expiry Date<span class="required">* </span> </label>
+                                            <div class="col-md-4">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" id="datepickerExpiryDate" required="required" name="facilityExpiryDate" style="width: 130px;" class="form-control"/>
+                                                    <script>
+                                                        $(function () {
+                                                            $("#datepickerExpiryDate").datepicker({dateFormat: 'yy-mm-dd'});
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="form-group">
+                                           <label class="control-label col-md-3">Condition<span class="required">* </span>  </label>
+                                           <div class="col-md-4">
+                                               <select name="facilityCondition" id="country_list" class="form-control select2me">
+                                                   <option value=""></option>                          
+                                                   <option value="Good">Good</option>
+                                                   <option value="Under Maintenance">Under Maintenance</option>
+                                                   <option value="Bad">Bad</option>
+                                               </select>
+                                           </div>
+                                       </div> --> 
+
+                                        <div class="form-actions">
+                                            <div class="row">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button type="submit" class="btn green"><i class="fa fa-check"></i> Submit</button>
+                                                    <button type="reset" class="btn default">Reset</button>
+                                                </div>
+                                            </div>
+                                        </div>                                          
+                                        <!-- END PAGE CONTENT INNER -->
+                                    </div>
+                                </div>                                                    
+                        </form>
+                    </div>
+                    <!-- End TABLE PORTLET-->
+                </div>
+                <!-- End Container -->
+            </div>
+            <!-- End PAGE CONTENT -->
+        </div>
+                                                
         <!-- BEGIN FOOTER -->
         <div class="page-footer">
             <div class="container">
@@ -269,12 +359,21 @@
         <script src="../assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-idle-timeout/jquery.idletimeout.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-idle-timeout/jquery.idletimer.js" type="text/javascript"></script>
+        <script type="text/javascript" src="../assets/global/plugins/select2/select2.min.js"></script>
         <script src="../assets/global/plugins/bootstrap-toastr/toastr.min.js"></script>
         <!-- END PAGE PLUGINS -->
         <script src="../assets/global/scripts/custom.js" type="text/javascript"></script>
         <script src="../assets/admin/interface/scripts/layout.js" type="text/javascript"></script>
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
+        <script>
+                                                        jQuery(document).ready(function () {
+                                                            Custom.init(); // init custom core components
+                                                            Layout.init(); // init current layout
+                                                            UIIdleTimeout.init(); // init Idle Timeout
+                                                            UIToastr.init(); // init Toastr Alert
+                                                        });
+        </script>
     </body>
     <!-- END BODY -->
 </html>

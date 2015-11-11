@@ -8,10 +8,12 @@ package mms.facility.session;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import mms.facility.entity.ContractorEntity;
 import mms.facility.entity.FacilityEntity;
 
 /**
@@ -26,13 +28,19 @@ public class FacilityManagerSession implements FacilityManagerSessionLocal {
 
     //create new facility
     @Override
-    public FacilityEntity addFacility(String facilityName, String facilityCategory, int facilityQuantity,
+    public FacilityEntity addFacility(Long contractorId,String facilityName, String facilityCategory, int facilityQuantity,
             String facilityCondition, String facilityLocation, Timestamp facilityPurchaseDate,
             Timestamp facilityExpiryDate, double facilityCost, String mallName) {
-        FacilityEntity facilityEntity = new FacilityEntity(facilityName, facilityCategory, facilityQuantity, facilityCondition,
+        FacilityEntity facilityEntity = new FacilityEntity(facilityName, facilityCategory, facilityQuantity,
                 facilityLocation, facilityPurchaseDate, facilityExpiryDate, facilityCost);
         facilityEntity.setMallName(mallName);
+        ContractorEntity contractor = em.find(ContractorEntity.class, contractorId);
+        Collection<FacilityEntity> facilityList = contractor.getFacility();
+        
         em.persist(facilityEntity);
+        facilityList.add(facilityEntity);
+        em.merge(contractor);
+        
         return facilityEntity;
     }
 
@@ -44,6 +52,19 @@ public class FacilityManagerSession implements FacilityManagerSessionLocal {
             Query q = em.createQuery("SELECT f FROM FacilityEntity f WHERE f.mallName=:inMallName");
             q.setParameter("inMallName", mallName);
             facilityList = new ArrayList<FacilityEntity>(q.getResultList());
+            Timestamp currentTime  = new Timestamp(System.currentTimeMillis());
+            for(int i=0; i<facilityList.size();i++){
+                FacilityEntity facility = facilityList.get(i);
+                Timestamp start  = facility.getFacilityPurchaseDate();
+                Timestamp end = facilityList.get(i).getFacilityExpiryDate();
+                if(start.after(currentTime) || end.before(currentTime)){
+                    facility.setFacilityStatus("Out of Warranty");
+                }else{
+                    facility.setFacilityStatus("Under Warranty");
+                }
+                em.merge(facility);
+                em.flush();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -94,11 +115,12 @@ public class FacilityManagerSession implements FacilityManagerSessionLocal {
     
     //check duplicated facilities within the same mall
     @Override
-    public boolean verifyFacility(String facilityName, String mallName){
+    public boolean verifyFacility(String facilityName, String mallName, String facilityLocation){
         boolean check=false; 
         Query q = em.createQuery("SELECT fa FROM FacilityEntity fa WHERE "
-                + "fa.facilityName =:inFacilityName AND fa.mallName =:inMallName");
+                + "fa.facilityName =:inFacilityName AND fa.mallName =:inMallName AND fa.facilityLocation= :inLocation");
         q.setParameter("inFacilityName", facilityName);
+        q.setParameter("inLocation", facilityLocation);
         q.setParameter("inMallName", mallName);
         if(q.getResultList().size()==0)
             check = true; //no dulpicated names existed

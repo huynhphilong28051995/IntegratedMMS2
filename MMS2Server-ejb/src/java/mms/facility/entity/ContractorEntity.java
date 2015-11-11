@@ -34,32 +34,35 @@ public class ContractorEntity implements Serializable {
     private String contractorEmail;
     private Timestamp contractStartDate;
     private Timestamp contractEndDate;
-    //private String status; //active or inactive
+    private String contractorStatus = "Inactive";
     private String mallName;
-    
-    @OneToMany(cascade={CascadeType.PERSIST})
+
+    @OneToMany(cascade = {CascadeType.PERSIST})
     private Collection<FacilityEntity> facility = new ArrayList<FacilityEntity>();
-    
+
     public Collection<FacilityEntity> getFacility() {
         return facility;
     }
-    
-    public void setFacility(Collection<FacilityEntity> facility){
+
+    public void setFacility(Collection<FacilityEntity> facility) {
         this.facility = facility;
     }
 
     public ContractorEntity() {
     }
 
-    public ContractorEntity(String contractorName, String companyName, String serviceType, 
-            String contractorTel, String contractorEmail) {
+    public ContractorEntity(String contractorName, String companyName,
+            String serviceType, String contractorTel, String contractorEmail,
+            Timestamp contractStartDate, Timestamp contractEndDate) {
         this.contractorName = contractorName;
         this.companyName = companyName;
         this.serviceType = serviceType;
         this.contractorTel = contractorTel;
         this.contractorEmail = contractorEmail;
+        this.contractStartDate = contractStartDate;
+        this.contractEndDate = contractEndDate;
     }
-    
+
     public Long getContractorId() {
         return contractorId;
     }
@@ -123,7 +126,15 @@ public class ContractorEntity implements Serializable {
     public void setContractEndDate(Timestamp contractEndDate) {
         this.contractEndDate = contractEndDate;
     }
-    
+
+    public String getContractorStatus() {
+        return contractorStatus;
+    }
+
+    public void setContractorStatus(String contractorStatus) {
+        this.contractorStatus = contractorStatus;
+    }
+
     public String getMallName() {
         return mallName;
     }
@@ -131,7 +142,7 @@ public class ContractorEntity implements Serializable {
     public void setMallName(String mallName) {
         this.mallName = mallName;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

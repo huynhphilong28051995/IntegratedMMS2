@@ -126,7 +126,7 @@ public class TenantManagerBean implements TenantManagerBeanLocal {
     
     public String submitOutsourcingRequest(Long tenantID, String tenantEmail, String mallName, String unitNumber, String contractorName, String description, int numStaff, Timestamp outsourcingDate, Timestamp oServicingStartDate, Timestamp oServicingEndDate, String docFileLink){
         OutsourcingEntity outsourceRequest = new OutsourcingEntity(tenantID,  tenantEmail, unitNumber, 
-                contractorName, numStaff,  outsourcingDate,  description, oServicingStartDate,
+                contractorName, numStaff, outsourcingDate,description, oServicingStartDate,
                 oServicingEndDate, docFileLink, mallName);
         em.persist(outsourceRequest);
         return "Request Submitted! Our staff will contact you shortly";

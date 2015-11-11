@@ -57,7 +57,7 @@
                                         <a href="extra_profile"><i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href=""><i class="icon-key"></i> Log Out </a>
+                                        <a href="../employee/logout"><i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
                             </li>

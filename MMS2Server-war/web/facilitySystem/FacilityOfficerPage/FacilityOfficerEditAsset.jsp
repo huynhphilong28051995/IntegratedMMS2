@@ -30,6 +30,7 @@
         <link href="../assets/admin/interface/css/layout.css" rel="stylesheet" type="text/css">
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="../assets/global/plugins/select2/select2.css"/>
         <!-- END CUSTOM STYLES -->
     </head>
     <!-- BEGIN BODY -->
@@ -60,7 +61,7 @@
                                         <a href="extra_profile"><i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href=""><i class="icon-key"></i> Log Out </a>
+                                        <a href="../employee/logout"><i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
                             </li>
@@ -157,94 +158,141 @@
             <!-- END PAGE HEAD -->
             <!-- BEGIN PAGE CONTENT -->
             <div class="page-content">
-                <div class="container">
-                    <!-- BEGIN PAGE BREADCRUMB -->
-                    <!-- END PAGE BREADCRUMB -->
+                <div class="container">                   
                     <!-- BEGIN PAGE CONTENT INNER -->
 
-                    <form action="changeAsset" method="GET">
-                        <table>
-                            <%
-                                AssetEntity asset = (AssetEntity) request.getAttribute("data");
-                                Long Id = asset.getAssetId();
-                                String name = asset.getAssetName();
-                                int quantity = asset.getAssetQuantity();
-                                String condition = asset.getAssetCondition();
-                                double cost = asset.getAssetCost();
-                                request.getSession().setAttribute("assetId", Id);
-                            %>
-                            <tr>
-                                <td>Asset ID:</td>
-                                <td><%=Id%></td>
-                            </tr>
-                            <tr>
-                                <td>Name:</td>
-                                <td><input type="text" name="assetName" value="<%=name%>"/></td>
-                            </tr>
-                            <tr>
-                                <td>Quantity:</td>
-                                <td><input type="number" name="assetQuantity" value="<%=quantity%>" min="1" max="200"/></td>
-                            </tr>
-                            <tr>
-                                <td>Condition:</td>
-                                <td><select name="assetCondition">
-                                        <option value="<%=condition%>" selected="selected">No change: <%=condition%></option>
-                                        <option value="Good">Good</option>
-                                        <option value="Under Maintenance">Under Maintenance</option>
-                                        <option value="Bad">Bad</option>
-                                    </select>
-                                </td>
-                            </tr> 
-                            <tr>
-                                <td>Cost:</td>
-                                <td><input type="number" name="assetCost" step="any" value="<%=cost%>"/></td>
-                            </tr>
-                        </table>
-                        <br/>
-                        <input type="submit" value="Submit Changes"/>&nbsp;&nbsp;
-                        <input type="reset" value="Reset"/>
-                    </form>
-                    <!-- END PAGE CONTENT INNER -->
+                    <!-- BEGIN TABLE PORTLET-->
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-cogs font-white-sharp"></i>
+                                <span class="caption-subject font-white-sharp ">Edit Existing Asset By ID</span>
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                                <a href="javascript:;" class="remove">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <form action="changeAsset" method="GET" class="form-horizontal form-bordered form-row-stripped">
+                                <div class="form-group">
+                                    <div class="form-body">
+                                        <div class="form-group">  
+                                            <%
+                                                AssetEntity asset = (AssetEntity) request.getAttribute("data");
+                                                Long Id = asset.getAssetId();
+                                                String name = asset.getAssetName();
+                                                int quantity = asset.getAssetQuantity();
+                                                String condition = asset.getAssetCondition();
+                                                double cost = asset.getAssetCost();
+                                                request.getSession().setAttribute("assetId", Id);
+                                            %>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">ID: </label>
+                                                <div class="col-md-4"><%=Id%></div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Name: </label>
+                                                <div class="col-md-4">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="text" name="assetName" value="<%=name%>" style="width: 250px;" class="form-control"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Quantity: </label>
+                                                <div class="col-md-4">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="number" name="assetQuantity" value="<%=quantity%>" min="1" max="200" style="width: 250px;" class="form-control"/>
+                                                    </div>
+                                                </div>
+                                            </div>         
+
+                                        <!--    <div class="form-group">
+                                                <label class="control-label col-md-3">Condition: </label>
+                                                <div class="col-md-4">
+                                                    <select name="assetCondition" id="country_list" class="form-control select2me">
+                                                        <option value="<-%=condition%>" selected="selected">Remain as <%=condition%></option>
+                                                        <option value="Good">Good</option>
+                                                        <option value="Under Maintenance">Under Maintenance</option>
+                                                        <option value="Bad">Bad</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        -->
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Cost: </label>
+                                                <div class="col-md-4">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="number" name="assetCost" value="<%=cost%>" min="1" max="200" style="width: 250px;" class="form-control"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-actions">
+                                                <div class="row">
+                                                    <div class="col-md-offset-3 col-md-9">
+                                                        <button type="submit" class="btn green"><i class="fa fa-check"></i> Submit</button>
+                                                        <button type="reset" class="btn default">Reset</button>
+                                                    </div>
+                                                </div>
+                                            </div>                                          
+                                            <!-- END PAGE CONTENT INNER -->
+                                        </div>
+                                    </div>                              
+                                </div>
+                            </form>
+                        </div>
+                        <!-- End TABLE PORTLET-->
+                    </div>
+                    <!-- End Container -->
+                </div>
+                <!-- End PAGE CONTENT -->
+            </div>
+            <!-- BEGIN FOOTER -->
+            <div class="page-footer">
+                <div class="container">
+                    2015 &copy; Merlion Mall Asia. 
                 </div>
             </div>
-            <!-- END PAGE CONTENT -->
-        </div>
-        <!-- END PAGE CONTAINER -->
-
-        <!-- BEGIN FOOTER -->
-        <div class="page-footer">
-            <div class="container">
-                2015 &copy; Merlion Mall Asia. 
+            <div class="scroll-to-top">
+                <i class="icon-arrow-up"></i>
             </div>
-        </div>
-        <div class="scroll-to-top">
-            <i class="icon-arrow-up"></i>
-        </div>
-        <!-- END FOOTER -->
-        <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-        <!-- BEGIN PAGE PLUGINS -->
-        <!--[if lt IE 9]>
-        <script src="../assets/global/plugins/respond.min.js"></script>
-        <script src="../assets/global/plugins/excanvas.min.js"></script> 
-        <![endif]-->
-        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
-        <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
-        <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
-        <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="../assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
-        <script src="../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-        <script src="../assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
-        <script src="../assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
-        <script src="../assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
-        <script src="../assets/global/plugins/jquery-idle-timeout/jquery.idletimeout.js" type="text/javascript"></script>
-        <script src="../assets/global/plugins/jquery-idle-timeout/jquery.idletimer.js" type="text/javascript"></script>
-        <script src="../assets/global/plugins/bootstrap-toastr/toastr.min.js"></script>
-        <!-- END PAGE PLUGINS -->
-        <script src="../assets/global/scripts/custom.js" type="text/javascript"></script>
-        <script src="../assets/admin/interface/scripts/layout.js" type="text/javascript"></script>
-        <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
-        <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
-        <!-- END JAVASCRIPTS -->
+            <!-- END FOOTER -->
+            <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+            <!-- BEGIN PAGE PLUGINS -->
+            <!--[if lt IE 9]>
+            <script src="../assets/global/plugins/respond.min.js"></script>
+            <script src="../assets/global/plugins/excanvas.min.js"></script> 
+            <![endif]-->
+            <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+            <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+            <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+            <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+            <script src="../assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+            <script src="../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+            <script src="../assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+            <script src="../assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+            <script src="../assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+            <script src="../assets/global/plugins/jquery-idle-timeout/jquery.idletimeout.js" type="text/javascript"></script>
+            <script src="../assets/global/plugins/jquery-idle-timeout/jquery.idletimer.js" type="text/javascript"></script>
+            <script src="../assets/global/plugins/bootstrap-toastr/toastr.min.js"></script>
+            <!-- END PAGE PLUGINS -->
+            <script src="../assets/global/scripts/custom.js" type="text/javascript"></script>
+            <script src="../assets/admin/interface/scripts/layout.js" type="text/javascript"></script>
+            <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
+            <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
+            <!-- END JAVASCRIPTS -->
     </body>
     <!-- END BODY -->
 </html>

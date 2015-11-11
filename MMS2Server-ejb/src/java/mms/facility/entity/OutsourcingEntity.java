@@ -40,6 +40,7 @@ public class OutsourcingEntity implements Serializable {
     }
 
     public OutsourcingEntity(Long tenantId, String tenantEmail, String unitNumber, String contractorName, int numStaff, Timestamp outsourcingDate, String outsourcingDetail, Timestamp oServicingStartDate, Timestamp oServicingEndDate, String docFileLink, String mallName) {
+        
         this.tenantId = tenantId;
         this.tenantEmail = tenantEmail;
         this.unitNumber = unitNumber;

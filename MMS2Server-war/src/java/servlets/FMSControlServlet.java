@@ -150,15 +150,18 @@ public class FMSControlServlet extends HttpServlet {
             if ("FacilityOfficerIndexpage".equals(page)) {
                 //no attributes to set           
             } else if ("addFacility".equals(page)) { //addFacility()
+                List data = contractorManagerSessionLocal.listContractor((String) request.getSession().getAttribute("mallName"));
+                request.setAttribute("data", data);
                 page = "FacilityOfficerAddFacility";
             } else if ("saveFacility".equals(page)) {
                 String faciName = request.getParameter("facilityName");
+                String faciLoca = request.getParameter("facilityLocation");
                 if (facilityManagerSessionLocal.verifyFacility(faciName,
-                        (String) request.getSession().getAttribute("mallName"))) { //verifyFacility()
-                    addFacility(faciName, request);
+                        (String) request.getSession().getAttribute("mallName"), faciLoca)) { //verifyFacility()
+                    addFacility(faciName, faciLoca, request);
                     request.setAttribute("addFacilityStatus", "Facility has been successfully added!");
                 } else {
-                    request.setAttribute("alertStatus", "Facility name cannot be duplicated. Please input the differnt name. Thank You!");
+                    request.setAttribute("alertStatus", "Error! You are not allowed to create same facility at same location. Please check your input carefully. Thank You!");
                 }
                 page = "FacilityOfficerIndexpage";
             } else if ("listFacility".equals(page)) { //listFacility()
@@ -229,6 +232,8 @@ public class FMSControlServlet extends HttpServlet {
                 request.setAttribute("deleteContractorStatus", "The contractor has been successfully deleted!");
                 page = "FacilityOfficerListContractor";
             } else if ("addServiceRequest".equals(page)) { //addServiceRequest()
+                List data = facilityManagerSessionLocal.listFacility((String) request.getSession().getAttribute("mallName"));
+                request.setAttribute("data", data);
                 page = "FacilityOfficerAddServiceRequest";
             } else if ("saveServiceRequest".equals(page)) {
                 addServiceRequest(request);
@@ -323,9 +328,9 @@ public class FMSControlServlet extends HttpServlet {
     }
 
     //create new facility
-    private FacilityEntity addFacility(String facilityName, HttpServletRequest request) {
+    private FacilityEntity addFacility(String facilityName, String facilityLocation, HttpServletRequest request) {
         FacilityManager fm = new FacilityManager(facilityManagerSessionLocal);
-        return fm.createNewFacility(facilityName, request);
+        return fm.createNewFacility(facilityName, facilityLocation, request);
     }
 
     //get facility details by ID

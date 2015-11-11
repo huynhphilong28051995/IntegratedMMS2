@@ -31,6 +31,21 @@
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
         <!-- END CUSTOM STYLES -->
+        <!--START PERSONAL STYLE-->
+        <!--<link rel="stylesheet" href="${pageContext.request.contextPath}/leasingSystem/leasingSystemAssets/css/bootstrap.css" type="text/css">-->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+        <!-- Embedded CSS -->
+        <style TYPE="text/css">
+            th{
+                text-align: center;
+            }
+            td{
+                text-align:center;
+            }
+        </style>
+        <!--END PERSONAL STYLE-->     
     </head>
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
@@ -60,7 +75,7 @@
                                         <a href="extra_profile"><i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href=""><i class="icon-key"></i> Log Out </a>
+                                        <a href="../employee/logout"><i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
                             </li>
@@ -149,7 +164,7 @@
                 <div class="container">
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">  
-                        <h1>List Service Requests</h1>
+                        <h1>List of Service Requests</h1>
                     </div>
                     <!-- END PAGE TITLE -->
                 </div>
@@ -158,53 +173,68 @@
             <!-- BEGIN PAGE CONTENT -->
             <div class="page-content">
                 <div class="container">
-                    <!-- BEGIN PAGE BREADCRUMB -->
-                    <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
 
-                    <table border="3">
-                        <tr align="left">
-                            <th>Id</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                            <th>Date</th>
-                            <th>Detail</th>
-                            <th>Fee</th>
-                            <th>Servicing Date</th>
-                            <th>Update Options</th>
-                        </tr>
-                        <%
-                            ArrayList services = (ArrayList) request.getAttribute("data");
-                            for (Object o : services) {
-                                ServiceEntity service = (ServiceEntity) o;
-                                Long Id = service.getServiceId();
-                                String type = service.getServiceType();
-                                String status = service.getServiceRequestStatus();
-                                String date = service.getServiceRequestDate().toString().substring(0, 10);
-                                String detail = service.getServiceRequestDetail();
-                                int fee = service.getServiceFee();
-                                String servicingDate = service.getServicingDate().toString().substring(0, 10);
-                        %>
-                        <tr>
-                            <td><%=Id%></td>
-                            <td><%=type%></td>
-                            <td><%=status%></td>            
-                            <td><%=date%></td>           
-                            <td><%=detail%></td>            
-                            <td><%=fee%></td>          
-                            <td><%=servicingDate%></td>           
-                            <td>
-                                <a onclick="return confirm('Are you sure you want to delete this service request?')" 
-                                   href="deleteServiceRequest?serviceId=<%=Id%>">&nbsp;&nbsp;&nbsp;Delete</a>
-                                <a href="editServiceRequest?serviceId=<%=Id%>">&nbsp;&nbsp;&nbsp;Edit</a>
-                            </td>
-                        </tr>           
-                        <%
-                            }
-                        %>                                
+                    <table id="table" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                
+                                <th>Type</th>
+                                <th>Request Date</th>
+                                <th>Detail</th>                           
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Fee</th> 
+                                <th>Status</th>                                                     
+                                <th>Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                ArrayList services = (ArrayList) request.getAttribute("data");
+                                for (Object o : services) {
+                                    ServiceEntity service = (ServiceEntity) o;
+                                    Long Id = service.getServiceId();
+                                    
+                                    String type = service.getServiceType();
+                                    String date = service.getServiceRequestDate().toString().substring(0, 10);
+                                    String detail = service.getServiceRequestDetail();
+                                    String status = service.getServiceRequestStatus();
+                                    String start = service.getServicingStartDate().toString().substring(0, 10);
+                                    String end = service.getServicingEndDate().toString().substring(0, 10);
+                                    double fee = service.getServiceFee();
+                            %>
+                            <tr>
+                                <td><%=Id%></td>
+                                
+                                <td><%=type%></td>                                    
+                                <td><%=date%></td>           
+                                <td><%=detail%></td>            
+                                <td><%=start%></td>          
+                                <td><%=end%></td> 
+                                <td><%=fee%></td> 
+                                <td><%=status%></td>                                
+                                <td>
+                                    <a onclick="return confirm('Are you sure you want to delete this service request?')" 
+                                       href="deleteServiceRequest?serviceId=<%=Id%>">Delete</a>
+                                    <a href="editServiceRequest?serviceId=<%=Id%>">Edit</a>
+                                </td>
+                            </tr>           
+                            <%
+                                }
+                            %>  
+                        </tbody>
                     </table>
-                    <!-- END PAGE CONTENT INNER -->
+                        <script>
+                            $(document).ready(function () {
+                                $('#table').DataTable({
+                                    "order": [[3, "desc"]]
+                                });
+                            });
+                        </script>                     
                 </div>
+                <!-- END PAGE CONTENT INNER -->
             </div>
             <!-- END PAGE CONTENT -->
         </div>
@@ -226,7 +256,7 @@
         <script src="../assets/global/plugins/respond.min.js"></script>
         <script src="../assets/global/plugins/excanvas.min.js"></script> 
         <![endif]-->
-        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+        <!--<script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
         <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -244,13 +274,12 @@
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
         <script>
-                                    < script >
-                                            jQuery(document).ready(function () {
-                                        Custom.init(); // init custom core components
-                                        Layout.init(); // init current layout
-                                        UIIdleTimeout.init(); // init Idle Timeout
-                                        UIToastr.init(); // init Toastr Alert
-                                    });
+                        jQuery(document).ready(function () {
+                            Custom.init(); // init custom core components
+                            Layout.init(); // init current layout
+                            UIIdleTimeout.init(); // init Idle Timeout
+                            UIToastr.init(); // init Toastr Alert
+                        });
         </script>
         <%
             if (request.getAttribute("editServiceRequestStatus") != null) {
@@ -278,7 +307,7 @@
         </script>
         <%
             }
-        %>      
+        %>
         <!-- END JAVASCRIPTS -->
     </body>
     <!-- END BODY -->

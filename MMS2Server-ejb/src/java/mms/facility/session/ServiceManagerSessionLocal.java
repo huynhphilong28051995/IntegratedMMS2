@@ -17,15 +17,16 @@ import mms.facility.entity.ServiceEntity;
 @Local
 public interface ServiceManagerSessionLocal {
 
-    public ServiceEntity addService(String serviceType, String serviceRequestStatus,
-            Timestamp serviceRequestDate, String serviceRequestDetail, int serviceFee,
-            Timestamp servicingDate, String mallName);
+    public ServiceEntity addService(String serviceType, String serviceRequestDetail,
+            Timestamp servicingStartDate, Timestamp servicingEndDate, double serviceFee, String mallName);
 
     public ArrayList<ServiceEntity> listServiceRequest(String mallName);
 
     public ServiceEntity getServiceRequest(Long serviceId);
 
-    public ServiceEntity editServiceRequest(Long serviceId, String serviceType, String serviceRequestStatus, Timestamp serviceRequestDate, String serviceRequestDetail, int serviceFee, Timestamp servicingDate);
+    public ServiceEntity editServiceRequest(Long serviceId, String serviceType, String serviceRequestStatus,
+            String serviceRequestDetail, Timestamp servicingStartDate, Timestamp servicingEndDate,
+            double serviceFee);
 
     public void deleteServiceRequest(Long serviceId);
 }

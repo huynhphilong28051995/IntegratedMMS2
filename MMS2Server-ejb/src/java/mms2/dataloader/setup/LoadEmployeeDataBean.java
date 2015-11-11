@@ -52,120 +52,140 @@ public class LoadEmployeeDataBean implements LoadEmployeeDataBeanRemote {
     public void setUp() {
 
         //Setup Organization Levels
-        createLevelType("C", "Merlion Headquarter", "SG", "2 Orchard Turn", "238801");
-        createLevelType("L", "Merlion Local Office", "SG", "2 West Coast Drive", "239901");
-        createLevelType("M", "Merlion West", "SG", "2 Jurong Lake District", "236601");
-
-        //Setup Organization Departments and Associate Department(s) to HQ(s)
-        createDepartment("Advertising and Promotion", 67263721, "2 Orchard Turn", "238801", "06-01");
-        associateLevelDepartment("Merlion Headquarter");
-        
-        createDepartment("Computer Services (IT)", 67263722, "2 Orchard Turn", "238801", "06-01");
-        associateLevelDepartment("Merlion Headquarter");
-        
-        createDepartment("Facilities", 67263723, "2 Orchard Turn", "238801", "06-01");
-        associateLevelDepartment("Merlion Headquarter");
-        
-        createDepartment("Leasing", 67263726, "2 Jurong Lake District", "236601", "06-01");
-        associateLevelDepartment("Merlion West");
-        createPosition("Manager");
-        associateDepartmentPosition("Leasing");
-        try {
-            createEmployee("SG0001M", "Ada", "Lim", 89588958, 63140027, 'F',
-                    "Blk 512 Clementi Road #05-422", "", sdf.parse("23/05/2013"), sdf.parse("23/05/2016"),
-                    "adalim89@gmail.com", encryptedPW, "SG",
-                    sdf.parse("01/10/1989"), "", 4200, dateFormatter.format(now));
-        } catch (ParseException ex) {
-            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        createPosition("Leasing Officer");
-        associateDepartmentPosition("Leasing");
-        try {
-            createEmployee("SG0002M", "Long Officer", "Huynh", 87821819, 63140127, 'M',
-                    "Blk 465 Jurong West Road #09-12", "", sdf.parse("23/05/2012"), sdf.parse("23/12/2015"),
-                    "long@gmail.com", encryptedPW, "SG",
-                    sdf.parse("13/06/1986"), "", 3800, dateFormatter.format(now));
-        } catch (ParseException ex) {
-            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        createPosition("Leasing Manager");
-        associateDepartmentPosition("Leasing");
-        try {
-            createEmployee("SG0002K", "Long Manager", "Wong", 87821819, 63140127, 'M',
-                    "Blk 465 Jurong West Road #09-12", "", sdf.parse("23/05/2012"), sdf.parse("23/12/2015"),
-                    "hplong95@gmail.com", encryptedPW, "SG",
-                    sdf.parse("13/06/1986"), "", 3800, dateFormatter.format(now));
-        } catch (ParseException ex) {
-            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        createPosition("Space Plan Officer");
-        associateDepartmentPosition("Leasing");
-        try {
-            createEmployee("SG0002F", "Long Space", "Wong", 87821819, 63140127, 'M',
-                    "Blk 465 Jurong West Road #09-12", "", sdf.parse("23/05/2012"), sdf.parse("23/12/2015"),
-                    "huynhphilong28051995@gmail.com", encryptedPW, "SG",
-                    sdf.parse("13/06/1986"), "", 3800, dateFormatter.format(now));
-        } catch (ParseException ex) {
-            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        //createDepartment("Finance", 67263724, "2 Orchard Turn", "238801", "06-01"); 
-        
-        //createDepartment("Human Resource", 67263725, "2 Orchard Turn", "238801", "06-01");
-        
-        createDepartment("Leasing", 67263726, "2 Orchard Turn", "238801", "06-01");
-        associateLevelDepartment("Merlion Headquarter");
-        
-        createDepartment("Security", 67263727, "2 Orchard Turn", "238801", "06-01");
-        associateLevelDepartment("Merlion Headquarter");
-        
-        //Setup Organization Position and Associate Position(s) to Department(s)
-        createPosition("Administrator");
-        associateDepartmentPosition("Computer Services (IT)");
-        try {
-            createEmployee("SG0001C", "Alfred", "Tan", 89588958, 63140027, 'M',
-                    "Blk 412 Saujana Road #02-231", "", sdf.parse("23/05/2013"), sdf.parse("23/05/2016"),
-                    "alfredtan90@gmail.com", encryptedPW, "SG",
-                    sdf.parse("01/01/1982"), "", 3800, dateFormatter.format(now));
-        } catch (ParseException ex) {
-            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         
-        createPosition("Manager");
-        associateDepartmentPosition("Advertising and Promotion");
-        try {
-            createEmployee("SG0002C", "Adrain", "Tan", 87821819, 63140127, 'M',
-                    "Blk 123 Bukit Panjang Ring Road #12-212", "", sdf.parse("23/05/2012"), sdf.parse("23/05/2015"),
-                    "adraintan@gmail.com", encryptedPW, "SG",
-                    sdf.parse("23/01/1991"), "", 3800, dateFormatter.format(now));
-        } catch (ParseException ex) {
-            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        createPosition("Manager");
-        associateDepartmentPosition("Facilities");
-        createPosition("Officer");
-        associateDepartmentPosition("Facilities");
+//        createLevelType("C", "Merlion Headquarter", "SG", "2 Orchard Turn", "238801");
+//        createLevelType("L", "Merlion Local Office", "SG", "2 West Coast Drive", "239901");
+//        createLevelType("M", "Merlion West", "SG", "2 Jurong Lake District", "236601");
+//
+//        //Setup Organization Departments and Associate Department(s) to HQ(s)
+//        createDepartment("Advertising and Promotion", 67263721, "2 Orchard Turn", "238801", "06-01");
+//        associateLevelDepartment("Merlion Headquarter");
+//        
+//        createDepartment("Computer Services (IT)", 67263722, "2 Orchard Turn", "238801", "06-01");
+//        associateLevelDepartment("Merlion Headquarter");
+//        
+//        createDepartment("Facilities", 67263723, "2 Orchard Turn", "238801", "06-01");
+//        associateLevelDepartment("Merlion Headquarter");
+//        
+//        createDepartment("Leasing", 67263726, "2 Jurong Lake District", "236601", "06-01");
+//        associateLevelDepartment("Merlion West");
+//        createPosition("Manager");
+//        associateDepartmentPosition("Leasing");
+//        try {
+//            createEmployee("SG0001M", "Ada", "Lim", 89588958, 63140027, 'F',
+//                    "Blk 512 Clementi Road #05-422", "", sdf.parse("23/05/2013"), sdf.parse("23/05/2016"),
+//                    "adalim89@gmail.com", encryptedPW, "SG",
+//                    sdf.parse("01/10/1989"), "", 4200, dateFormatter.format(now));
+//        } catch (ParseException ex) {
+//            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        createPosition("Leasing Officer");
+//        associateDepartmentPosition("Leasing");
+//        try {
+//            createEmployee("SG0002M", "Long Officer", "Huynh", 87821819, 63140127, 'M',
+//                    "Blk 465 Jurong West Road #09-12", "", sdf.parse("23/05/2012"), sdf.parse("23/12/2015"),
+//                    "long@gmail.com", encryptedPW, "SG",
+//                    sdf.parse("13/06/1986"), "", 3800, dateFormatter.format(now));
+//        } catch (ParseException ex) {
+//            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        createPosition("Leasing Manager");
+//        associateDepartmentPosition("Leasing");
+//        try {
+//            createEmployee("SG0002K", "Long Manager", "Wong", 87821819, 63140127, 'M',
+//                    "Blk 465 Jurong West Road #09-12", "", sdf.parse("23/05/2012"), sdf.parse("23/12/2015"),
+//                    "hplong95@gmail.com", encryptedPW, "SG",
+//                    sdf.parse("13/06/1986"), "", 3800, dateFormatter.format(now));
+//        } catch (ParseException ex) {
+//            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        createPosition("Space Plan Officer");
+//        associateDepartmentPosition("Leasing");
+//        try {
+//            createEmployee("SG0002F", "Long Space", "Wong", 87821819, 63140127, 'M',
+//                    "Blk 465 Jurong West Road #09-12", "", sdf.parse("23/05/2012"), sdf.parse("23/12/2015"),
+//                    "huynhphilong28051995@gmail.com", encryptedPW, "SG",
+//                    sdf.parse("13/06/1986"), "", 3800, dateFormatter.format(now));
+//        } catch (ParseException ex) {
+//            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        //createDepartment("Finance", 67263724, "2 Orchard Turn", "238801", "06-01"); 
+//        
+//        //createDepartment("Human Resource", 67263725, "2 Orchard Turn", "238801", "06-01");
+//        
+//        createDepartment("Leasing", 67263726, "2 Orchard Turn", "238801", "06-01");
+//        associateLevelDepartment("Merlion Headquarter");
+//        
+//        createDepartment("Security", 67263727, "2 Orchard Turn", "238801", "06-01");
+//        associateLevelDepartment("Merlion Headquarter");
+//        
+//        //Setup Organization Position and Associate Position(s) to Department(s)
+//        createPosition("Administrator");
+//        associateDepartmentPosition("Computer Services (IT)");
+//        try {
+//            createEmployee("SG0001C", "Alfred", "Tan", 89588958, 63140027, 'M',
+//                    "Blk 412 Saujana Road #02-231", "", sdf.parse("23/05/2013"), sdf.parse("23/05/2016"),
+//                    "alfredtan90@gmail.com", encryptedPW, "SG",
+//                    sdf.parse("01/01/1982"), "", 3800, dateFormatter.format(now));
+//        } catch (ParseException ex) {
+//            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//         
+//        createPosition("Manager");
+//        associateDepartmentPosition("Advertising and Promotion");
+//        try {
+//            createEmployee("SG0002C", "Adrain", "Tan", 87821819, 63140127, 'M',
+//                    "Blk 123 Bukit Panjang Ring Road #12-212", "", sdf.parse("23/05/2012"), sdf.parse("23/05/2015"),
+//                    "adraintan@gmail.com", encryptedPW, "SG",
+//                    sdf.parse("23/01/1991"), "", 3800, dateFormatter.format(now));
+//        } catch (ParseException ex) {
+//            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        createPosition("Manager");
+//        associateDepartmentPosition("Facilities");
+//        createPosition("Officer");
+//        associateDepartmentPosition("Facilities");
+//        //associateDepartmentPosition("Finance");
+//        //associateDepartmentPosition("Human Resource");
+//        createPosition("Manager");
+//        associateDepartmentPosition("Leasing");
+//        createPosition("Officer");
+//        associateDepartmentPosition("Leasing");
+//        createPosition("Manager");
+//        associateDepartmentPosition("Security");
+//        createPosition("Officer");
+//        associateDepartmentPosition("Security");
+//        createPosition("Officer");
+//        associateDepartmentPosition("Advertising and Promotion");
+//        createPosition("Officer");
+//        associateDepartmentPosition("Computer Services (IT)");    
         //associateDepartmentPosition("Finance");
         //associateDepartmentPosition("Human Resource");
-        createPosition("Manager");
-        associateDepartmentPosition("Leasing");
-        createPosition("Officer");
-        associateDepartmentPosition("Leasing");
-        createPosition("Manager");
-        associateDepartmentPosition("Security");
-        createPosition("Officer");
-        associateDepartmentPosition("Security");
-        createPosition("Officer");
+createPosition("AP Officer");
         associateDepartmentPosition("Advertising and Promotion");
-        createPosition("Officer");
-        associateDepartmentPosition("Computer Services (IT)");    
-        //associateDepartmentPosition("Finance");
-        //associateDepartmentPosition("Human Resource");
-
-
+        try {
+            createEmployee("SG000sasa2M", "Khush Officer", "Huynh", 87821819, 63140127, 'M',
+                    "Blk 465 Jurong West Road #09-12", "", sdf.parse("23/05/2012"), sdf.parse("23/12/2015"),
+                    "khushO@gmail.com", encryptedPW, "SG",
+                    sdf.parse("13/06/1986"), "", 3800, dateFormatter.format(now));
+        } catch (ParseException ex) {
+            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        createPosition("AP Manager");
+        associateDepartmentPosition("Advertising and Promotion");
+        try {
+            createEmployee("SG000sas2K", "Khush Manager", "Wong", 87821819, 63140127, 'M',
+                    "Blk 465 Jurong West Road #09-12", "", sdf.parse("23/05/2012"), sdf.parse("23/12/2015"),
+                    "khushM@gmail.com", encryptedPW, "SG",
+                    sdf.parse("13/06/1986"), "", 3800, dateFormatter.format(now));
+        } catch (ParseException ex) {
+            Logger.getLogger(LoadEmployeeDataBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         
     }
     

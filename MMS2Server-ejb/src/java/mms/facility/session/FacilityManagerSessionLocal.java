@@ -16,7 +16,7 @@ import mms.facility.entity.FacilityEntity;
  */
 @Local
 public interface FacilityManagerSessionLocal {
-    public FacilityEntity addFacility(String facilityName, String facilityCategory, 
+    public FacilityEntity addFacility(Long contractorId, String facilityName, String facilityCategory, 
             int facilityQuantity, String facilityCondition, String facilityLocation, 
             Timestamp facilityPurchaseDate, Timestamp facilityExpiryDate, double facilityCost,
             String mallName); 
@@ -31,5 +31,5 @@ public interface FacilityManagerSessionLocal {
 
     public void deleteFacility(Long facilityId);  
 
-    public boolean verifyFacility(String facilityName, String mallName);
+    public boolean verifyFacility(String facilityName, String mallName, String facilityLocation);
     }

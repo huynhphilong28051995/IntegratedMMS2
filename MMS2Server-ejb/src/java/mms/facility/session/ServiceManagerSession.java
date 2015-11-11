@@ -5,7 +5,6 @@
  */
 package mms.facility.session;
 
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import javax.ejb.Stateless;
@@ -26,11 +25,11 @@ public class ServiceManagerSession implements ServiceManagerSessionLocal {
 
     //create new service request
     @Override
-    public ServiceEntity addService(String serviceType, String serviceRequestStatus,
-            Timestamp serviceRequestDate, String serviceRequestDetail, int serviceFee,
-            Timestamp servicingDate, String mallName) {
-        ServiceEntity serviceEntity = new ServiceEntity(serviceType, serviceRequestStatus,
-                serviceRequestDate, serviceRequestDetail, serviceFee, servicingDate);
+    public ServiceEntity addService(String serviceType, String serviceRequestDetail,
+            Timestamp servicingStartDate, Timestamp servicingEndDate,
+            double serviceFee, String mallName) {
+        ServiceEntity serviceEntity = new ServiceEntity(serviceType,
+                serviceRequestDetail, servicingStartDate, servicingEndDate, serviceFee);
         serviceEntity.setMallName(mallName);
         em.persist(serviceEntity);
         return serviceEntity;
@@ -67,16 +66,17 @@ public class ServiceManagerSession implements ServiceManagerSessionLocal {
 
     //edit an existing service request
     @Override
-    public ServiceEntity editServiceRequest(Long serviceId, String serviceType, String serviceRequestStatus,
-            Timestamp serviceRequestDate, String serviceRequestDetail, int serviceFee,
-            Timestamp servicingDate) {
+    public ServiceEntity editServiceRequest(Long serviceId, String serviceType,
+            String serviceRequestStatus, String serviceRequestDetail, 
+            Timestamp servicingStartDate, Timestamp servicingEndDate,
+            double serviceFee) {
         ServiceEntity serviceEntity = em.find(ServiceEntity.class, serviceId);
         serviceEntity.setServiceType(serviceType);
         serviceEntity.setServiceRequestStatus(serviceRequestStatus);
-        serviceEntity.setServiceRequestDate(serviceRequestDate);
         serviceEntity.setServiceRequestDetail(serviceRequestDetail);
+        serviceEntity.setServicingStartDate(servicingStartDate);
+        serviceEntity.setServicingEndDate(servicingEndDate);
         serviceEntity.setServiceFee(serviceFee);
-        serviceEntity.setServicingDate(servicingDate);
         em.merge(serviceEntity);
         em.flush();
         return serviceEntity;
@@ -86,13 +86,10 @@ public class ServiceManagerSession implements ServiceManagerSessionLocal {
     @Override
     public void deleteServiceRequest(Long serviceId) {
         ServiceEntity serviceEntity = em.find(ServiceEntity.class, serviceId);
-        if (serviceEntity == null) {
-            System.out.println("Error! Facility does not exist!");
-        } else {
+        if (serviceEntity != null) {
             em.remove(serviceEntity);
-            System.out.println("Facility has been successfully deleted!");
+            System.out.println("Service request has been successfully deleted!");
         }
         em.flush();
     }
-    
 }

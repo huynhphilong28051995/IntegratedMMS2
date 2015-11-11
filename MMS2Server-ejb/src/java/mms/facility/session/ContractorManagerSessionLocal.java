@@ -5,6 +5,7 @@
  */
 package mms.facility.session;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import javax.ejb.Local;
 import mms.facility.entity.ContractorEntity;
@@ -15,8 +16,9 @@ import mms.facility.entity.ContractorEntity;
  */
 @Local
 public interface ContractorManagerSessionLocal {
-    public ContractorEntity addContractor(String contractorName, 
-            String companyName, String serviceType, String contractorTel, String contractEmail, String mallName);
+    public ContractorEntity addContractor(String contractorName, String companyName, String serviceType, 
+            String contractorTel, String contractEmail, Timestamp contractStartDate, 
+            Timestamp contractEndDate,  String mallName);
 
     public ArrayList<ContractorEntity> listContractor(String mallName);   
 
@@ -24,7 +26,9 @@ public interface ContractorManagerSessionLocal {
 
     public ContractorEntity getContractor(Long contractorId);
 
-    public ContractorEntity editContractor(Long contractorId, String contractorName, String companyName, String serviceType, String contractorTel, String contractEmail);
+    public ContractorEntity editContractor(Long contractorId, String contractorName, String serviceType, 
+            Timestamp contractStartDate, Timestamp contractEndDate,String contractorTel, 
+            String contractEmail);
 
-    public boolean verifyContractor(String contractorName, String mallName);
+    public boolean verifyContractor(String contractorName, String mallName);   
 }

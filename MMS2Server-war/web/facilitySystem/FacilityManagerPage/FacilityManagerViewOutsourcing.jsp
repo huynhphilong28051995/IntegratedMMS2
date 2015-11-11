@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Merlion Facility Management System | View Outsourcing</title>
+        <title>Merlion Facility Management System | List Asset</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -31,6 +31,17 @@
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
         <!-- END CUSTOM STYLES -->
+        <!--START PERSONAL STYLE-->      
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+        <!-- Embedded CSS -->
+        <style TYPE="text/css">
+            table{
+                width: 0%;
+            }           
+        </style>
+        <!-- END PERSONAL STYLE -->      
     </head>
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
@@ -60,7 +71,7 @@
                                         <a href="extra_profile"><i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href=""><i class="icon-key"></i> Log Out </a>
+                                        <a href="../employee/logout"><i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
                             </li>
@@ -119,7 +130,7 @@
                 <div class="container">
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">  
-                        <h1>View Individual Outsourcing Request</h1>
+                        <h1>Detail of Outsourcing Request</h1>
                     </div>
                     <!-- END PAGE TITLE -->
                 </div>
@@ -128,11 +139,9 @@
             <!-- BEGIN PAGE CONTENT -->
             <div class="page-content">
                 <div class="container">
-                    <!-- BEGIN PAGE BREADCRUMB -->
-                    <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
 
-                    <table>
+                    <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
                         <%
                             OutsourcingEntity outsource = (OutsourcingEntity) request.getAttribute("data");
                             Long Id = outsource.getOutsourcingId();
@@ -148,6 +157,7 @@
                             String endDate = outsource.getoServicingEndDate().toString().substring(0, 10);
                             String link = outsource.getDocFileLink();
                             String status = outsource.getOutsourcingStatus();
+                        
                         %>
                         <tr>
                             <td>Outsourcing Id:</td>
@@ -195,13 +205,21 @@
                         </tr>
                         <tr>
                             <td>Technical Document:</td>
-                            <td><a href="">Download</a></td>                
+                            <td><a target="_blank" href="<%=link%>">Go to link</a></td>                
                         </tr>  
                         <tr>
                             <td>Outsourcing Status:</td>
                             <td><%=status%></td>
                         </tr>            
-                    </table>
+                    </table>                   
+                    <script>
+                        $(document).ready(function () {
+                            $('#table').DataTable({
+                                "order": [[3, "desc"]]
+                            });
+                        });
+                    </script>
+
                     <!-- END PAGE CONTENT INNER -->
                 </div>
             </div>
@@ -225,7 +243,7 @@
         <script src="../assets/global/plugins/respond.min.js"></script>
         <script src="../assets/global/plugins/excanvas.min.js"></script> 
         <![endif]-->
-        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+        <!--<script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
         <script src="../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -242,6 +260,15 @@
         <script src="../assets/admin/interface/scripts/layout.js" type="text/javascript"></script>
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
+        <script>
+                        jQuery(document).ready(function () {
+                            Custom.init(); // init custom core components
+                            Layout.init(); // init current layout
+                            UIIdleTimeout.init(); // init Idle Timeout
+                            UIToastr.init(); // init Toastr Alert
+                        });
+        </script>
+
         <!-- END JAVASCRIPTS -->
     </body>
     <!-- END BODY -->

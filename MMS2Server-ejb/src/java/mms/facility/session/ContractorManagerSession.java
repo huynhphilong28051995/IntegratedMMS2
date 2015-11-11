@@ -5,7 +5,7 @@
  */
 package mms.facility.session;
 
-
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -26,9 +26,12 @@ public class ContractorManagerSession implements ContractorManagerSessionLocal {
     //create new contractor
     @Override
     public ContractorEntity addContractor(String contractorName, String companyName,
-            String serviceType, String contractorTel, String contractEmail, String mallName) {
-        ContractorEntity contractorEntity = new ContractorEntity(contractorName, companyName,
-                serviceType, contractorTel, contractEmail);
+            String serviceType, String contractorTel, String contractEmail, Timestamp contractStartDate,
+            Timestamp contractEndDate, String mallName) {
+        ContractorEntity contractorEntity;
+        contractorEntity = new ContractorEntity(contractorName, companyName,
+                serviceType, contractorTel, contractEmail, contractStartDate, 
+                contractEndDate);
         contractorEntity.setMallName(mallName);
         em.persist(contractorEntity);
         em.flush();
@@ -43,6 +46,20 @@ public class ContractorManagerSession implements ContractorManagerSessionLocal {
             Query q = em.createQuery("SELECT c FROM ContractorEntity c WHERE c.mallName=:inMallName");
             q.setParameter("inMallName", mallName);
             contractorList = new ArrayList<ContractorEntity>(q.getResultList());
+            Timestamp currentTime  = new Timestamp(System.currentTimeMillis());
+            for(int i=0; i<contractorList.size();i++){
+                ContractorEntity contractor = contractorList.get(i);
+                Timestamp start  = contractor.getContractStartDate();
+                Timestamp end = contractorList.get(i).getContractEndDate();
+                if(start.after(currentTime) || end.before(currentTime)){
+                    contractor.setContractorStatus("Inactive");
+                }else{
+                    contractor.setContractorStatus("Active");
+                }
+                em.merge(contractor);
+                em.flush();
+            }
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -66,12 +83,14 @@ public class ContractorManagerSession implements ContractorManagerSessionLocal {
 
     //edit an existing contractor
     @Override
-    public ContractorEntity editContractor(Long contractorId, String contractorName, String companyName,
-            String serviceType, String contractorTel, String contractEmail) {
+    public ContractorEntity editContractor(Long contractorId, String contractorName, String serviceType, 
+            Timestamp contractStartDate, Timestamp contractEndDate, String contractorTel, 
+            String contractEmail) {
         ContractorEntity contractorEntity = em.find(ContractorEntity.class, contractorId);
         contractorEntity.setContractorName(contractorName);
-        contractorEntity.setCompanyName(companyName);
         contractorEntity.setServiceType(serviceType);
+        contractorEntity.setContractStartDate(contractStartDate);
+        contractorEntity.setContractEndDate(contractEndDate);
         contractorEntity.setContractorTel(contractorTel);
         contractorEntity.setContractorEmail(contractEmail);
         em.flush();
@@ -90,19 +109,18 @@ public class ContractorManagerSession implements ContractorManagerSessionLocal {
         }
         em.flush();
     }
-    
+
     //check duplicated contractors within the same mall
     @Override
-    public boolean verifyContractor(String contractorName, String mallName){
-        boolean check=false; 
+    public boolean verifyContractor(String contractorName, String mallName) {
+        boolean check = false;
         Query q = em.createQuery("SELECT ce FROM ContractorEntity ce WHERE "
                 + "ce.contractorName =:inContractorName AND ce.mallName =:inMallName");
         q.setParameter("inContractorName", contractorName);
         q.setParameter("inMallName", mallName);
-        if(q.getResultList().size()==0)
+        if (q.getResultList().size() == 0) {
             check = true; //no dulpicated names existed
+        }
         return check;
     }
-    
-    //verify the contract date 
 }

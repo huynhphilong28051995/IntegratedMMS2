@@ -43,9 +43,22 @@ public class APSControllerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         switch ((String) request.getSession().getAttribute("action")) {
-            
+            case ("Login"): { //login
+                String role = request.getParameter("userRole");
+                String mallName = request.getParameter("mallName");
+                request.getSession().setAttribute("userRole", role);
+                request.getSession().setAttribute("mallName", mallName);
+
+                if (role.contains("anager")) { // if role is that of a manager
+                    request.getRequestDispatcher("APManagerIndex").forward(request, response);
+                    request.getSession().setAttribute("action", "GetCampaigns");
+                    response.sendRedirect("APSControllerServlet");
+                } else { // ap officer 
+                    request.getRequestDispatcher("APOfficerIndex").forward(request, response);
+                }
+                break;
+            }
             // get current campaigns
             case ("GetCampaigns"): {
                 List<CampaignEntity> list = new CampaignManager(campaignSessionLocal).listCampaign();

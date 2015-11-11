@@ -25,15 +25,16 @@ public class ServiceManager {
     public ServiceEntity createNewServiceRequest(HttpServletRequest request) {
         String serviceType = request.getParameter("serviceType");
         String serviceRequestStatus = request.getParameter("serviceRequestStatus");
-        //String serviceRequestDateString = request.getParameter("serviceRequestDate") + " 00:00:00";
         Timestamp serviceRequestDate = new Timestamp(System.currentTimeMillis());
         String serviceRequestDetail = request.getParameter("serviceRequestDetail");
-        String servicingDateString = request.getParameter("servicingDate") + " 00:00:00";
-        Timestamp servicingDate = Timestamp.valueOf(servicingDateString);
-        int serviceFee = Integer.parseInt(request.getParameter("serviceFee"));
+        String servicingStartDateString = request.getParameter("servicingStartDate") + " 00:00:00";
+        Timestamp servicingStartDate = Timestamp.valueOf(servicingStartDateString);
+        String servicingEndDateString = request.getParameter("servicingEndDate") + " 00:00:00";
+        Timestamp servicingEndDate = Timestamp.valueOf(servicingEndDateString);
+        double serviceFee = Double.parseDouble(request.getParameter("serviceFee"));
         String mallName = (String) request.getSession().getAttribute("mallName");
-        return serviceManagerSessionLocal.addService(serviceType, serviceRequestStatus,
-                serviceRequestDate, serviceRequestDetail, serviceFee, servicingDate, mallName);
+        return serviceManagerSessionLocal.addService(serviceType, serviceRequestDetail,
+            servicingStartDate, servicingEndDate, serviceFee, mallName);
     }
 
     public ServiceEntity getServiceRequest(HttpServletRequest request) {
@@ -46,14 +47,14 @@ public class ServiceManager {
         request.removeAttribute("serviceId");
         String serviceType = request.getParameter("serviceType");
         String serviceRequestStatus = request.getParameter("serviceRequestStatus");
-        String serviceRequestDateString = request.getParameter("serviceRequestDate") + " 00:00:00";
-        Timestamp serviceRequestDate = Timestamp.valueOf(serviceRequestDateString);
         String serviceRequestDetail = request.getParameter("serviceRequestDetail");
-        int serviceFee = Integer.parseInt(request.getParameter("serviceFee"));
-        String servicingDateString = request.getParameter("servicingDate") + " 00:00:00";
-        Timestamp servicingDate = Timestamp.valueOf(servicingDateString);      
+        String servicingStartDateString = request.getParameter("servicingStartDate") + " 00:00:00";
+        Timestamp servicingStartDate = Timestamp.valueOf(servicingStartDateString);
+        String servicingEndDateString = request.getParameter("servicingEndDate") + " 00:00:00";
+        Timestamp servicingEndDate = Timestamp.valueOf(servicingEndDateString);
+        double serviceFee = Double.parseDouble(request.getParameter("serviceFee"));
         return serviceManagerSessionLocal.editServiceRequest(serviceId, serviceType, serviceRequestStatus,
-                serviceRequestDate, serviceRequestDetail, serviceFee, servicingDate);
+                 serviceRequestDetail, servicingStartDate, servicingEndDate, serviceFee);
     }
 
     public void deleteServiceRequest(HttpServletRequest request) {

@@ -24,7 +24,6 @@
                 <th>Unit Number</th>
                 <th>Description</th>
                 <th>Status</th>
-                <th></th>
             </tr>
             <%
                 ArrayList<RentRenewalRequestEntity> renewalList = (ArrayList<RentRenewalRequestEntity>) request.getAttribute("renewalList");

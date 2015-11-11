@@ -116,6 +116,7 @@ public class EmployeeServlet extends HttpServlet {
                                         message = "../LeasingControllerServlet/SpacePlanMain";
                                         //mainPage = "SpacePlanMain";
                                     }
+                                   
                                 }
                                 
                                 if (session.getAttribute("staffDept").toString().toLowerCase().contains("facilities")) {
@@ -133,7 +134,7 @@ public class EmployeeServlet extends HttpServlet {
                                     
                                         message = "../FMSControlServlet/directLogin?userRole="+staffPosition+"&mallName="+mallName;
                                      
- 
+                                   
                                 }
                             }
                         }

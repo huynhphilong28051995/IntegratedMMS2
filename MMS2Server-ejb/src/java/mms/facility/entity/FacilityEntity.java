@@ -34,8 +34,8 @@ public class FacilityEntity implements Serializable {
     private String facilityLocation;
     private Timestamp facilityPurchaseDate;
     private Timestamp facilityExpiryDate;
-    //private Timestamp lastServicingDate;
     private double facilityCost;
+    private String facilityStatus = "Good Condition";
     private String mallName;
     
     @OneToMany(cascade={CascadeType.ALL}, mappedBy="facility")
@@ -65,12 +65,11 @@ public class FacilityEntity implements Serializable {
     }
 
     public FacilityEntity(String facilityName, String facilityCategory, int facilityQuantity, 
-            String facilityCondition, String facilityLocation, Timestamp facilityPurchaseDate, 
+            String facilityLocation, Timestamp facilityPurchaseDate, 
             Timestamp facilityExpiryDate, double facilityCost) {
         this.facilityName = facilityName;
         this.facilityCategory = facilityCategory;
-        this.facilityQuantity = facilityQuantity;
-        this.facilityCondition = facilityCondition;
+        this.facilityQuantity = facilityQuantity;        
         this.facilityLocation = facilityLocation;
         this.facilityPurchaseDate = facilityPurchaseDate;
         this.facilityExpiryDate = facilityExpiryDate;
@@ -147,6 +146,14 @@ public class FacilityEntity implements Serializable {
 
     public void setFacilityCost(double facilityCost) {
         this.facilityCost = facilityCost;
+    }
+
+    public String getFacilityStatus() {
+        return facilityStatus;
+    }
+
+    public void setFacilityStatus(String facilityStatus) {
+        this.facilityStatus = facilityStatus;
     }
     
     public String getMallName() {

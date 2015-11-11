@@ -3,15 +3,18 @@
     Created on : Sep 25, 2015, 8:33:22 PM
     Author     : linjiao_Zoe
 --%>
+
+<%@page import="mms.facility.entity.ServiceEntity"%>
+<%@page import="mms.facility.entity.FacilityEntity"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <title>Merlion Facility Management System | Add Service Request</title>
-        <script src="${pageContext.request.contextPath}/javascript/mainScript.js"></script>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
         <meta content="" name="description"/>
         <meta content="" name="author"/>
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -28,9 +31,8 @@
         <link href="../assets/admin/interface/css/layout.css" rel="stylesheet" type="text/css">
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="../assets/global/plugins/select2/select2.css"/>
         <!-- END CUSTOM STYLES -->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" type="text/css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css" type="text/css">
         <!-- BEGIN PERSONAL STYLES -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/facilitySystem/jquery-ui-1.11.4.custom/jquery-ui.theme.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/facilitySystem/jquery-ui-1.11.4.custom/jquery-ui.css">
@@ -38,11 +40,12 @@
         <script src="${pageContext.request.contextPath}/facilitySystem/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
         <!-- END PERSONAL STYLES -->
     </head>
+
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
-        <!-- BEGIN HEADER -->
+        <!-- BEGIN Page HEADER -->
         <div class="page-header">
-            <!-- BEGIN HEADER TOP -->
+            <!-- BEGIN Page HEADER TOP -->
             <div class="page-header-top">
                 <div class="container">
                     <!-- BEGIN LOGO -->
@@ -66,17 +69,18 @@
                                         <a href="extra_profile"><i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href=""><i class="icon-key"></i> Log Out </a>
+                                        <a href="../employee/logout"><i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
                             </li>
-                            <!-- END USER LOGIN DROPDOWN -->
+                            <!-- END USER LOGIN DROP DOWN -->
                         </ul>
                     </div>
                     <!-- END TOP NAVIGATION MENU -->
                 </div>
             </div>
-            <!-- END HEADER TOP -->
+            <!-- END Page HEADER TOP -->
+
             <!-- BEGIN HEADER MENU -->
             <div class="page-header-menu">
                 <div class="container">
@@ -147,7 +151,8 @@
             </div>
             <!-- END HEADER MENU -->
         </div>
-        <!-- END HEADER -->
+        <!-- END Page HEADER -->
+
         <!-- BEGIN PAGE CONTAINER -->
         <div class="page-container">
             <!-- BEGIN PAGE HEAD -->
@@ -155,79 +160,146 @@
                 <div class="container">
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">  
-                        <h1>Add New Service Request</h1>
+                        <h1>Add Service Request</h1>
                     </div>
                     <!-- END PAGE TITLE -->
                 </div>
             </div>
             <!-- END PAGE HEAD -->
+
             <!-- BEGIN PAGE CONTENT -->
             <div class="page-content">
                 <div class="container">
-                    <!-- BEGIN PAGE BREADCRUMB -->
-                    <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
 
-                    <form action="saveServiceRequest" method="GET">
-                        <table>
-                            <tr>
-                                <td>Service Type:</td>
-                                <td><select name="serviceType" required="required">
-                                        <option value="">Select a type</option>
-                                        <option value="Repair">Repair</option>
-                                        <option value="Maintenance">Maintenance</option>
-                                        <option value="Renovation">Renovation</option>
-                                    </select>
-                                </td>
-                            </tr> 
-                            <tr>
-                                <td>Service Request Status:</td>
-                                <td><select name="serviceRequestStatus" required="required">
-                                        <option value="">Select a status</option>
-                                        <option value="Work Done">Work Done</option> 
-                                        <option value="Pending Service">Pending Request</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Service Request Date:</td>
-                                <td><input type="text" id="datepickerServiceRequestDate" name="serviceRequestDate" required="required"/>
-                                    <script>
-                                        $(function () {
-                                            $("#datepickerServiceRequestDate").datepicker({dateFormat: 'yy-mm-dd'});
-                                        });
-                                    </script>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Service Request Detail:</td>
-                                <td><textarea rows="10" cols="20" name="serviceRequestDetail" placeholder="Please enter the description of service request here." required="required"></textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Service Fee: SG$</td>
-                                <td><input type="number" name="serviceFee" required="required"/></td>
-                            </tr>
-                            <tr>
-                                <td>Servicing Date:</td>
-                                <td><input type="text" id="datepickerServicingDate" name="servicingDate" required="required"/>
-                                    <script>
-                                        $(function () {
-                                            $("#datepickerServicingDate").datepicker({dateFormat: 'yy-mm-dd'});
-                                        });
-                                    </script>
-                                </td>
-                            </tr>            
-                        </table>
-                        <input type="submit" value="Submit"/>&nbsp;&nbsp;
-                        <input type="reset" value="Reset"/>                 
-                    </form>
-                    <!-- END PAGE CONTENT INNER -->
+                    <!-- BEGIN TABLE PORTLET-->
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-cogs font-white-sharp"></i>
+                                <span class="caption-subject font-white-sharp ">Add New Service Request</span>
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                                <a href="javascript:;" class="remove">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <form action="saveServiceRequest" method="GET" class="form-horizontal form-bordered form-row-stripped">
+                                <div class="form-group">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Facility<span class="required">* </span>  </label>
+                                            <div class="col-md-4">
+                                                <select name="facilityId" id="country_list" required="required" class="form-control select2me">
+                                                    <option value=""></option>
+                                                    <%
+                                                        ArrayList facilities = (ArrayList) request.getAttribute("data");
+                                                        for (Object o : facilities) {
+                                                            FacilityEntity facility = (FacilityEntity) o;
+                                                            Long Id = facility.getFacilityId();
+                                                            String name = facility.getFacilityName();
+                                                            String location = facility.getFacilityLocation();
+                                                    %>
+                                                    <option value="<%=Id%>"><%=name%> | <%=location%></option>
+                                                    <%
+                                                        }
+                                                    %>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Service Type<span class="required">* </span>  </label>
+                                            <div class="col-md-4">
+                                                <select name="serviceType" id="country_list" required="required" class="form-control select2me">
+                                                    <option value=""></option>                          
+                                                    <option value="Air Conditioner Repair">Air Conditioner Repair & Maintenance</option>
+                                                    <option value="Elevator Maintenance">Elevator Maintenance</option>
+                                                    <option value="Toilet Repair & Maintenance">Toilet Repair & Maintenance</option>
+                                                    <option value="Electricity Maintenance">Electricity Maintenance</option>
+                                                    <option value="Fire Alarm Replacement">Fire Alarm Replacement</option>
+                                                    <option value="Renovation Service">Renovation Service</option>   
+                                                    <option value="Cleaning Service">Cleaning Service</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Service Request Detail<span class="required">* </span> </label>
+                                            <div class="col-md-4">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <textarea rows="10" cols="20" name="serviceRequestDetail" placeholder="Please enter the description of service request here." required="required" class="form-control"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>  
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Servicing Start Date<span class="required">* </span> </label>
+                                            <div class="col-md-4">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" id="datepickerStartDate" required="required" name="servicingStartDate" style="width: 130px;" class="form-control"/>
+                                                    <script>
+                                                        $(function () {
+                                                            $("#datepickerStartDate").datepicker({dateFormat: 'yy-mm-dd'});
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Servicing End Date<span class="required">* </span> </label>
+                                            <div class="col-md-4">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" id="datepickerEndDate" required="required" name="servicingEndDate" style="width: 130px;" class="form-control"/>
+                                                    <script>
+                                                        $(function () {
+                                                            $("#datepickerEndDate").datepicker({dateFormat: 'yy-mm-dd'});
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Fee<span class="required">* </span> </label>
+                                            <div class="col-md-4">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="number" name="serviceFee" required="required" min="0" max="2000000" placeholder="Specify new facility cost" style="width: 230px;" class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div> 
+
+                                        <div class="form-actions">
+                                            <div class="row">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button type="submit" class="btn green"><i class="fa fa-check"></i> Submit</button>
+                                                    <button type="reset" class="btn default">Reset</button>
+                                                </div>
+                                            </div>
+                                        </div>                                          
+                                        <!-- END PAGE CONTENT INNER -->
+                                    </div>
+                            </form>
+                        </div>                                                    
+                    </div>
+
+                    <!-- End TABLE PORTLET-->
                 </div>
+                <!-- End Container -->
             </div>
-            <!-- END PAGE CONTENT -->
+            <!-- End PAGE CONTENT -->
         </div>
-        <!-- END PAGE CONTAINER -->
 
         <!-- BEGIN FOOTER -->
         <div class="page-footer">
@@ -256,13 +328,21 @@
         <script src="../assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-idle-timeout/jquery.idletimeout.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery-idle-timeout/jquery.idletimer.js" type="text/javascript"></script>
+        <script type="text/javascript" src="../assets/global/plugins/select2/select2.min.js"></script>
         <script src="../assets/global/plugins/bootstrap-toastr/toastr.min.js"></script>
         <!-- END PAGE PLUGINS -->
         <script src="../assets/global/scripts/custom.js" type="text/javascript"></script>
         <script src="../assets/admin/interface/scripts/layout.js" type="text/javascript"></script>
         <script src="../assets/admin/pages/scripts/ui-idletimeout.js"></script>
         <script src="../assets/admin/pages/scripts/ui-toastr.js"></script>
+        <script>
+                                                        jQuery(document).ready(function () {
+                                                            Custom.init(); // init custom core components
+                                                            Layout.init(); // init current layout
+                                                            UIIdleTimeout.init(); // init Idle Timeout
+                                                            UIToastr.init(); // init Toastr Alert
+                                                        });
+        </script>
     </body>
     <!-- END BODY -->
 </html>
-

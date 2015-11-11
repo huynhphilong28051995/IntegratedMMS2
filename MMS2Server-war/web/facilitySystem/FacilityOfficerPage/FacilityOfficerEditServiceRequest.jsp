@@ -30,16 +30,17 @@
         <link href="../assets/admin/interface/css/layout.css" rel="stylesheet" type="text/css">
         <link href="../assets/admin/interface/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
         <link href="../assets/admin/interface/css/custom.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="../assets/global/plugins/select2/select2.css"/>
         <!-- END CUSTOM STYLES -->
         <!-- BEGIN PERSONAL STYLES -->
+        <script src="${pageContext.request.contextPath}/javascript/mainScript.js"></script>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" type="text/css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css" type="text/css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/facilitySystem/jquery-ui-1.11.4.custom/jquery-ui.theme.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/facilitySystem/jquery-ui-1.11.4.custom/jquery-ui.css">
         <script src="${pageContext.request.contextPath}/facilitySystem/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
         <script src="${pageContext.request.contextPath}/facilitySystem/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
-        <!-- END PERSONAL STYLES -->
-        <script src="${pageContext.request.contextPath}/javascript/mainScript.js"></script>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" type="text/css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css" type="text/css">
+        <!-- END PERSONAL STYLES -->     
     </head>
     <!-- BEGIN BODY -->
     <body class="page-header-menu-fixed">
@@ -69,7 +70,7 @@
                                         <a href="extra_profile"><i class="icon-user"></i> User Settings </a>
                                     </li>
                                     <li>
-                                        <a href=""><i class="icon-key"></i> Log Out </a>
+                                        <a href="../employee/logout"><i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
                             </li>
@@ -167,82 +168,140 @@
             <!-- BEGIN PAGE CONTENT -->
             <div class="page-content">
                 <div class="container">
-                    <!-- BEGIN PAGE BREADCRUMB -->
-                    <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE CONTENT INNER -->
 
-                    <form action="changeServiceRequest" method="GET">
-                        <table>
-                            <%
-                                ServiceEntity service = (ServiceEntity) request.getAttribute("data");
-                                Long Id = service.getServiceId();
-                                String type = service.getServiceType();
-                                String status = service.getServiceRequestStatus();
-                                String date = service.getServiceRequestDate().toString().substring(0, 10);
-                                String detail = service.getServiceRequestDetail();
-                                int fee = service.getServiceFee();
-                                String servicingDate = service.getServicingDate().toString().substring(0, 10);
-                                request.getSession().setAttribute("serviceId", Id);
-                            %>
-                            <tr>
-                                <td>Service Request ID:</td>
-                                <td><%=Id%></td>
-                            </tr>
-                            <tr>
-                                <td>New Service Type:</td>
-                                <td><select name="serviceType">
-                                        <option value="<%=type%>" selected="selected">No change: <%=type%></option>
-                                        <option value="Repair">Repair</option>
-                                        <option value="Maintenance">Maintenance</option>
-                                        <option value="Renovation">Renovation</option>
-                                    </select>
-                                </td>
-                            </tr> 
-                            <tr>
-                                <td>New Service Request Status:</td>
-                                <td><select name="serviceRequestStatus">
-                                        <option value="<%=status%>" selected="selected">No change: <%=status%></option>
-                                        <option value="Work Done">Work Done</option> 
-                                        <option value="Pending Service">Pending Request</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>New Service Request Date:</td>
-                                <td><input type="text" id="datepickerServiceRequestDate" name="serviceRequestDate" value="<%=date%>"/>
-                                    <script>
-                                        $(function () {
-                                            $("#datepickerServiceRequestDate").datepicker({dateFormat: 'yy-mm-dd'});
-                                        });
-                                    </script>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>New Service Request Detail:</td>
-                                <td><textarea rows="10" cols="20" name="serviceRequestDetail" value="<%=detail%>">Please enter the detail of service request here.
-                                    </textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>New Service Fee: SG$</td>
-                                <td><input type="number" name="serviceFee" value="<%=fee%>"/></td>
-                            </tr>
-                            <tr>
-                                <td>New Servicing Date:</td>
-                                <td><input type="text" id="datepickerServicingDate" name="servicingDate" value="<%=servicingDate%>"/>
-                                    <script>
-                                        $(function () {
-                                            $("#datepickerServicingDate").datepicker({dateFormat: 'yy-mm-dd'});
-                                        });
-                                    </script>
-                                </td>
-                            </tr>  
-                        </table>
-                        <br/>
-                        <input type="submit" value="Submit Changes"/>&nbsp;&nbsp;
-                        <input type="reset" value="Reset"/>
-                    </form>
-                    <!-- END PAGE CONTENT INNER -->
+                    <!-- BEGIN TABLE PORTLET-->
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-cogs font-white-sharp"></i>
+                                <span class="caption-subject font-white-sharp ">Edit Existing Service Request by ID</span>
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                                <a href="javascript:;" class="remove">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <form action="changeServiceRequest" method="GET" class="form-horizontal form-bordered form-row-stripped">
+                                <div class="form-group">
+                                    <div class="form-body">
+                                        <div class="form-group">  
+                                            <%
+                                                ServiceEntity service = (ServiceEntity) request.getAttribute("data");
+                                                Long Id = service.getServiceId();
+                                                String type = service.getServiceType();
+                                                String status = service.getServiceRequestStatus();
+                                                String detail = service.getServiceRequestDetail();
+                                                String start = service.getServicingStartDate().toString().substring(0, 10);
+                                                String end = service.getServicingEndDate().toString().substring(0, 10);
+                                                double fee = service.getServiceFee();
+                                                request.getSession().setAttribute("serviceId", Id);
+                                            %>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3"> ID </label>
+                                                <div class="col-md-4"><%=Id%></div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Service Type: </label>
+                                                <div class="col-md-4">
+                                                    <select name="serviceType" id="country_list" class="form-control select2me">
+                                                        <option value="<%=type%>" selected="selected">Remain as <%=type%></option>
+                                                        <option value="Air Conditioner Repair">Air Conditioner Repair & Maintenance</option>
+                                                        <option value="Elevator Maintenance">Elevator Maintenance</option>
+                                                        <option value="Toilet Repair & Maintenance">Toilet Repair & Maintenance</option>
+                                                        <option value="Electricity Maintenance">Electricity Maintenance</option>
+                                                        <option value="Fire Alarm Replacement">Fire Alarm Replacement</option>
+                                                        <option value="Renovation Service">Renovation Service</option>  
+                                                        <option value="Cleaning Service">Cleaning Service</option>                  
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Service Request Detail</label>
+                                                <div class="col-md-4">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <textarea rows="10" cols="20" name="serviceRequestDetail" class="form-control"><%=detail%>
+                                                        </textarea>
+                                                    </div>
+                                                </div>
+                                            </div> 
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Servicing Start Date</label>
+                                                <div class="col-md-4">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="text" id="datepickerStartDate" name="servicingStartDate" value=<%=start%> style="width: 130px" class="form-control"/>
+                                                        <script>
+                                                            $(function () {
+                                                                $("#datepickerStartDate").datepicker({dateFormat: 'yy-mm-dd'});
+                                                            });
+                                                        </script>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Servicing End Date</label>
+                                                <div class="col-md-4">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="text" id="datepickerEndDate" name="servicingEndDate" value=<%=end%> style="width: 130px;" class="form-control"/>
+                                                        <script>
+                                                            $(function () {
+                                                                $("#datepickerEndDate").datepicker({dateFormat: 'yy-mm-dd'});
+                                                            });
+                                                        </script>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Fee</label>
+                                                <div class="col-md-4">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="number" step="any" name="serviceFee" value="<%=fee%>" min="1" max="2000000" style="width: 250px;" class="form-control"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3"> Status </label>
+                                                <div class="col-md-4">
+                                                    <select name="serviceRequestStatus" id="country_list" class="form-control select2me">
+                                                        <option value="<%=status%>" selected="selected">Remain as <%=status%></option>
+                                                        <option value="Good">Work Done</option>
+                                                        <option value="Under Maintenance">In Progress</option>
+                                                    </select>
+                                                </div>
+                                            </div> 
+
+                                            <div class="form-actions">
+                                                <div class="row">
+                                                    <div class="col-md-offset-3 col-md-9">
+                                                        <button type="submit" class="btn green"><i class="fa fa-check"></i> Submit</button>
+                                                        <button type="reset" class="btn default">Reset</button>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                        <!-- END PAGE CONTENT INNER -->
+
+                                    </div>
+                                </div>
+                            </form>                   
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- END PAGE CONTENT -->

@@ -5,6 +5,7 @@
  */
 package manager.facility;
 
+import java.sql.Timestamp;
 import javax.servlet.http.HttpServletRequest;
 import mms.facility.entity.ContractorEntity;
 import mms.facility.session.ContractorManagerSessionLocal;
@@ -27,9 +28,14 @@ public class ContractorManager {
         String serviceType = request.getParameter("serviceType");
         String contractorTel = request.getParameter("contractorTel");
         String contractorEmail = request.getParameter("contractorEmail");
+        String contractStartDateString = request.getParameter("contractStartDate") + " 00:00:00";
+        Timestamp contractStartDate = Timestamp.valueOf(contractStartDateString);
+        String contractEndDateString = request.getParameter("contractEndDate") + " 00:00:00";
+        Timestamp contractEndDate = Timestamp.valueOf(contractEndDateString);
         String mallName = (String) request.getSession().getAttribute("mallName");
         return contractorManagerSessionLocal.addContractor(contractorName, companyName, serviceType,
-                contractorTel, contractorEmail, mallName);
+                contractorTel, contractorEmail, contractStartDate, contractEndDate, 
+                mallName);
     }
 
     public ContractorEntity getContractor(HttpServletRequest request) {
@@ -41,12 +47,15 @@ public class ContractorManager {
         Long contractorId = (long) request.getSession().getAttribute("contractorId");
         request.removeAttribute("contractorId");
         String contractorName = request.getParameter("contractorName");
-        String companyName = request.getParameter("companyName");
         String serviceType = request.getParameter("serviceType");
+        String contractStartDateString = request.getParameter("contractStartDate") + " 00:00:00";
+        Timestamp contractStartDate = Timestamp.valueOf(contractStartDateString);
+        String contractEndDateString = request.getParameter("contractEndDate") + " 00:00:00";
+        Timestamp contractEndDate = Timestamp.valueOf(contractEndDateString);
         String contractorTel = request.getParameter("contractorTel");
         String contractorEmail = request.getParameter("contractorEmail");
-        return contractorManagerSessionLocal.editContractor(contractorId, contractorName, companyName, serviceType,
-                contractorTel, contractorEmail);
+        return contractorManagerSessionLocal.editContractor(contractorId, contractorName, serviceType,
+                contractStartDate, contractEndDate, contractorTel, contractorEmail);
     }
 
     public void deleteContractor(HttpServletRequest request) {

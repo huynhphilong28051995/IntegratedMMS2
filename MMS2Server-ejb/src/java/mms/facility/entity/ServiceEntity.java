@@ -7,10 +7,12 @@ package mms.facility.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -22,26 +24,27 @@ public class ServiceEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long serviceId;
-    private String serviceType;
-    private String serviceRequestStatus;
+    private String serviceType;    
     private Timestamp serviceRequestDate;
-    private String serviceRequestDetail;
-    private int serviceFee;
-    private Timestamp servicingDate;
+    private String serviceRequestDetail;   
+    private Timestamp servicingStartDate;
+    private Timestamp servicingEndDate;
+    private double serviceFee;
+    private String serviceRequestStatus = "Service Pending";
     private String mallName;
-
+    
     public ServiceEntity() {
     }
 
-    public ServiceEntity(String serviceType, String serviceRequestStatus, 
-            Timestamp serviceRequestDate, String serviceRequestDetail, int serviceFee, 
-            Timestamp servicingDate) {
+    public ServiceEntity(String serviceType,
+            String serviceRequestDetail, Timestamp servicingStartDate, 
+            Timestamp servicingEndDate, double serviceFee) {       
         this.serviceType = serviceType;
-        this.serviceRequestStatus = serviceRequestStatus;
-        this.serviceRequestDate = serviceRequestDate;
+        this.serviceRequestDate = new Timestamp(System.currentTimeMillis());
         this.serviceRequestDetail = serviceRequestDetail;
+        this.servicingStartDate = servicingStartDate;
+        this.servicingEndDate = servicingEndDate;
         this.serviceFee = serviceFee;
-        this.servicingDate = servicingDate;
     }
 
     public Long getServiceId() {
@@ -84,22 +87,30 @@ public class ServiceEntity implements Serializable {
         this.serviceRequestDetail = serviceRequestDetail;
     }
 
-    public int getServiceFee() {
+    public Timestamp getServicingStartDate() {
+        return servicingStartDate;
+    }
+
+    public void setServicingStartDate(Timestamp servicingStartDate) {
+        this.servicingStartDate = servicingStartDate;
+    }
+
+    public Timestamp getServicingEndDate() {
+        return servicingEndDate;
+    }
+
+    public void setServicingEndDate(Timestamp servicingEndDate) {
+        this.servicingEndDate = servicingEndDate;
+    }
+
+    public double getServiceFee() {
         return serviceFee;
     }
 
-    public void setServiceFee(int serviceFee) {
+    public void setServiceFee(double serviceFee) {
         this.serviceFee = serviceFee;
     }
 
-    public Timestamp getServicingDate() {
-        return servicingDate;
-    }
-
-    public void setServicingDate(Timestamp servicingDate) {
-        this.servicingDate = servicingDate;
-    }
-    
     public String getMallName() {
         return mallName;
     }
