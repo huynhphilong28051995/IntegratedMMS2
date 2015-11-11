@@ -62,39 +62,35 @@ public class TenantManagerBean implements TenantManagerBeanLocal {
         }
         return encrypted;
     }
+    @Override
     public TenantEntity getTenant(String email) {
         Query query = em.createQuery("SELECT u FROM TenantEntity u WHERE u.email = :inEmail");
         query.setParameter("inEmail", email);
-    
         TenantEntity customer = (TenantEntity) query.getResultList().get(0);
-        
         return customer;
     }
     
+    @Override
     public TenantContractEntity getContract(Long contractid) {
         Query query = em.createQuery("SELECT u FROM TenantContractEntity u WHERE u.id = :inEmail");
         query.setParameter("inEmail", contractid);
-    
         TenantContractEntity contract = (TenantContractEntity) query.getResultList().get(0);
-        
         return contract;
     }
     
+    @Override
      public ArrayList<SaleEntity> getSaleList(Long tenantid) {
-        Query query = em.createQuery("SELECT u FROM SaleEntity u WHERE u.tenantId = :inEmail");
-        query.setParameter("inEmail", tenantid);
-    
-        ArrayList<SaleEntity> saleList = new ArrayList<SaleEntity>(query.getResultList());
-        
+        Query query = em.createQuery("SELECT u FROM SaleEntity u WHERE u.tenantId = :inId");
+        query.setParameter("inId", tenantid);
+        ArrayList<SaleEntity> saleList = new ArrayList<>(query.getResultList());
         return saleList;
     }
      
+    @Override
     public ArrayList<RentInvoiceEntity> getInvoices(Long tenantid) {
         Query query = em.createQuery("SELECT u FROM RentInvoiceEntity u WHERE u.tenantID = :inTenantID");
         query.setParameter("inTenantID", tenantid);
-    
-        ArrayList<RentInvoiceEntity> rentInvoiceList = new ArrayList<RentInvoiceEntity>(query.getResultList());
-        
+        ArrayList<RentInvoiceEntity> rentInvoiceList = new ArrayList<>(query.getResultList());
         return rentInvoiceList;
     }
     
@@ -102,28 +98,34 @@ public class TenantManagerBean implements TenantManagerBeanLocal {
     public ArrayList<UnitEntity> getUnits(Long tenantid) {
         Query query = em.createQuery("SELECT u FROM UnitEntity u WHERE u.tenant = :inTenant");
         query.setParameter("inTenant", em.find(TenantEntity.class,tenantid));
-        return new ArrayList<UnitEntity>(query.getResultList());
+        return new ArrayList<>(query.getResultList());
     }
     
     @Override
     public ArrayList<OutsourcingEntity> getOutsourceRequest(Long tenantid) {
         Query query = em.createQuery("SELECT u FROM OutsourcingEntity u WHERE u.tenantId = :inTenantId");
         query.setParameter("inTenantId", tenantid);
-    
-        ArrayList<OutsourcingEntity> outsourcerequest = new ArrayList<OutsourcingEntity>(query.getResultList());
         
+        ArrayList<OutsourcingEntity> outsourcerequest = new ArrayList<>(query.getResultList());
+        
+        for(int i =0; i<outsourcerequest.size(); i++ ){
+            em.refresh(outsourcerequest.get(i));
+        }
         return outsourcerequest;
     }
     
+    @Override
     public ArrayList<RentRenewalRequestEntity> getRenewalList(Long tenantid) {
         Query query = em.createQuery("SELECT u FROM RentRenewalRequestEntity u WHERE u.tenantID = :inTenantId");
-        query.setParameter("inTenantId", tenantid);
-    
-        ArrayList<RentRenewalRequestEntity> renewalList = new ArrayList<RentRenewalRequestEntity>(query.getResultList());
-        
+        query.setParameter("inTenantId", tenantid);    
+        ArrayList<RentRenewalRequestEntity> renewalList = new ArrayList<>(query.getResultList());
+        for(int i =0; i<renewalList.size(); i++ ){
+            em.refresh(renewalList.get(i));
+        }
         return renewalList;
     }
     
+    @Override
     public String submitOutsourcingRequest(Long tenantID, String tenantEmail, String mallName, String unitNumber, String contractorName, String description, int numStaff, Timestamp outsourcingDate, Timestamp oServicingStartDate, Timestamp oServicingEndDate, String docFileLink){
         OutsourcingEntity outsourceRequest = new OutsourcingEntity(tenantID,  tenantEmail, unitNumber, 
                 contractorName, numStaff, outsourcingDate,description, oServicingStartDate,
@@ -145,7 +147,7 @@ public class TenantManagerBean implements TenantManagerBeanLocal {
                 + "re.mall= :inMallName AND re.status= :inStatus");
         q.setParameter("inMallName", mallName);
         q.setParameter("inStatus", "Pending");
-        return new ArrayList<RentRenewalRequestEntity>(q.getResultList());
+        return new ArrayList<>(q.getResultList());
     }
     
     @Override

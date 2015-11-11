@@ -107,7 +107,20 @@ public class FacilityManagerSession implements FacilityManagerSessionLocal {
     @Override
     public void deleteFacility(Long facilityId) {
         FacilityEntity facilityEntity = em.find(FacilityEntity.class, facilityId);
-        if (facilityEntity != null) {          
+        if (facilityEntity != null) { 
+            Query q = em.createQuery("SELECT con FROM ContractorEntity con WHERE con.mallName = :inMallName");
+            q.setParameter("inMallName", facilityEntity.getMallName());
+            ArrayList<ContractorEntity> contractorList = new ArrayList<ContractorEntity>(q.getResultList());
+            for(int i=0; i< contractorList.size(); i++){
+                ContractorEntity contractor  =contractorList.get(i);
+                ArrayList<FacilityEntity> facilityList   = new ArrayList<>(contractor.getFacility());
+                if(facilityList.contains(facilityEntity)){
+                    facilityList.remove(facilityEntity);
+                    contractor.setFacility(facilityList);
+                    em.merge(contractor);
+                }
+            }
+            
             em.remove(facilityEntity);
             em.flush();
         }

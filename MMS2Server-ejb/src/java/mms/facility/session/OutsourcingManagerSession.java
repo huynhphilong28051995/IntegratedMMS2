@@ -27,8 +27,10 @@ public class OutsourcingManagerSession implements OutsourcingManagerSessionLocal
     public ArrayList<OutsourcingEntity> listOutsourcing(String mallName) {
         ArrayList<OutsourcingEntity> outsourcingList = new ArrayList();
         try {         
-            Query q = em.createQuery("SELECT ol FROM OutsourcingEntity ol WHERE ol.mallName=:inMallName");
+            Query q = em.createQuery("SELECT ol FROM OutsourcingEntity ol WHERE ol.mallName=:inMallName WHERE "
+                    + "ol.outsourcingStatus = :inStatus");
             q.setParameter("inMallName", mallName);
+            q.setParameter("inStatus", "Pending");
             outsourcingList = new ArrayList<OutsourcingEntity>(q.getResultList());
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -49,16 +49,7 @@ public class FacilityEntity implements Serializable {
         this.assets = assets;
     }
     
-    @OneToMany(cascade={CascadeType.PERSIST})
-    private Collection<ServiceEntity> service = new ArrayList<ServiceEntity>();
-    
-    public Collection<ServiceEntity> getService(){
-        return service;
-    }
-    
-    public void setService(Collection<ServiceEntity> service){
-        this.service = service;
-    }
+   
 
     //Constructor
     public FacilityEntity() {

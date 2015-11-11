@@ -32,6 +32,7 @@ public class ServiceEntity implements Serializable {
     private double serviceFee;
     private String serviceRequestStatus = "Service Pending";
     private String mallName;
+    private String facilityIdName;
     
     public ServiceEntity() {
     }
@@ -143,4 +144,18 @@ public class ServiceEntity implements Serializable {
     public String toString() {
         return "Entity.ServiceEntity[ serviceId=" + serviceId + " ]";
     }    
+
+    /**
+     * @return the facilityIdName
+     */
+    public String getFacilityIdName() {
+        return facilityIdName;
+    }
+
+    /**
+     * @param facilityIdName the facilityIdName to set
+     */
+    public void setFacilityIdName(String facilityIdName) {
+        this.facilityIdName = facilityIdName;
+    }
 }

@@ -18,7 +18,7 @@ import mms.facility.entity.ServiceEntity;
 public interface ServiceManagerSessionLocal {
 
     public ServiceEntity addService(String serviceType, String serviceRequestDetail,
-            Timestamp servicingStartDate, Timestamp servicingEndDate, double serviceFee, String mallName);
+            Timestamp servicingStartDate, Timestamp servicingEndDate, double serviceFee, String mallName, Long faciityId);
 
     public ArrayList<ServiceEntity> listServiceRequest(String mallName);
 

@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import mms.facility.entity.FacilityEntity;
 import mms.facility.entity.ServiceEntity;
 
 /**
@@ -27,10 +28,13 @@ public class ServiceManagerSession implements ServiceManagerSessionLocal {
     @Override
     public ServiceEntity addService(String serviceType, String serviceRequestDetail,
             Timestamp servicingStartDate, Timestamp servicingEndDate,
-            double serviceFee, String mallName) {
+            double serviceFee, String mallName, Long facilityId) {
+        FacilityEntity facility  = em.find(FacilityEntity.class, facilityId);
+        String facilityIdName  = (facility.getFacilityId().toString())+"_"+facility.getFacilityName();
         ServiceEntity serviceEntity = new ServiceEntity(serviceType,
                 serviceRequestDetail, servicingStartDate, servicingEndDate, serviceFee);
         serviceEntity.setMallName(mallName);
+        serviceEntity.setFacilityIdName(facilityIdName);
         em.persist(serviceEntity);
         return serviceEntity;
     }

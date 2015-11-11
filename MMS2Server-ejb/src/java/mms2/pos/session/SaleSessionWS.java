@@ -18,6 +18,8 @@ import java.lang.NullPointerException;
 import java.sql.Timestamp;
 import javax.persistence.Query;
 import mms2.customer.entity.CustomerEntity;
+import mms2.leasing.entity.TenantEntity;
+import mms2.leasing.entity.UnitEntity;
 
 /**
  *
@@ -33,6 +35,9 @@ public class SaleSessionWS {
     @WebMethod
     public String createSale(@WebParam(name = "sale") SaleEntity sale) {
         try {
+            TenantEntity tenant = em.find(TenantEntity.class, sale.getTenantId());
+           String category  = (new ArrayList<UnitEntity>(tenant.getUnits())).get(0).getCategory();
+           sale.setBusinessType(category);
             ArrayList<Long> itemIdList = sale.getItemIdList();
             for (int i = 0; i < itemIdList.size(); i++) {
                 ItemEntity item = em.find(ItemEntity.class, itemIdList.get(i));
