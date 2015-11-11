@@ -36,7 +36,6 @@ public class TenantSystemServlet extends HttpServlet {
     private TenantEntity tenant;
     private TenantContractEntity contract;
     private ArrayList<UnitEntity> tenantunit;
-    private ArrayList<OutsourcingEntity> outsourcerequest;
     private ArrayList<RentRenewalRequestEntity> renewalList;
     private ArrayList<SaleEntity> saleList;
     private ArrayList<RentInvoiceEntity> rentInvoiceList;
@@ -108,7 +107,7 @@ public class TenantSystemServlet extends HttpServlet {
                     break;
                 case "OutsourceStatus":
                     tenantid = ((TenantEntity) request.getSession().getAttribute("tenant")).getId();
-                    outsourcerequest = getOutsourceRequest(tenantid);
+                    ArrayList<OutsourcingEntity>  outsourcerequest = getOutsourceRequest(tenantid);
                     request.setAttribute("outsourcerequest", outsourcerequest);
                     break;
                     
